@@ -7,11 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		35FB878C4910785280653742 /* Pods_WatchWise_WatchWiseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2CD3A0E4816C811EA020C5 /* Pods_WatchWise_WatchWiseUITests.framework */; };
+		997BEC852738F815AD416AB6 /* Pods_WatchWiseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCD4E15E36954A81010F71A /* Pods_WatchWiseTests.framework */; };
+		B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91FFEF42A8D3BEA005C15EF /* HomeView.swift */; };
+		B91FFEF82A8D3D3C005C15EF /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B91FFEF72A8D3D3C005C15EF /* Kingfisher */; };
+		B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212572A90B56C00AFFB9C /* HomeNavigationView.swift */; };
+		B922125A2A90B57E00AFFB9C /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212592A90B57E00AFFB9C /* FeedView.swift */; };
+		B922125C2A90B59000AFFB9C /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922125B2A90B59000AFFB9C /* SearchView.swift */; };
+		B922125E2A90B59D00AFFB9C /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922125D2A90B59D00AFFB9C /* EpisodesView.swift */; };
+		B92212622A90B5C000AFFB9C /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212612A90B5C000AFFB9C /* ProfileView.swift */; };
+		B92212652A90E01300AFFB9C /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212642A90E01300AFFB9C /* APIConstants.swift */; };
+		B92212672A90E04A00AFFB9C /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212662A90E04A00AFFB9C /* APIRouter.swift */; };
+		B92212692A90E15400AFFB9C /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212682A90E15400AFFB9C /* APIService.swift */; };
+		B922126C2A90E20300AFFB9C /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922126B2A90E20300AFFB9C /* Movie.swift */; };
+		B922126E2A90E68A00AFFB9C /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922126D2A90E68A00AFFB9C /* APIManager.swift */; };
+		B92212702A90FBC400AFFB9C /* DiscoverMoviesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922126F2A90FBC400AFFB9C /* DiscoverMoviesResponse.swift */; };
+		B92212732A910E4700AFFB9C /* MovieDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212722A910E4700AFFB9C /* MovieDetailsView.swift */; };
+		B936CA722A927A62001F4908 /* CompleteRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA712A927A62001F4908 /* CompleteRegistrationView.swift */; };
+		B936CA752A929D44001F4908 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA742A929D44001F4908 /* AuthManager.swift */; };
+		B936CA772A929F77001F4908 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA762A929F77001F4908 /* SplashScreen.swift */; };
+		B973F5112A936D8B00AB7DC8 /* AuthenticatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B973F5102A936D8A00AB7DC8 /* AuthenticatedView.swift */; };
+		B973F5132A936DC700AB7DC8 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B973F5122A936DC700AB7DC8 /* AuthenticationView.swift */; };
+		B98DE9902A8BCFFD0076F379 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98DE98F2A8BCFFD0076F379 /* LoginView.swift */; };
+		B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */; };
+		B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE262A92214E00226A35 /* ClearableTextField.swift */; };
+		B9AAAE292A92234400226A35 /* EmailRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE282A92234400226A35 /* EmailRegistrationView.swift */; };
 		B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */; };
-		B9F2B13A2A8B867A00B18E44 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1392A8B867A00B18E44 /* ContentView.swift */; };
 		B9F2B13C2A8B867F00B18E44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9F2B13B2A8B867F00B18E44 /* Assets.xcassets */; };
 		B9F2B13F2A8B867F00B18E44 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9F2B13E2A8B867F00B18E44 /* Preview Assets.xcassets */; };
-		B9F2B1412A8B867F00B18E44 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1402A8B867F00B18E44 /* Item.swift */; };
 		B9F2B14B2A8B867F00B18E44 /* WatchWiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B14A2A8B867F00B18E44 /* WatchWiseTests.swift */; };
 		B9F2B1552A8B867F00B18E44 /* WatchWiseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1542A8B867F00B18E44 /* WatchWiseUITests.swift */; };
 		B9F2B1572A8B867F00B18E44 /* WatchWiseUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1562A8B867F00B18E44 /* WatchWiseUITestsLaunchTests.swift */; };
@@ -35,6 +58,7 @@
 		B9F2B1862A8B8B9B00B18E44 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B9F2B1852A8B8B9B00B18E44 /* FirebaseMessaging */; };
 		B9F2B1882A8B8B9B00B18E44 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B9F2B1872A8B8B9B00B18E44 /* FirebaseStorage */; };
 		B9F2B18A2A8B8B9B00B18E44 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = B9F2B1892A8B8B9B00B18E44 /* FirebaseStorageCombine-Community */; };
+		DC805A82EF0A7B4966DA50B1 /* Pods_WatchWise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57795A70F06874F1753D612E /* Pods_WatchWise.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,18 +79,47 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1198DFA3BFF0229B15EDD988 /* Pods-WatchWise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.release.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.release.xcconfig"; sourceTree = "<group>"; };
+		4C6F31A77B1FD0BA2BE26426 /* Pods-WatchWise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.debug.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.debug.xcconfig"; sourceTree = "<group>"; };
+		57795A70F06874F1753D612E /* Pods_WatchWise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchWise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8093A0428160055D22BAB237 /* Pods-WatchWiseTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWiseTests.release.xcconfig"; path = "Target Support Files/Pods-WatchWiseTests/Pods-WatchWiseTests.release.xcconfig"; sourceTree = "<group>"; };
+		85DD1888EA51BD629C67FE6A /* Pods-WatchWise-WatchWiseUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise-WatchWiseUITests.debug.xcconfig"; path = "Target Support Files/Pods-WatchWise-WatchWiseUITests/Pods-WatchWise-WatchWiseUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		ADE556216E1FB05C5D171D8B /* Pods-WatchWiseTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWiseTests.debug.xcconfig"; path = "Target Support Files/Pods-WatchWiseTests/Pods-WatchWiseTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B91FFEF42A8D3BEA005C15EF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		B92212572A90B56C00AFFB9C /* HomeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationView.swift; sourceTree = "<group>"; };
+		B92212592A90B57E00AFFB9C /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
+		B922125B2A90B59000AFFB9C /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		B922125D2A90B59D00AFFB9C /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
+		B92212612A90B5C000AFFB9C /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		B92212642A90E01300AFFB9C /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
+		B92212662A90E04A00AFFB9C /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
+		B92212682A90E15400AFFB9C /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		B922126B2A90E20300AFFB9C /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		B922126D2A90E68A00AFFB9C /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		B922126F2A90FBC400AFFB9C /* DiscoverMoviesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMoviesResponse.swift; sourceTree = "<group>"; };
+		B92212722A910E4700AFFB9C /* MovieDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsView.swift; sourceTree = "<group>"; };
+		B936CA712A927A62001F4908 /* CompleteRegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteRegistrationView.swift; sourceTree = "<group>"; };
+		B936CA742A929D44001F4908 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		B936CA762A929F77001F4908 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
+		B973F5102A936D8A00AB7DC8 /* AuthenticatedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedView.swift; sourceTree = "<group>"; };
+		B973F5122A936DC700AB7DC8 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		B98DE98F2A8BCFFD0076F379 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleableSecureField.swift; sourceTree = "<group>"; };
+		B9AAAE262A92214E00226A35 /* ClearableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearableTextField.swift; sourceTree = "<group>"; };
+		B9AAAE282A92234400226A35 /* EmailRegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailRegistrationView.swift; sourceTree = "<group>"; };
 		B9F2B1342A8B867A00B18E44 /* WatchWise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchWise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWiseApp.swift; sourceTree = "<group>"; };
-		B9F2B1392A8B867A00B18E44 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B9F2B13B2A8B867F00B18E44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B9F2B13E2A8B867F00B18E44 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		B9F2B1402A8B867F00B18E44 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		B9F2B1462A8B867F00B18E44 /* WatchWiseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchWiseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F2B14A2A8B867F00B18E44 /* WatchWiseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWiseTests.swift; sourceTree = "<group>"; };
 		B9F2B1502A8B867F00B18E44 /* WatchWiseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchWiseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F2B1542A8B867F00B18E44 /* WatchWiseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWiseUITests.swift; sourceTree = "<group>"; };
 		B9F2B1562A8B867F00B18E44 /* WatchWiseUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWiseUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B9F2B1632A8B86BD00B18E44 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		BF2CD3A0E4816C811EA020C5 /* Pods_WatchWise_WatchWiseUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchWise_WatchWiseUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EDCD4E15E36954A81010F71A /* Pods_WatchWiseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchWiseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD1F46C49F246AD6B821A1BA /* Pods-WatchWise-WatchWiseUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise-WatchWiseUITests.release.xcconfig"; path = "Target Support Files/Pods-WatchWise-WatchWiseUITests/Pods-WatchWise-WatchWiseUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +144,8 @@
 				B9F2B1862A8B8B9B00B18E44 /* FirebaseMessaging in Frameworks */,
 				B9F2B1782A8B8B9B00B18E44 /* FirebaseFirestoreSwift in Frameworks */,
 				B9F2B1842A8B8B9B00B18E44 /* FirebaseMLModelDownloader in Frameworks */,
+				B91FFEF82A8D3D3C005C15EF /* Kingfisher in Frameworks */,
+				DC805A82EF0A7B4966DA50B1 /* Pods_WatchWise.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				997BEC852738F815AD416AB6 /* Pods_WatchWiseTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,12 +161,127 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35FB878C4910785280653742 /* Pods_WatchWise_WatchWiseUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08C9855FC110C7B5387526BE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4C6F31A77B1FD0BA2BE26426 /* Pods-WatchWise.debug.xcconfig */,
+				1198DFA3BFF0229B15EDD988 /* Pods-WatchWise.release.xcconfig */,
+				85DD1888EA51BD629C67FE6A /* Pods-WatchWise-WatchWiseUITests.debug.xcconfig */,
+				FD1F46C49F246AD6B821A1BA /* Pods-WatchWise-WatchWiseUITests.release.xcconfig */,
+				ADE556216E1FB05C5D171D8B /* Pods-WatchWiseTests.debug.xcconfig */,
+				8093A0428160055D22BAB237 /* Pods-WatchWiseTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		4031569D087B667F0280A2E7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				57795A70F06874F1753D612E /* Pods_WatchWise.framework */,
+				BF2CD3A0E4816C811EA020C5 /* Pods_WatchWise_WatchWiseUITests.framework */,
+				EDCD4E15E36954A81010F71A /* Pods_WatchWiseTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B91FFEF32A8D3BD9005C15EF /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				B92212572A90B56C00AFFB9C /* HomeNavigationView.swift */,
+				B91FFEF42A8D3BEA005C15EF /* HomeView.swift */,
+				B92212592A90B57E00AFFB9C /* FeedView.swift */,
+				B922125B2A90B59000AFFB9C /* SearchView.swift */,
+				B922125D2A90B59D00AFFB9C /* EpisodesView.swift */,
+				B92212612A90B5C000AFFB9C /* ProfileView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		B92212632A90D79100AFFB9C /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				B92212642A90E01300AFFB9C /* APIConstants.swift */,
+				B92212662A90E04A00AFFB9C /* APIRouter.swift */,
+				B92212682A90E15400AFFB9C /* APIService.swift */,
+				B922126D2A90E68A00AFFB9C /* APIManager.swift */,
+			);
+			path = Api;
+			sourceTree = "<group>";
+		};
+		B922126A2A90E1EB00AFFB9C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B922126B2A90E20300AFFB9C /* Movie.swift */,
+				B922126F2A90FBC400AFFB9C /* DiscoverMoviesResponse.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B92212712A910E3000AFFB9C /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				B92212722A910E4700AFFB9C /* MovieDetailsView.swift */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
+		B936CA732A929D33001F4908 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				B936CA742A929D44001F4908 /* AuthManager.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		B98DE98C2A8BCFB70076F379 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B9AAAE232A9220F900226A35 /* Components */,
+				B92212712A910E3000AFFB9C /* Details */,
+				B91FFEF32A8D3BD9005C15EF /* Home */,
+				B98DE98D2A8BCFC40076F379 /* Auth */,
+				B936CA762A929F77001F4908 /* SplashScreen.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		B98DE98D2A8BCFC40076F379 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				B98DE98F2A8BCFFD0076F379 /* LoginView.swift */,
+				B9AAAE282A92234400226A35 /* EmailRegistrationView.swift */,
+				B936CA712A927A62001F4908 /* CompleteRegistrationView.swift */,
+				B973F5102A936D8A00AB7DC8 /* AuthenticatedView.swift */,
+				B973F5122A936DC700AB7DC8 /* AuthenticationView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		B98DE98E2A8BCFD20076F379 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B936CA732A929D33001F4908 /* Utils */,
+				B92212632A90D79100AFFB9C /* Api */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B9AAAE232A9220F900226A35 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */,
+				B9AAAE262A92214E00226A35 /* ClearableTextField.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		B9F2B12B2A8B867A00B18E44 = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +289,8 @@
 				B9F2B1492A8B867F00B18E44 /* WatchWiseTests */,
 				B9F2B1532A8B867F00B18E44 /* WatchWiseUITests */,
 				B9F2B1352A8B867A00B18E44 /* Products */,
+				08C9855FC110C7B5387526BE /* Pods */,
+				4031569D087B667F0280A2E7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,11 +307,12 @@
 		B9F2B1362A8B867A00B18E44 /* WatchWise */ = {
 			isa = PBXGroup;
 			children = (
+				B922126A2A90E1EB00AFFB9C /* Model */,
+				B98DE98E2A8BCFD20076F379 /* Services */,
+				B98DE98C2A8BCFB70076F379 /* Views */,
 				B9F2B1632A8B86BD00B18E44 /* GoogleService-Info.plist */,
 				B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */,
-				B9F2B1392A8B867A00B18E44 /* ContentView.swift */,
 				B9F2B13B2A8B867F00B18E44 /* Assets.xcassets */,
-				B9F2B1402A8B867F00B18E44 /* Item.swift */,
 				B9F2B13D2A8B867F00B18E44 /* Preview Content */,
 			);
 			path = WatchWise;
@@ -176,9 +350,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B9F2B15A2A8B867F00B18E44 /* Build configuration list for PBXNativeTarget "WatchWise" */;
 			buildPhases = (
+				545549CF3DB7144CDFFE9DAE /* [CP] Check Pods Manifest.lock */,
 				B9F2B1302A8B867A00B18E44 /* Sources */,
 				B9F2B1312A8B867A00B18E44 /* Frameworks */,
 				B9F2B1322A8B867A00B18E44 /* Resources */,
+				7A322766C19174884826936B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -203,6 +379,7 @@
 				B9F2B1852A8B8B9B00B18E44 /* FirebaseMessaging */,
 				B9F2B1872A8B8B9B00B18E44 /* FirebaseStorage */,
 				B9F2B1892A8B8B9B00B18E44 /* FirebaseStorageCombine-Community */,
+				B91FFEF72A8D3D3C005C15EF /* Kingfisher */,
 			);
 			productName = WatchWise;
 			productReference = B9F2B1342A8B867A00B18E44 /* WatchWise.app */;
@@ -212,6 +389,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B9F2B15D2A8B867F00B18E44 /* Build configuration list for PBXNativeTarget "WatchWiseTests" */;
 			buildPhases = (
+				18C3FBC6FFD03B2FA7B110FA /* [CP] Check Pods Manifest.lock */,
 				B9F2B1422A8B867F00B18E44 /* Sources */,
 				B9F2B1432A8B867F00B18E44 /* Frameworks */,
 				B9F2B1442A8B867F00B18E44 /* Resources */,
@@ -230,9 +408,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B9F2B1602A8B867F00B18E44 /* Build configuration list for PBXNativeTarget "WatchWiseUITests" */;
 			buildPhases = (
+				43983512A09C865B8D0DD615 /* [CP] Check Pods Manifest.lock */,
 				B9F2B14C2A8B867F00B18E44 /* Sources */,
 				B9F2B14D2A8B867F00B18E44 /* Frameworks */,
 				B9F2B14E2A8B867F00B18E44 /* Resources */,
+				4CF0F2B3EA9F7AC1E7FC86EC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -279,6 +459,7 @@
 			packageReferences = (
 				B9F2B1672A8B8AD000B18E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				B9F2B1682A8B8B9B00B18E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				B91FFEF62A8D3D3C005C15EF /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = B9F2B1352A8B867A00B18E44 /* Products */;
 			projectDirPath = "";
@@ -320,14 +501,137 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		18C3FBC6FFD03B2FA7B110FA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WatchWiseTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		43983512A09C865B8D0DD615 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WatchWise-WatchWiseUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4CF0F2B3EA9F7AC1E7FC86EC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WatchWise-WatchWiseUITests/Pods-WatchWise-WatchWiseUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WatchWise-WatchWiseUITests/Pods-WatchWise-WatchWiseUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WatchWise-WatchWiseUITests/Pods-WatchWise-WatchWiseUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		545549CF3DB7144CDFFE9DAE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WatchWise-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7A322766C19174884826936B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WatchWise/Pods-WatchWise-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WatchWise/Pods-WatchWise-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WatchWise/Pods-WatchWise-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B9F2B1302A8B867A00B18E44 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9F2B13A2A8B867A00B18E44 /* ContentView.swift in Sources */,
-				B9F2B1412A8B867F00B18E44 /* Item.swift in Sources */,
+				B92212622A90B5C000AFFB9C /* ProfileView.swift in Sources */,
+				B92212672A90E04A00AFFB9C /* APIRouter.swift in Sources */,
+				B922126C2A90E20300AFFB9C /* Movie.swift in Sources */,
+				B922125A2A90B57E00AFFB9C /* FeedView.swift in Sources */,
+				B9AAAE292A92234400226A35 /* EmailRegistrationView.swift in Sources */,
+				B92212702A90FBC400AFFB9C /* DiscoverMoviesResponse.swift in Sources */,
+				B98DE9902A8BCFFD0076F379 /* LoginView.swift in Sources */,
+				B936CA722A927A62001F4908 /* CompleteRegistrationView.swift in Sources */,
+				B92212692A90E15400AFFB9C /* APIService.swift in Sources */,
+				B936CA772A929F77001F4908 /* SplashScreen.swift in Sources */,
+				B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */,
+				B936CA752A929D44001F4908 /* AuthManager.swift in Sources */,
+				B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */,
+				B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */,
 				B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */,
+				B92212732A910E4700AFFB9C /* MovieDetailsView.swift in Sources */,
+				B973F5112A936D8B00AB7DC8 /* AuthenticatedView.swift in Sources */,
+				B92212652A90E01300AFFB9C /* APIConstants.swift in Sources */,
+				B973F5132A936DC700AB7DC8 /* AuthenticationView.swift in Sources */,
+				B922125C2A90B59000AFFB9C /* SearchView.swift in Sources */,
+				B922126E2A90E68A00AFFB9C /* APIManager.swift in Sources */,
+				B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */,
+				B922125E2A90B59D00AFFB9C /* EpisodesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,7 +705,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -416,7 +720,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -464,7 +768,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -473,7 +777,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -485,6 +789,7 @@
 		};
 		B9F2B15B2A8B867F00B18E44 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C6F31A77B1FD0BA2BE26426 /* Pods-WatchWise.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -499,6 +804,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -514,6 +820,7 @@
 		};
 		B9F2B15C2A8B867F00B18E44 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1198DFA3BFF0229B15EDD988 /* Pods-WatchWise.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -528,6 +835,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -543,6 +851,7 @@
 		};
 		B9F2B15E2A8B867F00B18E44 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ADE556216E1FB05C5D171D8B /* Pods-WatchWiseTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -563,6 +872,7 @@
 		};
 		B9F2B15F2A8B867F00B18E44 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8093A0428160055D22BAB237 /* Pods-WatchWiseTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -583,6 +893,7 @@
 		};
 		B9F2B1612A8B867F00B18E44 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85DD1888EA51BD629C67FE6A /* Pods-WatchWise-WatchWiseUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -601,6 +912,7 @@
 		};
 		B9F2B1622A8B867F00B18E44 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FD1F46C49F246AD6B821A1BA /* Pods-WatchWise-WatchWiseUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -659,6 +971,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B91FFEF62A8D3D3C005C15EF /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.9.0;
+			};
+		};
 		B9F2B1672A8B8AD000B18E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -678,6 +998,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B91FFEF72A8D3D3C005C15EF /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B91FFEF62A8D3D3C005C15EF /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		B9F2B1692A8B8B9B00B18E44 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B9F2B1672A8B8AD000B18E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
