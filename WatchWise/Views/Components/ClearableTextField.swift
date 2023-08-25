@@ -14,6 +14,12 @@ struct ClearableTextField: View {
     var endIcon: String
     @State private var isPressed: Bool = false
     @Binding var error: Bool
+    var keyboardType: UIKeyboardType = .emailAddress
+    var textInputAutocapitalization: TextInputAutocapitalization = .never
+    var autocorrectionDisabled: Bool = true
+    var lowercaseText: Bool = false
+    var axis: Axis = .horizontal
+    
     
     var body: some View {
         HStack {
@@ -22,10 +28,15 @@ struct ClearableTextField: View {
                     .frame(width: 24, height: 24)
                     .foregroundColor(error ? .red : .primary)
             }
-            TextField(hint, text: $text)
-                .keyboardType(.emailAddress)
-                .autocapitalization(.none)
-                .autocorrectionDisabled(true)
+            TextField(hint, text: $text, axis: axis)
+                .keyboardType(keyboardType)
+                .textInputAutocapitalization(textInputAutocapitalization)
+                .autocorrectionDisabled(autocorrectionDisabled)
+                .onChange(of: text) { newValue in
+                    if lowercaseText {
+                        text = newValue.lowercased()
+                    }
+                }
             if !text.isEmpty {
                 Button(action: {
                     self.text = ""

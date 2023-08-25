@@ -48,4 +48,3 @@ struct HomeNavigationView: View {
     HomeNavigationView()
         .accentColor(.cyan)
 }
-

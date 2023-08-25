@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		35FB878C4910785280653742 /* Pods_WatchWise_WatchWiseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2CD3A0E4816C811EA020C5 /* Pods_WatchWise_WatchWiseUITests.framework */; };
 		997BEC852738F815AD416AB6 /* Pods_WatchWiseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCD4E15E36954A81010F71A /* Pods_WatchWiseTests.framework */; };
+		B90052A12A97B0D2005FC143 /* HistogramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90052A02A97B0D2005FC143 /* HistogramView.swift */; };
 		B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91FFEF42A8D3BEA005C15EF /* HomeView.swift */; };
 		B91FFEF82A8D3D3C005C15EF /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B91FFEF72A8D3D3C005C15EF /* Kingfisher */; };
 		B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212572A90B56C00AFFB9C /* HomeNavigationView.swift */; };
@@ -26,12 +27,20 @@
 		B936CA722A927A62001F4908 /* CompleteRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA712A927A62001F4908 /* CompleteRegistrationView.swift */; };
 		B936CA752A929D44001F4908 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA742A929D44001F4908 /* AuthManager.swift */; };
 		B936CA772A929F77001F4908 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA762A929F77001F4908 /* SplashScreen.swift */; };
+		B9564A902A98A31000A7F92C /* Pods_WatchWise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57795A70F06874F1753D612E /* Pods_WatchWise.framework */; };
+		B9564A912A98A31000A7F92C /* Pods_WatchWise.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57795A70F06874F1753D612E /* Pods_WatchWise.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B973F5112A936D8B00AB7DC8 /* AuthenticatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B973F5102A936D8A00AB7DC8 /* AuthenticatedView.swift */; };
 		B973F5132A936DC700AB7DC8 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B973F5122A936DC700AB7DC8 /* AuthenticationView.swift */; };
+		B97984352A97668C00A9EC42 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97984342A97668C00A9EC42 /* Extensions.swift */; };
+		B97984372A97736500A9EC42 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97984362A97736500A9EC42 /* Utils.swift */; };
+		B979843D2A97997000A9EC42 /* AxisRatingBar in Frameworks */ = {isa = PBXBuildFile; productRef = B979843C2A97997000A9EC42 /* AxisRatingBar */; };
+		B97984422A97AA1C00A9EC42 /* AxisSegmentedView in Frameworks */ = {isa = PBXBuildFile; productRef = B97984412A97AA1C00A9EC42 /* AxisSegmentedView */; };
 		B98DE9902A8BCFFD0076F379 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98DE98F2A8BCFFD0076F379 /* LoginView.swift */; };
 		B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */; };
 		B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE262A92214E00226A35 /* ClearableTextField.swift */; };
 		B9AAAE292A92234400226A35 /* EmailRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE282A92234400226A35 /* EmailRegistrationView.swift */; };
+		B9D9EA982A960AEC000C05CE /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B9D9EA972A960AEC000C05CE /* GoogleSignIn */; };
+		B9D9EA9A2A960AEC000C05CE /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B9D9EA992A960AEC000C05CE /* GoogleSignInSwift */; };
 		B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */; };
 		B9F2B13C2A8B867F00B18E44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9F2B13B2A8B867F00B18E44 /* Assets.xcassets */; };
 		B9F2B13F2A8B867F00B18E44 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9F2B13E2A8B867F00B18E44 /* Preview Assets.xcassets */; };
@@ -58,7 +67,7 @@
 		B9F2B1862A8B8B9B00B18E44 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = B9F2B1852A8B8B9B00B18E44 /* FirebaseMessaging */; };
 		B9F2B1882A8B8B9B00B18E44 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B9F2B1872A8B8B9B00B18E44 /* FirebaseStorage */; };
 		B9F2B18A2A8B8B9B00B18E44 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = B9F2B1892A8B8B9B00B18E44 /* FirebaseStorageCombine-Community */; };
-		DC805A82EF0A7B4966DA50B1 /* Pods_WatchWise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57795A70F06874F1753D612E /* Pods_WatchWise.framework */; };
+		B9FC91F72A96645200B10DAB /* ExpandableText in Frameworks */ = {isa = PBXBuildFile; productRef = B9FC91F62A96645200B10DAB /* ExpandableText */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +87,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		B9564A922A98A31000A7F92C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B9564A912A98A31000A7F92C /* Pods_WatchWise.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1198DFA3BFF0229B15EDD988 /* Pods-WatchWise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.release.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.release.xcconfig"; sourceTree = "<group>"; };
 		4C6F31A77B1FD0BA2BE26426 /* Pods-WatchWise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.debug.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.debug.xcconfig"; sourceTree = "<group>"; };
@@ -85,6 +108,7 @@
 		8093A0428160055D22BAB237 /* Pods-WatchWiseTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWiseTests.release.xcconfig"; path = "Target Support Files/Pods-WatchWiseTests/Pods-WatchWiseTests.release.xcconfig"; sourceTree = "<group>"; };
 		85DD1888EA51BD629C67FE6A /* Pods-WatchWise-WatchWiseUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise-WatchWiseUITests.debug.xcconfig"; path = "Target Support Files/Pods-WatchWise-WatchWiseUITests/Pods-WatchWise-WatchWiseUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		ADE556216E1FB05C5D171D8B /* Pods-WatchWiseTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWiseTests.debug.xcconfig"; path = "Target Support Files/Pods-WatchWiseTests/Pods-WatchWiseTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B90052A02A97B0D2005FC143 /* HistogramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramView.swift; sourceTree = "<group>"; };
 		B91FFEF42A8D3BEA005C15EF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B92212572A90B56C00AFFB9C /* HomeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationView.swift; sourceTree = "<group>"; };
 		B92212592A90B57E00AFFB9C /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -103,10 +127,13 @@
 		B936CA762A929F77001F4908 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		B973F5102A936D8A00AB7DC8 /* AuthenticatedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedView.swift; sourceTree = "<group>"; };
 		B973F5122A936DC700AB7DC8 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		B97984342A97668C00A9EC42 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		B97984362A97736500A9EC42 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		B98DE98F2A8BCFFD0076F379 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleableSecureField.swift; sourceTree = "<group>"; };
 		B9AAAE262A92214E00226A35 /* ClearableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearableTextField.swift; sourceTree = "<group>"; };
 		B9AAAE282A92234400226A35 /* EmailRegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailRegistrationView.swift; sourceTree = "<group>"; };
+		B9D9EA9B2A960B00000C05CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B9F2B1342A8B867A00B18E44 /* WatchWise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchWise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWiseApp.swift; sourceTree = "<group>"; };
 		B9F2B13B2A8B867F00B18E44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -131,21 +158,26 @@
 				B9F2B16E2A8B8B9B00B18E44 /* FirebaseCrashlytics in Frameworks */,
 				B9F2B1822A8B8B9B00B18E44 /* FirebaseInstallations in Frameworks */,
 				B9F2B16A2A8B8B9B00B18E44 /* FirebaseAnalytics in Frameworks */,
+				B97984422A97AA1C00A9EC42 /* AxisSegmentedView in Frameworks */,
+				B979843D2A97997000A9EC42 /* AxisRatingBar in Frameworks */,
 				B9F2B17C2A8B8B9B00B18E44 /* FirebaseFunctionsCombine-Community in Frameworks */,
+				B9FC91F72A96645200B10DAB /* ExpandableText in Frameworks */,
+				B9D9EA982A960AEC000C05CE /* GoogleSignIn in Frameworks */,
 				B9F2B1882A8B8B9B00B18E44 /* FirebaseStorage in Frameworks */,
 				B9F2B18A2A8B8B9B00B18E44 /* FirebaseStorageCombine-Community in Frameworks */,
 				B9F2B17A2A8B8B9B00B18E44 /* FirebaseFunctions in Frameworks */,
+				B9D9EA9A2A960AEC000C05CE /* GoogleSignInSwift in Frameworks */,
 				B9F2B1702A8B8B9B00B18E44 /* FirebaseDatabase in Frameworks */,
 				B9F2B17E2A8B8B9B00B18E44 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				B9F2B16C2A8B8B9B00B18E44 /* FirebaseAuth in Frameworks */,
 				B9F2B1742A8B8B9B00B18E44 /* FirebaseFirestore in Frameworks */,
 				B9F2B1762A8B8B9B00B18E44 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				B9F2B1802A8B8B9B00B18E44 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
+				B9564A902A98A31000A7F92C /* Pods_WatchWise.framework in Frameworks */,
 				B9F2B1862A8B8B9B00B18E44 /* FirebaseMessaging in Frameworks */,
 				B9F2B1782A8B8B9B00B18E44 /* FirebaseFirestoreSwift in Frameworks */,
 				B9F2B1842A8B8B9B00B18E44 /* FirebaseMLModelDownloader in Frameworks */,
 				B91FFEF82A8D3D3C005C15EF /* Kingfisher in Frameworks */,
-				DC805A82EF0A7B4966DA50B1 /* Pods_WatchWise.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				B936CA742A929D44001F4908 /* AuthManager.swift */,
+				B97984362A97736500A9EC42 /* Utils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -278,6 +311,8 @@
 			children = (
 				B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */,
 				B9AAAE262A92214E00226A35 /* ClearableTextField.swift */,
+				B97984342A97668C00A9EC42 /* Extensions.swift */,
+				B90052A02A97B0D2005FC143 /* HistogramView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -307,6 +342,7 @@
 		B9F2B1362A8B867A00B18E44 /* WatchWise */ = {
 			isa = PBXGroup;
 			children = (
+				B9D9EA9B2A960B00000C05CE /* Info.plist */,
 				B922126A2A90E1EB00AFFB9C /* Model */,
 				B98DE98E2A8BCFD20076F379 /* Services */,
 				B98DE98C2A8BCFB70076F379 /* Views */,
@@ -355,6 +391,8 @@
 				B9F2B1312A8B867A00B18E44 /* Frameworks */,
 				B9F2B1322A8B867A00B18E44 /* Resources */,
 				7A322766C19174884826936B /* [CP] Embed Pods Frameworks */,
+				B973F5142A93946400AB7DC8 /* ShellScript */,
+				B9564A922A98A31000A7F92C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -380,6 +418,11 @@
 				B9F2B1872A8B8B9B00B18E44 /* FirebaseStorage */,
 				B9F2B1892A8B8B9B00B18E44 /* FirebaseStorageCombine-Community */,
 				B91FFEF72A8D3D3C005C15EF /* Kingfisher */,
+				B9D9EA972A960AEC000C05CE /* GoogleSignIn */,
+				B9D9EA992A960AEC000C05CE /* GoogleSignInSwift */,
+				B9FC91F62A96645200B10DAB /* ExpandableText */,
+				B979843C2A97997000A9EC42 /* AxisRatingBar */,
+				B97984412A97AA1C00A9EC42 /* AxisSegmentedView */,
 			);
 			productName = WatchWise;
 			productReference = B9F2B1342A8B867A00B18E44 /* WatchWise.app */;
@@ -460,6 +503,11 @@
 				B9F2B1672A8B8AD000B18E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				B9F2B1682A8B8B9B00B18E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				B91FFEF62A8D3D3C005C15EF /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				B9D9EA962A960AEC000C05CE /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				B9FC91F52A96645200B10DAB /* XCRemoteSwiftPackageReference "ExpandableText" */,
+				B97984382A97783300A9EC42 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */,
+				B979843B2A97997000A9EC42 /* XCRemoteSwiftPackageReference "AxisRatingBar" */,
+				B97984402A97AA1C00A9EC42 /* XCRemoteSwiftPackageReference "AxisSegmentedView" */,
 			);
 			productRefGroup = B9F2B1352A8B867A00B18E44 /* Products */;
 			projectDirPath = "";
@@ -602,6 +650,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WatchWise/Pods-WatchWise-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B973F5142A93946400AB7DC8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"$(SRCROOT)/${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"$(SRCROOT)/${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/Users/nicolobartolini/Library/Developer/Xcode/DerivedData/WatchWise-cesnlccuyzgzqrapoalxagzyieqf/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -614,6 +684,7 @@
 				B922126C2A90E20300AFFB9C /* Movie.swift in Sources */,
 				B922125A2A90B57E00AFFB9C /* FeedView.swift in Sources */,
 				B9AAAE292A92234400226A35 /* EmailRegistrationView.swift in Sources */,
+				B97984372A97736500A9EC42 /* Utils.swift in Sources */,
 				B92212702A90FBC400AFFB9C /* DiscoverMoviesResponse.swift in Sources */,
 				B98DE9902A8BCFFD0076F379 /* LoginView.swift in Sources */,
 				B936CA722A927A62001F4908 /* CompleteRegistrationView.swift in Sources */,
@@ -621,6 +692,7 @@
 				B936CA772A929F77001F4908 /* SplashScreen.swift in Sources */,
 				B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */,
 				B936CA752A929D44001F4908 /* AuthManager.swift in Sources */,
+				B90052A12A97B0D2005FC143 /* HistogramView.swift in Sources */,
 				B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */,
 				B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */,
 				B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */,
@@ -628,6 +700,7 @@
 				B973F5112A936D8B00AB7DC8 /* AuthenticatedView.swift in Sources */,
 				B92212652A90E01300AFFB9C /* APIConstants.swift in Sources */,
 				B973F5132A936DC700AB7DC8 /* AuthenticationView.swift in Sources */,
+				B97984352A97668C00A9EC42 /* Extensions.swift in Sources */,
 				B922125C2A90B59000AFFB9C /* SearchView.swift in Sources */,
 				B922126E2A90E68A00AFFB9C /* APIManager.swift in Sources */,
 				B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */,
@@ -795,10 +868,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"WatchWise/Preview Content\"";
 				DEVELOPMENT_TEAM = NKB8VF9K3L;
+				ENABLE_CODE_COVERAGE = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WatchWise/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -828,8 +904,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WatchWise/Preview Content\"";
 				DEVELOPMENT_TEAM = NKB8VF9K3L;
+				ENABLE_CODE_COVERAGE = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WatchWise/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -979,6 +1057,38 @@
 				minimumVersion = 7.9.0;
 			};
 		};
+		B97984382A97783300A9EC42 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/magickworx/StarRatingViewSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+		B979843B2A97997000A9EC42 /* XCRemoteSwiftPackageReference "AxisRatingBar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jasudev/AxisRatingBar.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		B97984402A97AA1C00A9EC42 /* XCRemoteSwiftPackageReference "AxisSegmentedView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jasudev/AxisSegmentedView.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		B9D9EA962A960AEC000C05CE /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		B9F2B1672A8B8AD000B18E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -995,6 +1105,14 @@
 				minimumVersion = 10.13.0;
 			};
 		};
+		B9FC91F52A96645200B10DAB /* XCRemoteSwiftPackageReference "ExpandableText" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/n3d1117/ExpandableText";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1002,6 +1120,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B91FFEF62A8D3D3C005C15EF /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		B979843C2A97997000A9EC42 /* AxisRatingBar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B979843B2A97997000A9EC42 /* XCRemoteSwiftPackageReference "AxisRatingBar" */;
+			productName = AxisRatingBar;
+		};
+		B97984412A97AA1C00A9EC42 /* AxisSegmentedView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B97984402A97AA1C00A9EC42 /* XCRemoteSwiftPackageReference "AxisSegmentedView" */;
+			productName = AxisSegmentedView;
+		};
+		B9D9EA972A960AEC000C05CE /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9D9EA962A960AEC000C05CE /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		B9D9EA992A960AEC000C05CE /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9D9EA962A960AEC000C05CE /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 		B9F2B1692A8B8B9B00B18E44 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1087,6 +1225,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B9F2B1672A8B8AD000B18E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		B9FC91F62A96645200B10DAB /* ExpandableText */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9FC91F52A96645200B10DAB /* XCRemoteSwiftPackageReference "ExpandableText" */;
+			productName = ExpandableText;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -52,7 +52,7 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
                 AuthenticationView()
                     .environmentObject(authManager)
             }
-        case .authenticated:
+        case .authenticated, .openingApp:
             EmptyView()
         }
     }

@@ -15,26 +15,52 @@ struct HomeView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 8) {
+                HStack {
+                    Spacer()
+                    HStack {
+                        Image("logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 35)
+                        
+                        Image("title")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 150)
+                    }
+                    Spacer()
+                }
+                .frame(width: UIScreen.main.bounds.width - 100)
+                .padding(.horizontal, 5)
+                
                 Text("Home")
-                    .font(.largeTitle)
-                    .padding()
-                    .foregroundColor(.cyan)
+                    .font(.title)
+                    .foregroundColor(.accentColor)
                     .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                
+                Text("Ultime uscite")
+                    .font(.title2)
+                    .foregroundColor(.accentColor)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(nowPlayingMovies ?? [], id: \.self) { movie in
                             NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                            KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(movie.poster_path ?? "")"))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                .cornerRadius(10)
+                                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(movie.poster_path ?? "")"))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                    .cornerRadius(10)
                             }
                         }
                     }
-                    .padding()
+                    .padding(.horizontal)
                 }
                 
                 Spacer()

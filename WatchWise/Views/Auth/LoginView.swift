@@ -8,8 +8,9 @@
 import SwiftUI
 import FirebaseAuth
 import GoogleSignIn
+import FirebaseFirestore
 
-enum FocusableField: Hashable {
+private enum FocusableField: Hashable {
     case email
     case password
 }
@@ -31,16 +32,20 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
+                Image("logo")
+                    .resizable()
+                    .scaledToFit()
+                    .padding(.top)
+                    .frame(width: UIScreen.main.bounds.width / 2.5)
+                
                 HStack {
                     Text(NSLocalizedString("Entra in", comment: "Titolo login"))
                         .bold()
                         .font(.largeTitle)
-                        .padding(.top, 40)
                     Text(NSLocalizedString("WatchWise", comment: "WatchWise"))
                         .bold()
                         .font(.largeTitle)
                         .foregroundColor(.accentColor)
-                        .padding(.top, 40)
                 }
                 
                 ClearableTextField(hint: "Email", text: $authManager.email, startIcon: "envelope", endIcon: "xmark.circle.fill", error: $authManager.errorLogin)
@@ -114,6 +119,33 @@ struct LoginView: View {
                 
                 Button(action: {}) {
                     HStack {
+                        Image(systemName: "apple.logo")
+                            .resizable()
+                            .frame(width: 24, height: 24)
+                        Text(NSLocalizedString("Entra con Apple", comment: "Bottone Apple"))
+                            .font(.title3)
+                            .bold()
+                    }
+                    .frame(width: 200, height: 40)
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button(action: {
+                    Task { () -> Void in
+                        if await authManager.signInWithGoogle() == true {
+                            let db = Firestore.firestore()
+                            let usersRef = db.collection("users")
+                            let querySnapshot = try await usersRef.whereField("email", isEqualTo: authManager.email).getDocuments()
+                            if querySnapshot.documents.isEmpty {
+                                authManager.shouldNavigate = true
+                                authManager.switchFlow()
+                            } else {
+                                authManager.authenticationState = .authenticated
+                            }
+                        }
+                    }
+                }) {
+                    HStack {
                         Image("ic_google")
                             .resizable()
                             .frame(width: 24, height: 24)
@@ -124,6 +156,8 @@ struct LoginView: View {
                     .frame(width: 200, height: 40)
                 }
                 .buttonStyle(.borderedProminent)
+                
+                Spacer()
             }
             .padding(.horizontal)
         }

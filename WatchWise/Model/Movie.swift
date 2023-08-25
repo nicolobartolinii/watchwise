@@ -57,7 +57,7 @@ struct WatchProvider: Codable {
     let rent: [Provider]?
 }
 
-struct Provider: Codable {
+struct Provider: Codable, Hashable {
     let logo_path: String
     let provider_id: Int
     let provider_name: String
@@ -68,7 +68,7 @@ struct VideosResponse: Codable {
     let results: [Video]
 }
 
-struct Video: Codable {
+struct Video: Codable, Hashable {
     let id: String
     let iso_639_1: String
     let iso_3166_1: String
@@ -84,7 +84,7 @@ struct Credits: Codable {
     let crew: [Crew]
 }
 
-struct Cast: Codable {
+struct Cast: Codable, Hashable {
     let adult: Bool
     let gender: Int
     let id: Int64
@@ -95,7 +95,7 @@ struct Cast: Codable {
     let character: String
 }
 
-struct Crew: Codable {
+struct Crew: Codable, Hashable {
     let adult: Bool
     let gender: Int
     let id: Int64
