@@ -44,6 +44,8 @@ struct MovieDetailsView: View {
     
     @State private var selectedInfoTab = InfoTabs.cast
     
+    @State private var showNavigationBar: Bool = false
+    
     var body: some View {
         NavigationView {
             OffsetScrollView(offset: $offset, showIndicators: true, axis: .vertical) {
@@ -75,6 +77,7 @@ struct MovieDetailsView: View {
                         }
                         .frame(height: UIScreen.main.bounds.width * 9 / 16)
                     }
+                    
                     HStack(alignment: .top) {
                         if let posterPath = movie?.poster_path {
                             KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)"))
@@ -218,13 +221,7 @@ struct MovieDetailsView: View {
                         .padding(.horizontal)
                     
                     HStack(spacing: 24) {
-                        AxisRatingBar(value: $rating) {
-                            ARStar(count: 5, innerRatio: 0.9)
-                                .fill(.gray.opacity(0.2))
-                        } foreground: {
-                            ARStar(count: 5, innerRatio: 0.9)
-                                .fill(Color.accentColor)
-                        }
+                        RatingBar(rating: $rating)
                         
                         Button {
                             print("OK")
@@ -341,6 +338,19 @@ struct MovieDetailsView: View {
             .onAppear {
                 getMovieDetails()
             }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    CustomNavigationBar(
+                        showNavigationBar: showNavigationBar,
+                        movieTitle: movie?.title
+                    )
+                }
+            }
+            .animation(.easeInOut, value: showNavigationBar)
+        }
+        .onReceive(offset) { newOffset in
+            // Logica per determinare quando mostrare la barra degli strumenti
+            showNavigationBar = newOffset > 130
         }
     }
     
@@ -498,5 +508,39 @@ struct OffsetScrollView<Content: View>: View {
         })
         .coordinateSpace(name: "scroll")
         .onPreferenceChange(OffsetKey.self) { offset = $0 }
+    }
+}
+
+struct CustomNavigationBar: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    let showNavigationBar: Bool
+    let movieTitle: String?
+    
+    var body: some View {
+        HStack {
+            Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "arrow.left") // Pulsante Indietro
+            }
+            Spacer()
+            Text(movieTitle ?? "Non disponibile") // Titolo del film
+                .opacity(showNavigationBar ? 1 : 0)
+            Spacer()
+        }
+    }
+}
+
+struct RatingBar: View {
+    @Binding var rating: CGFloat
+    
+    var body: some View {
+        AxisRatingBar(value: $rating) {
+            ARStar(count: 5, innerRatio: 0.9)
+                .fill(.gray.opacity(0.2))
+        } foreground: {
+            ARStar(count: 5, innerRatio: 0.9)
+                .fill(Color.accentColor)
+        }
     }
 }
