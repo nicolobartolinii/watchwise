@@ -36,8 +36,6 @@ struct MovieDetailsView: View {
     
     @State private var unitType: Int = 1
     
-    @State private var laude = false
-    
     @State private var review = ""
     
     @State private var reviewError = false
@@ -46,106 +44,15 @@ struct MovieDetailsView: View {
     
     @State private var showNavigationBar: Bool = false
     
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
         NavigationView {
             OffsetScrollView(offset: $offset, showIndicators: true, axis: .vertical) {
                 VStack {
-                    ZStack {
-                        GeometryReader { proxy in
-                            if let backdropPath = movie?.backdrop_path {
-                                KFImage(URL(string: "https://image.tmdb.org/t/p/w1280\(backdropPath)"))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: UIScreen.main.bounds.width,
-                                           height: max(proxy.size.height - offset, UIScreen.main.bounds.width * 9 / 16))
-                                    .clipped()
-                                    .offset(y: min(offset, 0))
-                            } else {
-                                Image("error_404")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: UIScreen.main.bounds.width,
-                                           height: max(proxy.size.height - offset, UIScreen.main.bounds.width * 9 / 16))
-                                    .clipped()
-                                    .offset(y: min(offset, 0))
-                            }
-                            
-                            LinearGradient(gradient: Gradient(colors: [Color(uiColor: UIColor.systemBackground).opacity(0.0), Color(uiColor: UIColor.systemBackground).opacity(0.0), Color(uiColor: UIColor.systemBackground).opacity(0.0), Color(uiColor: UIColor.systemBackground).opacity(1.0)]), startPoint: .top, endPoint: .bottom)
-                                .frame(width: UIScreen.main.bounds.width,
-                                       height: max(proxy.size.height + offset, UIScreen.main.bounds.width * 9 / 16))
-                                .offset(y: min(-offset, 0))
-                        }
-                        .frame(height: UIScreen.main.bounds.width * 9 / 16)
-                    }
+                    BackgroundImageView(backdrop_path: movie?.backdrop_path, offset: offset)
                     
-                    HStack(alignment: .top) {
-                        if let posterPath = movie?.poster_path {
-                            KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)"))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                .cornerRadius(10)
-                                .shadow(color: .secondary, radius: 5)
-                                .offset(y: -40)
-                        } else {
-                            Image("error_404")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                .cornerRadius(10)
-                                .shadow(color: .secondary, radius: 5)
-                                .offset(y: -40)
-                        }
-                        
-                        VStack(spacing: 8) {
-                            Text(movie?.title ?? "Non disponibile")
-                                .bold()
-                                .font(.title2)
-                                .foregroundColor(.accentColor)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            if let tagline = movie?.tagline {
-                                if !tagline.isEmpty {
-                                    Text("\"\(tagline)\"")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .italic()
-                                }
-                            }
-                            
-                            HStack {
-                                if let releaseDate = movie?.release_date {
-                                    Text("\(releaseDate.prefix(4))" + " | Diretto da:")
-                                        .font(.footnote)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .lineLimit(1)
-                                }
-                                Spacer()
-                                if let runtime = movie?.runtime {
-                                    Text("\(runtime) min")
-                                        .font(.subheadline)
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
-                                }
-                            }
-                            
-                            //                            if let releaseDate = movie?.release_date {
-                            //                                let formattedDate = Utils.convertDate(from: releaseDate)
-                            //                                Text(formattedDate ?? "")
-                            //                                    .font(.footnote)
-                            //                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            //                            }
-                            
-                            let directors = movie?.credits?.crew.filter { $0.job == "Director" }.map { $0.name } ?? ["Non disponibile"]
-                            let directorsString = directors.joined(separator: ", ")
-                            
-                            Text(directorsString)
-                                .font(.subheadline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .lineLimit(1)
-                        }
-                    }
-                    .padding(.horizontal)
+                    HeaderView(movie: movie)
                     
                     let genres = movie?.genres.map { $0.name } ?? []
                     
@@ -338,20 +245,18 @@ struct MovieDetailsView: View {
             .onAppear {
                 getMovieDetails()
             }
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    CustomNavigationBar(
-                        showNavigationBar: showNavigationBar,
-                        movieTitle: movie?.title
-                    )
-                }
+            
+        }
+        .overlay(
+            NavigationBar(title: movie?.title ?? "", offset: $offset) {
+                presentationMode.wrappedValue.dismiss()
             }
-            .animation(.easeInOut, value: showNavigationBar)
-        }
-        .onReceive(offset) { newOffset in
-            // Logica per determinare quando mostrare la barra degli strumenti
-            showNavigationBar = newOffset > 130
-        }
+        )
+        .navigationBarBackButtonHidden(true)
+    }
+    
+    var linearGradient: LinearGradient {
+        LinearGradient(colors: [.clear, .primary.opacity(0.3), .clear], startPoint: .topLeading, endPoint: .bottomTrailing)
     }
     
     func getMovieDetails() {
@@ -423,9 +328,13 @@ struct MovieDetailsView: View {
             Spacer()
         }
         .frame(height: 174)
-        .background(Color(UIColor.systemGray6))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(radius: 4)
+        .background(.ultraThinMaterial)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+            .strokeBorder(linearGradient)
+        )
+        .cornerRadius(12)
+        .shadow(color: .primary.opacity(0.2) , radius: 3)
         .padding(.vertical, 8)
     }
     
@@ -465,9 +374,13 @@ struct MovieDetailsView: View {
             Spacer()
         }
         .frame(height: 174)
-        .background(Color(UIColor.systemGray6))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(radius: 4)
+        .background(.ultraThinMaterial)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+            .strokeBorder(linearGradient)
+        )
+        .cornerRadius(12)
+        .shadow(color: .primary.opacity(0.2) , radius: 3)
         .padding(.vertical, 8)
     }
     
@@ -511,26 +424,6 @@ struct OffsetScrollView<Content: View>: View {
     }
 }
 
-struct CustomNavigationBar: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    let showNavigationBar: Bool
-    let movieTitle: String?
-    
-    var body: some View {
-        HStack {
-            Button(action: {
-                self.presentationMode.wrappedValue.dismiss()
-            }) {
-                Image(systemName: "arrow.left") // Pulsante Indietro
-            }
-            Spacer()
-            Text(movieTitle ?? "Non disponibile") // Titolo del film
-                .opacity(showNavigationBar ? 1 : 0)
-            Spacer()
-        }
-    }
-}
-
 struct RatingBar: View {
     @Binding var rating: CGFloat
     
@@ -543,4 +436,129 @@ struct RatingBar: View {
                 .fill(Color.accentColor)
         }
     }
+}
+
+struct BackgroundImageView: View {
+    let backdrop_path: String?
+    let offset: CGFloat
+    
+    var body: some View {
+        ZStack {
+            GeometryReader { proxy in
+                if let backdropPath = backdrop_path {
+                    KFImage(URL(string: "https://image.tmdb.org/t/p/w1280\(backdropPath)"))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: UIScreen.main.bounds.width,
+                               height: max(proxy.size.height - offset, UIScreen.main.bounds.width * 9 / 16))
+                        .clipped()
+                        .offset(y: min(offset, 0))
+                } else {
+                    Image("error_404")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: UIScreen.main.bounds.width,
+                               height: max(proxy.size.height - offset, UIScreen.main.bounds.width * 9 / 16))
+                        .clipped()
+                        .offset(y: min(offset, 0))
+                }
+                
+                LinearGradient(gradient: Gradient(colors: [Color(uiColor: UIColor.systemBackground).opacity(0.0), Color(uiColor: UIColor.systemBackground).opacity(0.0), Color(uiColor: UIColor.systemBackground).opacity(0.0), Color(uiColor: UIColor.systemBackground).opacity(1.0)]), startPoint: .top, endPoint: .bottom)
+                    .frame(width: UIScreen.main.bounds.width,
+                           height: max(proxy.size.height + offset, UIScreen.main.bounds.width * 9 / 16))
+                    .offset(y: min(-offset, 0))
+            }
+            .frame(height: UIScreen.main.bounds.width * 9 / 16)
+        }
+    }
+}
+
+struct HeaderView: View {
+    let movie: Movie?
+    
+    var body: some View {
+        HStack(alignment: .top) {
+            if let posterPath = movie?.poster_path {
+                KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)"))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                    .cornerRadius(10)
+                    .shadow(color: .primary.opacity(0.2) , radius: 5)
+                    .offset(y: -40)
+            } else {
+                Image("error_404")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                    .cornerRadius(10)
+                    .shadow(color: .primary.opacity(0.2) , radius: 5)
+                    .offset(y: -40)
+            }
+            
+            VStack(spacing: 8) {
+                Text(movie?.title ?? "Non disponibile")
+                    .bold()
+                    .font(.title2)
+                    .foregroundColor(.accentColor)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                if let tagline = movie?.tagline {
+                    if !tagline.isEmpty {
+                        Text("\"\(tagline)\"")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .italic()
+                    }
+                }
+                
+                HStack {
+                    if let releaseDate = movie?.release_date {
+                        Text("\(releaseDate.prefix(4))" + " | Diretto da:")
+                            .font(.footnote)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .lineLimit(1)
+                    }
+                    Spacer()
+                    if let runtime = movie?.runtime {
+                        Text("\(runtime) min")
+                            .font(.subheadline)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    }
+                }
+                
+                //                            if let releaseDate = movie?.release_date {
+                //                                let formattedDate = Utils.convertDate(from: releaseDate)
+                //                                Text(formattedDate ?? "")
+                //                                    .font(.footnote)
+                //                                    .frame(maxWidth: .infinity, alignment: .leading)
+                //                            }
+                
+                let directors = movie?.credits?.crew.filter { $0.job == "Director" }.map { $0.name } ?? ["Non disponibile"]
+                let directorsString = directors.joined(separator: ", ")
+                
+                Text(directorsString)
+                    .font(.subheadline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .lineLimit(1)
+            }
+        }
+        .padding(.horizontal)
+    }
+}
+
+extension UINavigationController: UIGestureRecognizerDelegate {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return viewControllers.count > 1
+    }
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+
 }
