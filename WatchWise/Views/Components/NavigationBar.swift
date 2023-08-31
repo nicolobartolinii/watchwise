@@ -20,7 +20,7 @@ struct NavigationBar: View {
             
             HStack {
                 Button(action: action) {
-                    Image(systemName: "arrow.left")
+                    Image(systemName: "arrow.backward")
                         .font(.title2)
                         .foregroundColor(.accentColor)
                         .padding(10)
@@ -37,6 +37,7 @@ struct NavigationBar: View {
                     .font(.title)
                     .foregroundColor(.accentColor)
                     .bold()
+                    .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 8)
                     .opacity(getOpacity(from: offset))

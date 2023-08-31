@@ -9,6 +9,7 @@ import Foundation
 
 struct DiscoverMoviesResponse: Codable {
     let results: [DiscoveredMovie]
+    let total_pages: Int32
 }
 
 struct DiscoveredMovie: Codable, Hashable {

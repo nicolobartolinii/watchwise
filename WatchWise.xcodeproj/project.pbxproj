@@ -27,6 +27,8 @@
 		B936CA722A927A62001F4908 /* CompleteRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA712A927A62001F4908 /* CompleteRegistrationView.swift */; };
 		B936CA752A929D44001F4908 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA742A929D44001F4908 /* AuthManager.swift */; };
 		B936CA772A929F77001F4908 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA762A929F77001F4908 /* SplashScreen.swift */; };
+		B94713A42A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94713A32A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift */; };
+		B94713A62A9CF88800B3FDB1 /* TVShowDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94713A52A9CF88800B3FDB1 /* TVShowDetailsView.swift */; };
 		B9564A902A98A31000A7F92C /* Pods_WatchWise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57795A70F06874F1753D612E /* Pods_WatchWise.framework */; };
 		B9564A912A98A31000A7F92C /* Pods_WatchWise.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57795A70F06874F1753D612E /* Pods_WatchWise.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B973F5112A936D8B00AB7DC8 /* AuthenticatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B973F5102A936D8A00AB7DC8 /* AuthenticatedView.swift */; };
@@ -36,10 +38,18 @@
 		B97984372A97736500A9EC42 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97984362A97736500A9EC42 /* Utils.swift */; };
 		B979843D2A97997000A9EC42 /* AxisRatingBar in Frameworks */ = {isa = PBXBuildFile; productRef = B979843C2A97997000A9EC42 /* AxisRatingBar */; };
 		B97984422A97AA1C00A9EC42 /* AxisSegmentedView in Frameworks */ = {isa = PBXBuildFile; productRef = B97984412A97AA1C00A9EC42 /* AxisSegmentedView */; };
+		B97B1C122A9E2CA900A0D767 /* ACarousel in Frameworks */ = {isa = PBXBuildFile; productRef = B97B1C112A9E2CA900A0D767 /* ACarousel */; };
+		B97B1C152A9E30D700A0D767 /* CarouselStack in Frameworks */ = {isa = PBXBuildFile; productRef = B97B1C142A9E30D700A0D767 /* CarouselStack */; };
+		B97B1C172A9E30D700A0D767 /* ShuffleDeck in Frameworks */ = {isa = PBXBuildFile; productRef = B97B1C162A9E30D700A0D767 /* ShuffleDeck */; };
+		B97B1C192A9E30D700A0D767 /* ShuffleIt in Frameworks */ = {isa = PBXBuildFile; productRef = B97B1C182A9E30D700A0D767 /* ShuffleIt */; };
+		B97B1C1B2A9E30D700A0D767 /* ShuffleStack in Frameworks */ = {isa = PBXBuildFile; productRef = B97B1C1A2A9E30D700A0D767 /* ShuffleStack */; };
 		B98DE9902A8BCFFD0076F379 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98DE98F2A8BCFFD0076F379 /* LoginView.swift */; };
 		B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */; };
 		B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE262A92214E00226A35 /* ClearableTextField.swift */; };
 		B9AAAE292A92234400226A35 /* EmailRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE282A92234400226A35 /* EmailRegistrationView.swift */; };
+		B9ACBA722A9BE29B0046E3F7 /* ListsShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9ACBA712A9BE29B0046E3F7 /* ListsShareView.swift */; };
+		B9ACBA742A9BF8710046E3F7 /* DiscoverTVShowsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9ACBA732A9BF8710046E3F7 /* DiscoverTVShowsResponse.swift */; };
+		B9ACBA762A9BF87A0046E3F7 /* TVShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9ACBA752A9BF87A0046E3F7 /* TVShow.swift */; };
 		B9D9EA982A960AEC000C05CE /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B9D9EA972A960AEC000C05CE /* GoogleSignIn */; };
 		B9D9EA9A2A960AEC000C05CE /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B9D9EA992A960AEC000C05CE /* GoogleSignInSwift */; };
 		B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */; };
@@ -126,6 +136,8 @@
 		B936CA712A927A62001F4908 /* CompleteRegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteRegistrationView.swift; sourceTree = "<group>"; };
 		B936CA742A929D44001F4908 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		B936CA762A929F77001F4908 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
+		B94713A32A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverPeopleResponse.swift; sourceTree = "<group>"; };
+		B94713A52A9CF88800B3FDB1 /* TVShowDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetailsView.swift; sourceTree = "<group>"; };
 		B973F5102A936D8A00AB7DC8 /* AuthenticatedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedView.swift; sourceTree = "<group>"; };
 		B973F5122A936DC700AB7DC8 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		B978F9372A9A2BF20076A03A /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
@@ -135,6 +147,9 @@
 		B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleableSecureField.swift; sourceTree = "<group>"; };
 		B9AAAE262A92214E00226A35 /* ClearableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearableTextField.swift; sourceTree = "<group>"; };
 		B9AAAE282A92234400226A35 /* EmailRegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailRegistrationView.swift; sourceTree = "<group>"; };
+		B9ACBA712A9BE29B0046E3F7 /* ListsShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsShareView.swift; sourceTree = "<group>"; };
+		B9ACBA732A9BF8710046E3F7 /* DiscoverTVShowsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTVShowsResponse.swift; sourceTree = "<group>"; };
+		B9ACBA752A9BF87A0046E3F7 /* TVShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShow.swift; sourceTree = "<group>"; };
 		B9D9EA9B2A960B00000C05CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B9F2B1342A8B867A00B18E44 /* WatchWise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchWise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWiseApp.swift; sourceTree = "<group>"; };
@@ -159,6 +174,7 @@
 				B9F2B1722A8B8B9B00B18E44 /* FirebaseDatabaseSwift in Frameworks */,
 				B9F2B16E2A8B8B9B00B18E44 /* FirebaseCrashlytics in Frameworks */,
 				B9F2B1822A8B8B9B00B18E44 /* FirebaseInstallations in Frameworks */,
+				B97B1C152A9E30D700A0D767 /* CarouselStack in Frameworks */,
 				B9F2B16A2A8B8B9B00B18E44 /* FirebaseAnalytics in Frameworks */,
 				B97984422A97AA1C00A9EC42 /* AxisSegmentedView in Frameworks */,
 				B979843D2A97997000A9EC42 /* AxisRatingBar in Frameworks */,
@@ -166,15 +182,19 @@
 				B9FC91F72A96645200B10DAB /* ExpandableText in Frameworks */,
 				B9D9EA982A960AEC000C05CE /* GoogleSignIn in Frameworks */,
 				B9F2B1882A8B8B9B00B18E44 /* FirebaseStorage in Frameworks */,
+				B97B1C192A9E30D700A0D767 /* ShuffleIt in Frameworks */,
 				B9F2B18A2A8B8B9B00B18E44 /* FirebaseStorageCombine-Community in Frameworks */,
 				B9F2B17A2A8B8B9B00B18E44 /* FirebaseFunctions in Frameworks */,
 				B9D9EA9A2A960AEC000C05CE /* GoogleSignInSwift in Frameworks */,
 				B9F2B1702A8B8B9B00B18E44 /* FirebaseDatabase in Frameworks */,
 				B9F2B17E2A8B8B9B00B18E44 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				B9F2B16C2A8B8B9B00B18E44 /* FirebaseAuth in Frameworks */,
+				B97B1C172A9E30D700A0D767 /* ShuffleDeck in Frameworks */,
 				B9F2B1742A8B8B9B00B18E44 /* FirebaseFirestore in Frameworks */,
 				B9F2B1762A8B8B9B00B18E44 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				B9F2B1802A8B8B9B00B18E44 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
+				B97B1C1B2A9E30D700A0D767 /* ShuffleStack in Frameworks */,
+				B97B1C122A9E2CA900A0D767 /* ACarousel in Frameworks */,
 				B9564A902A98A31000A7F92C /* Pods_WatchWise.framework in Frameworks */,
 				B9F2B1862A8B8B9B00B18E44 /* FirebaseMessaging in Frameworks */,
 				B9F2B1782A8B8B9B00B18E44 /* FirebaseFirestoreSwift in Frameworks */,
@@ -254,6 +274,9 @@
 			children = (
 				B922126B2A90E20300AFFB9C /* Movie.swift */,
 				B922126F2A90FBC400AFFB9C /* DiscoverMoviesResponse.swift */,
+				B9ACBA732A9BF8710046E3F7 /* DiscoverTVShowsResponse.swift */,
+				B9ACBA752A9BF87A0046E3F7 /* TVShow.swift */,
+				B94713A32A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -262,6 +285,7 @@
 			isa = PBXGroup;
 			children = (
 				B92212722A910E4700AFFB9C /* MovieDetailsView.swift */,
+				B94713A52A9CF88800B3FDB1 /* TVShowDetailsView.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -316,6 +340,7 @@
 				B97984342A97668C00A9EC42 /* Extensions.swift */,
 				B90052A02A97B0D2005FC143 /* HistogramView.swift */,
 				B978F9372A9A2BF20076A03A /* NavigationBar.swift */,
+				B9ACBA712A9BE29B0046E3F7 /* ListsShareView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -426,6 +451,11 @@
 				B9FC91F62A96645200B10DAB /* ExpandableText */,
 				B979843C2A97997000A9EC42 /* AxisRatingBar */,
 				B97984412A97AA1C00A9EC42 /* AxisSegmentedView */,
+				B97B1C112A9E2CA900A0D767 /* ACarousel */,
+				B97B1C142A9E30D700A0D767 /* CarouselStack */,
+				B97B1C162A9E30D700A0D767 /* ShuffleDeck */,
+				B97B1C182A9E30D700A0D767 /* ShuffleIt */,
+				B97B1C1A2A9E30D700A0D767 /* ShuffleStack */,
 			);
 			productName = WatchWise;
 			productReference = B9F2B1342A8B867A00B18E44 /* WatchWise.app */;
@@ -500,6 +530,7 @@
 			knownRegions = (
 				en,
 				Base,
+				it,
 			);
 			mainGroup = B9F2B12B2A8B867A00B18E44;
 			packageReferences = (
@@ -511,6 +542,8 @@
 				B97984382A97783300A9EC42 /* XCRemoteSwiftPackageReference "StarRatingViewSwiftUI" */,
 				B979843B2A97997000A9EC42 /* XCRemoteSwiftPackageReference "AxisRatingBar" */,
 				B97984402A97AA1C00A9EC42 /* XCRemoteSwiftPackageReference "AxisSegmentedView" */,
+				B97B1C102A9E2CA900A0D767 /* XCRemoteSwiftPackageReference "ACarousel" */,
+				B97B1C132A9E30D700A0D767 /* XCRemoteSwiftPackageReference "ShuffleIt" */,
 			);
 			productRefGroup = B9F2B1352A8B867A00B18E44 /* Products */;
 			projectDirPath = "";
@@ -686,8 +719,11 @@
 				B92212672A90E04A00AFFB9C /* APIRouter.swift in Sources */,
 				B922126C2A90E20300AFFB9C /* Movie.swift in Sources */,
 				B922125A2A90B57E00AFFB9C /* FeedView.swift in Sources */,
+				B9ACBA742A9BF8710046E3F7 /* DiscoverTVShowsResponse.swift in Sources */,
+				B9ACBA722A9BE29B0046E3F7 /* ListsShareView.swift in Sources */,
 				B9AAAE292A92234400226A35 /* EmailRegistrationView.swift in Sources */,
 				B97984372A97736500A9EC42 /* Utils.swift in Sources */,
+				B9ACBA762A9BF87A0046E3F7 /* TVShow.swift in Sources */,
 				B92212702A90FBC400AFFB9C /* DiscoverMoviesResponse.swift in Sources */,
 				B98DE9902A8BCFFD0076F379 /* LoginView.swift in Sources */,
 				B936CA722A927A62001F4908 /* CompleteRegistrationView.swift in Sources */,
@@ -700,6 +736,7 @@
 				B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */,
 				B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */,
 				B92212732A910E4700AFFB9C /* MovieDetailsView.swift in Sources */,
+				B94713A42A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift in Sources */,
 				B973F5112A936D8B00AB7DC8 /* AuthenticatedView.swift in Sources */,
 				B92212652A90E01300AFFB9C /* APIConstants.swift in Sources */,
 				B973F5132A936DC700AB7DC8 /* AuthenticationView.swift in Sources */,
@@ -708,6 +745,7 @@
 				B978F9382A9A2BF20076A03A /* NavigationBar.swift in Sources */,
 				B922126E2A90E68A00AFFB9C /* APIManager.swift in Sources */,
 				B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */,
+				B94713A62A9CF88800B3FDB1 /* TVShowDetailsView.swift in Sources */,
 				B922125E2A90B59D00AFFB9C /* EpisodesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1085,6 +1123,22 @@
 				kind = branch;
 			};
 		};
+		B97B1C102A9E2CA900A0D767 /* XCRemoteSwiftPackageReference "ACarousel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JWAutumn/ACarousel";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
+			};
+		};
+		B97B1C132A9E30D700A0D767 /* XCRemoteSwiftPackageReference "ShuffleIt" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dscyrescotti/ShuffleIt.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.3;
+			};
+		};
 		B9D9EA962A960AEC000C05CE /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
@@ -1134,6 +1188,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B97984402A97AA1C00A9EC42 /* XCRemoteSwiftPackageReference "AxisSegmentedView" */;
 			productName = AxisSegmentedView;
+		};
+		B97B1C112A9E2CA900A0D767 /* ACarousel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B97B1C102A9E2CA900A0D767 /* XCRemoteSwiftPackageReference "ACarousel" */;
+			productName = ACarousel;
+		};
+		B97B1C142A9E30D700A0D767 /* CarouselStack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B97B1C132A9E30D700A0D767 /* XCRemoteSwiftPackageReference "ShuffleIt" */;
+			productName = CarouselStack;
+		};
+		B97B1C162A9E30D700A0D767 /* ShuffleDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B97B1C132A9E30D700A0D767 /* XCRemoteSwiftPackageReference "ShuffleIt" */;
+			productName = ShuffleDeck;
+		};
+		B97B1C182A9E30D700A0D767 /* ShuffleIt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B97B1C132A9E30D700A0D767 /* XCRemoteSwiftPackageReference "ShuffleIt" */;
+			productName = ShuffleIt;
+		};
+		B97B1C1A2A9E30D700A0D767 /* ShuffleStack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B97B1C132A9E30D700A0D767 /* XCRemoteSwiftPackageReference "ShuffleIt" */;
+			productName = ShuffleStack;
 		};
 		B9D9EA972A960AEC000C05CE /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;

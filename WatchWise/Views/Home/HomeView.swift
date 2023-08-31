@@ -15,60 +15,100 @@ struct HomeView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 8) {
-                HStack {
-                    Spacer()
+            ScrollView(.vertical) {
+                VStack(spacing: 8) {
                     HStack {
-                        Image("logo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 35)
-                        
-                        Image("title")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 150)
+                        Spacer()
+                        HStack {
+                            Image("logo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 35)
+                            
+                            Image("title")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 150)
+                        }
+                        Spacer()
                     }
-                    Spacer()
-                }
-                .frame(width: UIScreen.main.bounds.width - 100)
-                .padding(.horizontal, 5)
-                
-                Text("Home")
-                    .font(.title)
-                    .foregroundColor(.accentColor)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-                
-                Text("Ultime uscite")
-                    .font(.title2)
-                    .foregroundColor(.accentColor)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(nowPlayingMovies ?? [], id: \.self) { movie in
-                            NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(movie.poster_path ?? "")"))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                    .cornerRadius(10)
+                    .frame(width: UIScreen.main.bounds.width - 100)
+                    .padding(.horizontal, 5)
+                    
+                    Text("Home")
+                        .font(.title)
+                        .foregroundColor(.accentColor)
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                    
+                    Text("Ultime uscite")
+                        .font(.title2)
+                        .foregroundColor(.accentColor)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(nowPlayingMovies ?? [], id: \.self) { movie in
+                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                                    if let posterPath = movie.poster_path {
+                                        KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                            .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                            .cornerRadius(10)
+                                    } else {
+                                        Image("error_404")
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                            .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                            .cornerRadius(10)
+                                    }
+                                }
                             }
                         }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
+                    
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("Lorem\nipsum")
+                    Text("FINE")
+                    
                 }
-                
-                Spacer()
-                
-                
-            }
-            .onAppear {
-                getNowPlayingMovies()
+                .onAppear {
+                    getNowPlayingMovies()
+                }
             }
         }
     }

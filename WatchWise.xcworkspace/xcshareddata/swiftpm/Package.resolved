@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "acarousel",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JWAutumn/ACarousel",
+      "state" : {
+        "revision" : "8a322513580f21288fd87eb3a1341c247b3e2a76",
+        "version" : "0.2.0"
+      }
+    },
+    {
       "identity" : "appauth-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openid/AppAuth-iOS.git",
@@ -151,6 +160,15 @@
       "state" : {
         "revision" : "e70e889c0196c76d22759eb50d6a0270ca9f1d9e",
         "version" : "2.3.1"
+      }
+    },
+    {
+      "identity" : "shuffleit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dscyrescotti/ShuffleIt.git",
+      "state" : {
+        "revision" : "e0e70737c1f32f72aec305036484b737ef9d0467",
+        "version" : "2.1.3"
       }
     },
     {

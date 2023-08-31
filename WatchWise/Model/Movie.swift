@@ -28,10 +28,16 @@ struct Movie: Codable {
     let watchProviders: WatchProvidersResponse?
     let videos: VideosResponse?
     let credits: Credits?
+    let productionCompanies: [ProductionCompany]?
+    let productionCountries: [ProductionCountry]?
+    let spokenLanguages: [SpokenLanguage]?
     
     enum CodingKeys: String, CodingKey {
         case adult, backdrop_path, belongs_to_collection, budget, genres, homepage, id, original_language, original_title, overview, poster_path, release_date, revenue, runtime, status, tagline, title, videos, credits
         case watchProviders = "watch/providers"
+        case productionCompanies = "production_companies"
+        case productionCountries = "production_countries"
+        case spokenLanguages = "spoken_languages"
     }
 }
 
@@ -105,4 +111,21 @@ struct Crew: Codable, Hashable {
     let profile_path: String?
     let department: String
     let job: String
+}
+
+struct ProductionCompany: Codable, Hashable {
+    let id: Int64
+    let logo_path: String?
+    let name: String
+}
+
+struct ProductionCountry: Codable, Hashable {
+    let iso_3166_1: String
+    let name: String
+}
+
+struct SpokenLanguage: Codable, Hashable {
+    let english_name: String
+    let iso_639_1: String
+    let name: String
 }
