@@ -52,4 +52,8 @@ class APIManager {
     static func getSeasonDetails(showId: Int64, seasonNumber: Int32, completion: @escaping (AFResult<Season>) -> Void) {
         APIService.getSeasonDetails(showId: showId, seasonNumber: seasonNumber, completion: completion)
     }
+    
+    static func getPersonDetails(personId: Int32, completion: @escaping (AFResult<Person>) -> Void) {
+        APIService.getPersonDetails(personId: personId, completion: completion)
+    }
 }

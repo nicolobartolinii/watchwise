@@ -21,7 +21,6 @@ struct WatchWiseApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     @StateObject var authManager = AuthManager()
-    
     var body: some Scene {
         WindowGroup {
             switch authManager.authenticationState {

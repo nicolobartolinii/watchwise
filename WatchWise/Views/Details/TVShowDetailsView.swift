@@ -67,445 +67,305 @@ struct TVShowDetailsView: View {
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottom) {
-                OffsetScrollView(offset: $offset, showIndicators: true, axis: .vertical) {
-                    VStack {
-                        BackgroundImageView(backdrop_path: show?.backdropPath, offset: offset)
-                        
-                        ShowHeaderView(show: show)
-                        
-                        let genres = show?.genres.map { $0.name } ?? []
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                ForEach(genres, id: \.self) { genre in
-                                    Text(genre)
-                                        .font(.subheadline.smallCaps())
-                                        .bold()
-                                        .foregroundColor(.cyan)
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 2)
-                                        .background(RoundedRectangle(cornerRadius: 5).stroke(.cyan, lineWidth: 2))
-                                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                                    
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical, -32)
-                        
-                        Divider()
-                        
-                        HStack(spacing: 24) {
-                            Button(action: {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    isListsSharePresented.toggle()
-                                }
-                            }, label: {
-                                HStack {
-                                    Image(systemName: "list.bullet")
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                    
-                                    Text("Liste e condivisione")
-                                }
-                            })
-                            .buttonStyle(.borderedProminent)
-                        }
-                        
-                        Divider()
-                        
+                if let show = show {
+                    OffsetScrollView(offset: $offset, showIndicators: true, axis: .vertical) {
                         VStack {
-                            HStack {
-                                Button(action: {
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        selectedTVShowTab = .info
-                                    }
-                                } ) {
-                                    VStack {
-                                        Text("Informazioni")
-                                            .fontWeight(selectedTVShowTab == .info ? .semibold : .regular)
-                                            .font(.title3.smallCaps())
-                                            .foregroundStyle(Color.primary)
-                                            .frame(width: UIScreen.main.bounds.width / 2, height: 44)
-                                    }
-                                }
-                                
-                                Divider().frame(height: 44)
-                                
-                                Button(action: {
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        selectedTVShowTab = .episodes
-                                    }
-                                } ) {
-                                    VStack {
-                                        Text("Episodi")
-                                            .fontWeight(selectedTVShowTab == .episodes ? .semibold : .regular)
-                                            .font(.title3.smallCaps())
-                                            .foregroundStyle(Color.primary)
-                                            .frame(width: UIScreen.main.bounds.width / 2, height: 44)
+                            BackgroundImageView(backdrop_path: show.backdropPath, offset: offset)
+                            
+                            ShowHeaderView(show: show)
+                            
+                            let genres = show.genres.map { $0.name }
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack {
+                                    ForEach(genres, id: \.self) { genre in
+                                        Text(genre)
+                                            .font(.subheadline.smallCaps())
+                                            .bold()
+                                            .foregroundColor(.cyan)
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 2)
+                                            .background(RoundedRectangle(cornerRadius: 5).stroke(.cyan, lineWidth: 2))
+                                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                                        
                                     }
                                 }
                             }
-                            UnevenRoundedRectangle(topLeadingRadius: selectedTVShowTab == .info ? 0 : 6, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: selectedTVShowTab == .info ? 6 : 0, style: .continuous)
-                                .fill(Color.accentColor)
-                                .frame(width: UIScreen.main.bounds.width / 2, height: 7)
-                                .offset(x: (UIScreen.main.bounds.width / 4) * (selectedTVShowTab == .info ? -1 : 1))
-                        }.frame(width: UIScreen.main.bounds.width, height: 44)
-                        
-                        switch selectedTVShowTab {
-                        case .info:
+                            .padding(.horizontal)
+                            .padding(.vertical, -32)
+                            
+                            Divider()
+                            
+                            HStack(spacing: 24) {
+                                Button(action: {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        isListsSharePresented.toggle()
+                                    }
+                                }, label: {
+                                    HStack {
+                                        Image(systemName: "list.bullet")
+                                            .font(.title)
+                                            .foregroundColor(.white)
+                                        
+                                        Text("Liste e condivisione")
+                                    }
+                                })
+                                .buttonStyle(.borderedProminent)
+                            }
+                            
+                            Divider()
+                            
                             VStack {
-                                if let providers = show?.watchProviders {
-                                    if let providersRegion = providers.results["IT"] {
-                                        Divider()
-                                        Text("Dove guardare")
-                                            .fontWeight(.semibold)
-                                            .font(.title3)
-                                            .foregroundColor(.accentColor)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.horizontal)
-                                        ScrollView(.horizontal) {
-                                            HStack {
-                                                ForEach(providersRegion.flatrate ?? [], id: \.self) { provider in
-                                                    providerView(provider: provider, type: "Abbonamento")
-                                                }
-                                                ForEach(providersRegion.buy ?? [], id: \.self) { provider in
-                                                    providerView(provider: provider, type: "Acquisto")
-                                                }
-                                                ForEach(providersRegion.rent ?? [], id: \.self) { provider in
-                                                    providerView(provider: provider, type: "Noleggio")
-                                                }
-                                            }
-                                            .padding(.horizontal)
+                                HStack {
+                                    Button(action: {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            selectedTVShowTab = .info
+                                        }
+                                    } ) {
+                                        VStack {
+                                            Text("Informazioni")
+                                                .fontWeight(selectedTVShowTab == .info ? .semibold : .regular)
+                                                .font(.title3.smallCaps())
+                                                .foregroundStyle(Color.primary)
+                                                .frame(width: UIScreen.main.bounds.width / 2, height: 44)
+                                        }
+                                    }
+                                    
+                                    Divider().frame(height: 44)
+                                    
+                                    Button(action: {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            selectedTVShowTab = .episodes
+                                        }
+                                    } ) {
+                                        VStack {
+                                            Text("Episodi")
+                                                .fontWeight(selectedTVShowTab == .episodes ? .semibold : .regular)
+                                                .font(.title3.smallCaps())
+                                                .foregroundStyle(Color.primary)
+                                                .frame(width: UIScreen.main.bounds.width / 2, height: 44)
                                         }
                                     }
                                 }
-                                
-                                Divider()
-                                
-                                Text("Descrizione")
-                                    .fontWeight(.semibold)
-                                    .font(.title3)
-                                    .foregroundColor(.accentColor)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal)
-                                
-                                if let overview = show?.overview {
-                                    ExpandableText(overview.isEmpty ? "Non disponibiile" : overview)
-                                        .font(.subheadline)
-                                        .lineLimit(4)
-                                        .moreButtonText("altro")
-                                        .padding(.horizontal)
-                                }
-                                
-                                Divider()
-                                
-                                Text("Valutazioni")
-                                    .fontWeight(.semibold)
-                                    .font(.title3)
-                                    .foregroundColor(.accentColor)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal)
-                                
-                                HistogramView(ratings: [])
-                                    .padding(.horizontal)
-                                
-                                HStack(spacing: 24) {
-                                    RatingBar(rating: $rating)
-                                    
-                                    Button {
-                                        print("OK")
-                                    } label: {
-                                        Text(NSLocalizedString("Valuta", comment: "Valuta"))
-                                            .frame(height: 28)
-                                            .frame(maxWidth: .infinity)
+                                UnevenRoundedRectangle(topLeadingRadius: selectedTVShowTab == .info ? 0 : 6, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: selectedTVShowTab == .info ? 6 : 0, style: .continuous)
+                                    .fill(Color.accentColor)
+                                    .frame(width: UIScreen.main.bounds.width / 2, height: 7)
+                                    .offset(x: (UIScreen.main.bounds.width / 4) * (selectedTVShowTab == .info ? -1 : 1))
+                            }.frame(width: UIScreen.main.bounds.width, height: 44)
+                            
+                            switch selectedTVShowTab {
+                            case .info:
+                                VStack {
+                                    if let providers = show.watchProviders {
+                                        if let providersRegion = providers.results["IT"] {
+                                            Divider()
+                                            Text("Dove guardare")
+                                                .fontWeight(.semibold)
+                                                .font(.title3)
+                                                .foregroundColor(.accentColor)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.horizontal)
+                                            ScrollView(.horizontal) {
+                                                HStack {
+                                                    ForEach(providersRegion.flatrate ?? [], id: \.self) { provider in
+                                                        providerView(provider: provider, type: "Abbonamento")
+                                                    }
+                                                    ForEach(providersRegion.buy ?? [], id: \.self) { provider in
+                                                        providerView(provider: provider, type: "Acquisto")
+                                                    }
+                                                    ForEach(providersRegion.rent ?? [], id: \.self) { provider in
+                                                        providerView(provider: provider, type: "Noleggio")
+                                                    }
+                                                }
+                                                .padding(.horizontal)
+                                            }
+                                        }
                                     }
-                                    .buttonStyle(.borderedProminent)
                                     
-                                }
-                                .padding()
-                                
-                                Divider()
-                                
-                                Text("Recensioni")
-                                    .fontWeight(.semibold)
-                                    .font(.title3)
-                                    .foregroundColor(.accentColor)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal)
-                                
-                                ClearableTextField(hint: "Scrivi una recensione", text: $review, startIcon: "text.cursor", endIcon: "xmark.circle.fill", error: $reviewError, keyboardType: .default, textInputAutocapitalization: .sentences, autocorrectionDisabled: false, axis: .vertical)
-                                    .padding(.horizontal)
-                                
-                                HStack {
-                                    Button {
-                                        print("OK")
-                                    } label: {
-                                        Text(NSLocalizedString("Modifica", comment: "Modifica"))
-                                            .frame(height: 28)
-                                            .frame(maxWidth: .infinity)
-                                    }
-                                    .buttonStyle(.bordered)
-                                    .disabled(true)
+                                    Divider()
                                     
-                                    Button {
-                                        print("OK")
-                                    } label: {
-                                        Text(NSLocalizedString("Conferma", comment: "Conferma"))
-                                            .frame(height: 28)
-                                            .frame(maxWidth: .infinity)
-                                    }
-                                    .buttonStyle(.borderedProminent)
-                                    .disabled(true)
-                                }
-                                .padding(.horizontal)
-                                
-                                Button {
-                                    showReviews.toggle()
-                                } label: {
-                                    Text("Visualizza tutte le recensioni (19)")
-                                        .frame(height: 28)
+                                    Text("Descrizione")
+                                        .fontWeight(.semibold)
+                                        .font(.title3)
+                                        .foregroundColor(.accentColor)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding(.horizontal)
-                                }
-                                .sheet(isPresented: $showReviews) {
-                                    List {
-                                        VStack {
-                                            Text("Recensione 1")
-                                            Text("Recensione 2")
-                                        }
+                                    
+                                    if let overview = show.overview {
+                                        ExpandableText(overview.isEmpty ? "Non disponibiile" : overview)
+                                            .font(.subheadline)
+                                            .lineLimit(4)
+                                            .moreButtonText("altro")
+                                            .padding(.horizontal)
                                     }
-                                }
-                                
-                                Divider()
-                                
-                                Text("Informazioni")
-                                    .fontWeight(.semibold)
-                                    .font(.title3)
-                                    .foregroundColor(.accentColor)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    Divider()
+                                    
+                                    Text("Valutazioni")
+                                        .fontWeight(.semibold)
+                                        .font(.title3)
+                                        .foregroundColor(.accentColor)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal)
+                                    
+                                    HistogramView(ratings: [])
+                                        .padding(.horizontal)
+                                    
+                                    HStack(spacing: 24) {
+                                        RatingBar(rating: $rating)
+                                        
+                                        Button {
+                                            print("OK")
+                                        } label: {
+                                            Text(NSLocalizedString("Valuta", comment: "Valuta"))
+                                                .frame(height: 28)
+                                                .frame(maxWidth: .infinity)
+                                        }
+                                        .buttonStyle(.borderedProminent)
+                                        
+                                    }
+                                    .padding()
+                                    
+                                    Divider()
+                                    
+                                    Text("Recensioni")
+                                        .fontWeight(.semibold)
+                                        .font(.title3)
+                                        .foregroundColor(.accentColor)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal)
+                                    
+                                    ClearableTextField(hint: "Scrivi una recensione", text: $review, startIcon: "text.cursor", endIcon: "xmark.circle.fill", error: $reviewError, keyboardType: .default, textInputAutocapitalization: .sentences, autocorrectionDisabled: false, axis: .vertical)
+                                        .padding(.horizontal)
+                                    
+                                    HStack {
+                                        Button {
+                                            print("OK")
+                                        } label: {
+                                            Text(NSLocalizedString("Modifica", comment: "Modifica"))
+                                                .frame(height: 28)
+                                                .frame(maxWidth: .infinity)
+                                        }
+                                        .buttonStyle(.bordered)
+                                        .disabled(true)
+                                        
+                                        Button {
+                                            print("OK")
+                                        } label: {
+                                            Text(NSLocalizedString("Conferma", comment: "Conferma"))
+                                                .frame(height: 28)
+                                                .frame(maxWidth: .infinity)
+                                        }
+                                        .buttonStyle(.borderedProminent)
+                                        .disabled(true)
+                                    }
                                     .padding(.horizontal)
-                                
-                                Picker("Informazioni", selection: $selectedInfoTab) {
-                                    ForEach(InfoTabs.allCases, id: \.self) { tab in
-                                        Text(tab.localized).tag(tab)
-                                    }
-                                }
-                                .pickerStyle(.segmented)
-                                .padding(.horizontal)
-                                
-                                switch selectedInfoTab {
-                                case .cast:
-                                    if let cast = show?.credits?.cast {
-                                        ScrollView(.horizontal) {
-                                            HStack {
-                                                ForEach(cast, id: \.self) { castMember in
-                                                    castView(castMember: castMember)
-                                                }
-                                            }
+                                    
+                                    Button {
+                                        showReviews.toggle()
+                                    } label: {
+                                        Text("Visualizza tutte le recensioni (19)")
+                                            .frame(height: 28)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
                                             .padding(.horizontal)
-                                        }
                                     }
-                                case .crew:
-                                    if let crew = show?.credits?.crew.prefix(30) {
-                                        ScrollView(.horizontal) {
-                                            HStack {
-                                                ForEach(crew, id: \.self) { crewMember in
-                                                    crewView(crewMember: crewMember)
-                                                }
-                                            }
-                                            .padding(.horizontal)
-                                        }
-                                    }
-                                case .details:
-                                    if let originalName = show?.originalName {
-                                        Text(NSLocalizedString("Titolo originale e lingua originale", comment: "Titolo originale e lingua originale").uppercased())
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading)
-                                            .padding(.top, 8)
-                                            .padding(.bottom, 0)
-                                        VStack(spacing: 0) {
-                                            Text(originalName)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .padding()
-                                            if let originalLanguageCode = show?.originalLanguage {
-                                                if let originalLanguage = Locale.current.localizedString(forLanguageCode: originalLanguageCode) {
-                                                    Divider()
-                                                        .padding(.horizontal)
-                                                    Text(originalLanguage)
-                                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                                        .padding()
-                                                }
+                                    .sheet(isPresented: $showReviews) {
+                                        List {
+                                            VStack {
+                                                Text("Recensione 1")
+                                                Text("Recensione 2")
                                             }
                                         }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
                                     }
                                     
-                                    if let releaseDate = show?.firstAirDate {
-                                        Text(NSLocalizedString("Prima data di rilascio", comment: "Prima data di rilascio").uppercased())
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading)
-                                            .padding(.top, 8)
-                                            .padding(.bottom, 0)
-                                        VStack(spacing: 0) {
-                                            Text(Utils.formatDateToLocalString(dateString: releaseDate)!)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .padding()
+                                    Divider()
+                                    
+                                    Text("Informazioni")
+                                        .fontWeight(.semibold)
+                                        .font(.title3)
+                                        .foregroundColor(.accentColor)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal)
+                                    
+                                    Picker("Informazioni", selection: $selectedInfoTab) {
+                                        ForEach(InfoTabs.allCases, id: \.self) { tab in
+                                            Text(tab.localized).tag(tab)
                                         }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
                                     }
+                                    .pickerStyle(.segmented)
+                                    .padding(.horizontal)
                                     
-                                    if let homepage = show?.homepage {
-                                        Text("Homepage".uppercased())
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading)
-                                            .padding(.top, 8)
-                                            .padding(.bottom, 0)
-                                        
-                                        VStack(spacing: 0) {
-                                            Button(action: {
-                                                if let url = URL(string: homepage) {
-                                                    UIApplication.shared.open(url)
-                                                } else {
-                                                    UIApplication.shared.open(URL(string: "https://themoviedb.org/tv/\(show?.id ?? 0)")!)
-                                                }
-                                            }) {
-                                                Text(NSLocalizedString("Vai alla homepage", comment: "Vai alla homepage"))
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                                    .padding()
-                                            }
-                                        }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
-                                    }
-                                    
-                                    
-                                    if let status = show?.status {
-                                        Text(NSLocalizedString("Stato", comment: "Stato").uppercased())
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading)
-                                            .padding(.top, 8)
-                                            .padding(.bottom, 0)
-                                        VStack(spacing: 0) {
-                                            Text(NSLocalizedString(status, comment: status))
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .padding()
-                                        }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
-                                    }
-                                    
-                                    if let spokenLanguages = show?.languages {
-                                        Text(NSLocalizedString("Lingue parlate", comment: "Lingue parlate").uppercased())
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading)
-                                            .padding(.top, 8)
-                                            .padding(.bottom, 0)
-                                        VStack(spacing: 0) {
-                                            ForEach(spokenLanguages.indices, id: \.self) { index in
-                                                if index > 0 {
-                                                    Divider()
-                                                        .padding(.horizontal)
-                                                }
-                                                Text(Locale.current.localizedString(forLanguageCode: spokenLanguages[index])!)
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                                    .padding()
-                                                
-                                            }
-                                        }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
-                                    }
-                                    
-                                    if let productionCompanies = show?.productionCompanies {
-                                        Text(NSLocalizedString("Case produttrici", comment: "Case produttrici").uppercased())
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading)
-                                            .padding(.top, 8)
-                                            .padding(.bottom, 0)
-                                        VStack(spacing: 0) {
-                                            ForEach(productionCompanies.indices, id: \.self) { index in
-                                                if index > 0 {
-                                                    Divider()
-                                                        .padding(.horizontal)
-                                                }
-                                                HStack(spacing: 0) {
-                                                    if let logoPath = productionCompanies[index].logo_path {
-                                                        KFImage(URL(string: "https://image.tmdb.org/t/p/w92\(logoPath)"))
-                                                            .resizable()
-                                                            .scaledToFit()
-                                                            .frame(width: 40, height: 40)
-                                                            .cornerRadius(10)
-                                                            .padding(.vertical, 4)
-                                                            .padding(.leading)
+                                    switch selectedInfoTab {
+                                    case .cast:
+                                        if let cast = show.credits?.cast {
+                                            ScrollView(.horizontal) {
+                                                LazyHStack {
+                                                    ForEach(cast, id: \.self) { castMember in
+                                                        castView(castMember: castMember)
                                                     }
-                                                    Text(productionCompanies[index].name)
-                                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                                        .padding()
                                                 }
+                                                .padding(.horizontal)
                                             }
                                         }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
-                                    }
-                                    
-                                    if let productionCountries = show?.productionCountries {
-                                        Text(NSLocalizedString("Paesi di produzione", comment: "Paesi di produzione").uppercased())
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading)
-                                            .padding(.top, 8)
-                                            .padding(.bottom, 0)
-                                        VStack(spacing: 0) {
-                                            ForEach(productionCountries.indices, id: \.self) { index in
-                                                if index > 0 {
-                                                    Divider()
-                                                        .padding(.horizontal)
+                                    case .crew:
+                                        if let crew = show.credits?.crew.prefix(30) {
+                                            ScrollView(.horizontal) {
+                                                LazyHStack {
+                                                    ForEach(crew, id: \.self) { crewMember in
+                                                        crewView(crewMember: crewMember)
+                                                    }
                                                 }
-                                                
-                                                Text(Locale.current.localizedString(forRegionCode: productionCountries[index].iso_3166_1)!)
+                                                .padding(.horizontal)
+                                            }
+                                        }
+                                    case .details:
+                                        if show.originalName != "" {
+                                            Text(NSLocalizedString("Titolo originale e lingua originale", comment: "Titolo originale e lingua originale").uppercased())
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.leading)
+                                                .padding(.top, 8)
+                                                .padding(.bottom, 0)
+                                            VStack(spacing: 0) {
+                                                Text(show.originalName)
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .padding()
+                                                if let originalLanguageCode = show.originalLanguage {
+                                                    if let originalLanguage = Locale.current.localizedString(forLanguageCode: originalLanguageCode) {
+                                                        Divider()
+                                                            .padding(.horizontal)
+                                                        Text(originalLanguage)
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .padding()
+                                                    }
+                                                }
+                                            }
+                                            .background(Color(UIColor.tertiarySystemFill)
+                                                .cornerRadius(12))
+                                            .padding(.horizontal)
+                                        }
+                                        
+                                        if let releaseDate = show.firstAirDate {
+                                            Text(NSLocalizedString("Prima data di rilascio", comment: "Prima data di rilascio").uppercased())
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.leading)
+                                                .padding(.top, 8)
+                                                .padding(.bottom, 0)
+                                            VStack(spacing: 0) {
+                                                Text(Utils.formatDateToLocalString(dateString: releaseDate)!)
                                                     .frame(maxWidth: .infinity, alignment: .leading)
                                                     .padding()
                                             }
+                                            .background(Color(UIColor.tertiarySystemFill)
+                                                .cornerRadius(12))
+                                            .padding(.horizontal)
                                         }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
-                                    }
-                                case .videos:
-                                    if let videos = show?.videos?.results {
-                                        let officialVideos = videos.filter { $0.official }
                                         
-                                        if !officialVideos.isEmpty && !videos.isEmpty {
-                                            let sortedVideos = officialVideos.sorted {
-                                                if $0.type == "Trailer" { return true }
-                                                if $1.type == "Trailer" { return false }
-                                                if $0.type == "Teaser" && $1.type != "Trailer" { return true }
-                                                return false
-                                            }
-                                            
-                                            Text(NSLocalizedString("Video disponibili", comment: "Video disponibili").uppercased())
+                                        if let homepage = show.homepage {
+                                            Text("Homepage".uppercased())
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
                                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -514,35 +374,186 @@ struct TVShowDetailsView: View {
                                                 .padding(.bottom, 0)
                                             
                                             VStack(spacing: 0) {
-                                                ForEach(sortedVideos.indices, id: \.self) { index in
+                                                Button(action: {
+                                                    if let url = URL(string: homepage) {
+                                                        UIApplication.shared.open(url)
+                                                    } else {
+                                                        UIApplication.shared.open(URL(string: "https://themoviedb.org/tv/\(show.id)")!)
+                                                    }
+                                                }) {
+                                                    Text(NSLocalizedString("Vai alla homepage", comment: "Vai alla homepage"))
+                                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                                        .padding()
+                                                }
+                                            }
+                                            .background(Color(UIColor.tertiarySystemFill)
+                                                .cornerRadius(12))
+                                            .padding(.horizontal)
+                                        }
+                                        
+                                        
+                                        if let status = show.status {
+                                            Text(NSLocalizedString("Stato", comment: "Stato").uppercased())
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.leading)
+                                                .padding(.top, 8)
+                                                .padding(.bottom, 0)
+                                            VStack(spacing: 0) {
+                                                Text(NSLocalizedString(status, comment: status))
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .padding()
+                                            }
+                                            .background(Color(UIColor.tertiarySystemFill)
+                                                .cornerRadius(12))
+                                            .padding(.horizontal)
+                                        }
+                                        
+                                        if let spokenLanguages = show.languages {
+                                            Text(NSLocalizedString("Lingue parlate", comment: "Lingue parlate").uppercased())
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.leading)
+                                                .padding(.top, 8)
+                                                .padding(.bottom, 0)
+                                            VStack(spacing: 0) {
+                                                ForEach(spokenLanguages.indices, id: \.self) { index in
                                                     if index > 0 {
                                                         Divider()
                                                             .padding(.horizontal)
                                                     }
-                                                    
-                                                    let video = sortedVideos[index]
-                                                    let language = Locale.current.localizedString(forLanguageCode: video.iso_639_1) ?? ""
-                                                    let country = Locale.current.localizedString(forRegionCode: video.iso_3166_1) ?? ""
-                                                    
-                                                    Button(action: {
-                                                        openVideo(video)
-                                                    }) {
-                                                        VStack(alignment: .leading) {
-                                                            Text(video.name)
-                                                                .bold()
-                                                                .lineLimit(1)
-                                                            Text("\(language) (\(country))")
-                                                                .font(.subheadline)
-                                                                .foregroundColor(.secondary)
-                                                        }
+                                                    Text(Locale.current.localizedString(forLanguageCode: spokenLanguages[index])!)
                                                         .frame(maxWidth: .infinity, alignment: .leading)
                                                         .padding()
+                                                    
+                                                }
+                                            }
+                                            .background(Color(UIColor.tertiarySystemFill)
+                                                .cornerRadius(12))
+                                            .padding(.horizontal)
+                                        }
+                                        
+                                        if let productionCompanies = show.productionCompanies {
+                                            Text(NSLocalizedString("Case produttrici", comment: "Case produttrici").uppercased())
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.leading)
+                                                .padding(.top, 8)
+                                                .padding(.bottom, 0)
+                                            VStack(spacing: 0) {
+                                                ForEach(productionCompanies.indices, id: \.self) { index in
+                                                    if index > 0 {
+                                                        Divider()
+                                                            .padding(.horizontal)
+                                                    }
+                                                    HStack(spacing: 0) {
+                                                        if let logoPath = productionCompanies[index].logo_path {
+                                                            KFImage(URL(string: "https://image.tmdb.org/t/p/w92\(logoPath)"))
+                                                                .resizable()
+                                                                .scaledToFit()
+                                                                .frame(width: 40, height: 40)
+                                                                .cornerRadius(10)
+                                                                .padding(.vertical, 4)
+                                                                .padding(.leading)
+                                                        }
+                                                        Text(productionCompanies[index].name)
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .padding()
                                                     }
                                                 }
                                             }
                                             .background(Color(UIColor.tertiarySystemFill)
                                                 .cornerRadius(12))
                                             .padding(.horizontal)
+                                        }
+                                        
+                                        if let productionCountries = show.productionCountries {
+                                            Text(NSLocalizedString("Paesi di produzione", comment: "Paesi di produzione").uppercased())
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.leading)
+                                                .padding(.top, 8)
+                                                .padding(.bottom, 0)
+                                            VStack(spacing: 0) {
+                                                ForEach(productionCountries.indices, id: \.self) { index in
+                                                    if index > 0 {
+                                                        Divider()
+                                                            .padding(.horizontal)
+                                                    }
+                                                    
+                                                    Text(Locale.current.localizedString(forRegionCode: productionCountries[index].iso_3166_1)!)
+                                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                                        .padding()
+                                                }
+                                            }
+                                            .background(Color(UIColor.tertiarySystemFill)
+                                                .cornerRadius(12))
+                                            .padding(.horizontal)
+                                        }
+                                    case .videos:
+                                        if let videos = show.videos?.results {
+                                            let officialVideos = videos.filter { $0.official }
+                                            
+                                            if !officialVideos.isEmpty && !videos.isEmpty {
+                                                let sortedVideos = officialVideos.sorted {
+                                                    if $0.type == "Trailer" { return true }
+                                                    if $1.type == "Trailer" { return false }
+                                                    if $0.type == "Teaser" && $1.type != "Trailer" { return true }
+                                                    return false
+                                                }
+                                                
+                                                Text(NSLocalizedString("Video disponibili", comment: "Video disponibili").uppercased())
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .padding(.leading)
+                                                    .padding(.top, 8)
+                                                    .padding(.bottom, 0)
+                                                
+                                                VStack(spacing: 0) {
+                                                    ForEach(sortedVideos.indices, id: \.self) { index in
+                                                        if index > 0 {
+                                                            Divider()
+                                                                .padding(.horizontal)
+                                                        }
+                                                        
+                                                        let video = sortedVideos[index]
+                                                        let language = Locale.current.localizedString(forLanguageCode: video.iso_639_1) ?? ""
+                                                        let country = Locale.current.localizedString(forRegionCode: video.iso_3166_1) ?? ""
+                                                        
+                                                        Button(action: {
+                                                            openVideo(video)
+                                                        }) {
+                                                            VStack(alignment: .leading) {
+                                                                Text(video.name)
+                                                                    .bold()
+                                                                    .lineLimit(1)
+                                                                Text("\(language) (\(country))")
+                                                                    .font(.subheadline)
+                                                                    .foregroundColor(.secondary)
+                                                            }
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .padding()
+                                                        }
+                                                    }
+                                                }
+                                                .background(Color(UIColor.tertiarySystemFill)
+                                                    .cornerRadius(12))
+                                                .padding(.horizontal)
+                                            } else {
+                                                VStack(spacing: 0) {
+                                                    Text(NSLocalizedString("Nessun video disponibile", comment: "Nessun video disponibile"))
+                                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                                        .padding()
+                                                }
+                                                .background(Color(UIColor.tertiarySystemFill)
+                                                    .cornerRadius(12))
+                                                .padding(.horizontal)
+                                            }
                                         } else {
                                             VStack(spacing: 0) {
                                                 Text(NSLocalizedString("Nessun video disponibile", comment: "Nessun video disponibile"))
@@ -553,269 +564,261 @@ struct TVShowDetailsView: View {
                                                 .cornerRadius(12))
                                             .padding(.horizontal)
                                         }
-                                    } else {
-                                        VStack(spacing: 0) {
-                                            Text(NSLocalizedString("Nessun video disponibile", comment: "Nessun video disponibile"))
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .padding()
-                                        }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
+                                        
                                     }
                                     
-                                }
-                                
-                                Divider()
-                                
-                                Text("Film simili")
-                                    .fontWeight(.semibold)
-                                    .font(.title3)
-                                    .foregroundColor(.accentColor)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal)
-                                
-                                Spacer()
-                                
-                            }.transition(.move(edge: .leading))
-                        case .episodes:
-                            VStack {
-                                Divider()
-                                Text("Inizia il monitoraggio")
-                                    .fontWeight(.semibold)
-                                    .font(.title3)
-                                    .foregroundColor(.accentColor)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal)
-                                
-                                CarouselStack(episodes) { episode in
-                                    HStack(alignment: .center) {
-                                        if let imagePath = episode.imagePath {
-                                            KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(imagePath)"))
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 80, height: 80)
-                                                .cornerRadius(10)
-                                                .padding(5)
-                                        } else {
-                                            Image("error_404")
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 80, height: 80)
-                                                .cornerRadius(10)
-                                                .padding(5)
-                                        }
-                                        VStack {
-                                            HStack(spacing: 0) {
-                                                if let seasonNumber = episode.seasonNumber {
-                                                    Text("S\(Utils.convertSeasonEpisodeNumber(seasonNumber)) | ")
+                                    Divider()
+                                    
+                                    Text("Film simili")
+                                        .fontWeight(.semibold)
+                                        .font(.title3)
+                                        .foregroundColor(.accentColor)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal)
+                                    
+                                    Spacer()
+                                    
+                                }.transition(.move(edge: .leading))
+                            case .episodes:
+                                VStack {
+                                    Divider()
+                                    Text("Inizia il monitoraggio")
+                                        .fontWeight(.semibold)
+                                        .font(.title3)
+                                        .foregroundColor(.accentColor)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal)
+                                    
+                                    CarouselStack(episodes) { episode in
+                                        HStack(alignment: .center) {
+                                            if let imagePath = episode.imagePath {
+                                                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(imagePath)"))
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 80, height: 80)
+                                                    .cornerRadius(10)
+                                                    .padding(5)
+                                            } else {
+                                                Image("error_404")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 80, height: 80)
+                                                    .cornerRadius(10)
+                                                    .padding(5)
+                                            }
+                                            VStack {
+                                                HStack(spacing: 0) {
+                                                    if let seasonNumber = episode.seasonNumber {
+                                                        Text("S\(Utils.convertSeasonEpisodeNumber(seasonNumber)) | ")
+                                                            .fontWeight(.semibold)
+                                                    }
+                                                    Text("E\(Utils.convertSeasonEpisodeNumber(episode.episodeNumber))")
                                                         .fontWeight(.semibold)
                                                 }
-                                                Text("E\(Utils.convertSeasonEpisodeNumber(episode.episodeNumber))")
-                                                    .fontWeight(.semibold)
-                                            }
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            Text(episode.name ?? "Episodio \(episode.episodeNumber)")
-                                                .font(.callout)
                                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                        }
-                                        .padding(.leading, -5)
-                                        .padding(.trailing, 5)
-                                        Spacer()
-                                        Button(action: {}) {
-                                            ZStack {
-                                                Circle()
-                                                    .fill(Color(uiColor: .systemGray4))
-                                                    .frame(width: 40, height: 40)
-                                                
-                                                Image(systemName: "checkmark")
-                                                    .foregroundStyle(Color.gray)
-                                                    .fontWeight(.medium)
-                                                    .font(.title3)
+                                                Text(episode.name ?? "Episodio \(episode.episodeNumber)")
+                                                    .font(.callout)
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
                                             }
-                                        }.padding(.trailing, 10)
+                                            .padding(.leading, -5)
+                                            .padding(.trailing, 5)
+                                            Spacer()
+                                            Button(action: {}) {
+                                                ZStack {
+                                                    Circle()
+                                                        .fill(Color(uiColor: .systemGray4))
+                                                        .frame(width: 40, height: 40)
+                                                    
+                                                    Image(systemName: "checkmark")
+                                                        .foregroundStyle(Color.gray)
+                                                        .fontWeight(.medium)
+                                                        .font(.title3)
+                                                }
+                                            }.padding(.trailing, 10)
+                                        }
+                                        .frame(height: 90)
+                                        .background(.ultraThickMaterial)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .strokeBorder(Utils.linearGradient)
+                                        )
+                                        .cornerRadius(12)
+                                        .shadow(color: Color.primary.opacity(0.4) , radius: 3)
+                                    }.frame(height: 100)
+                                    
+                                    Divider()
+                                    
+                                    Text("Tutti gli episodi")
+                                        .fontWeight(.semibold)
+                                        .font(.title3)
+                                        .foregroundColor(.accentColor)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal)
+                                    
+                                    if let seasons = show.seasons {
+                                        ForEach(seasons, id: \.self) { season in
+                                            if season.seasonNumber != 0 {
+                                                SeasonView(season: season, isSeasonDetailsPresented: $isSeasonDetailsPresented, isEpisodeWatched: $isEpisodeWatched, linearGradient: Utils.linearGradient)
+                                            }
+                                        }
+                                        if let specialSeason = seasons.first(where: { $0.seasonNumber == 0 }) {
+                                            SeasonView(season: specialSeason, isSeasonDetailsPresented: $isSeasonDetailsPresented, isEpisodeWatched: $isEpisodeWatched, linearGradient: Utils.linearGradient)
+                                        }
                                     }
-                                    .frame(height: 90)
-                                    .background(.ultraThickMaterial)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .strokeBorder(linearGradient)
-                                    )
-                                    .cornerRadius(12)
-                                    .shadow(color: Color.primary.opacity(0.4) , radius: 3)
-                                }.frame(height: 100)
+                                    
+                                }.transition(.move(edge: .trailing))
+                            }
+                        }
+                    }
+                    .ignoresSafeArea()
+                    .overlay(
+                        NavigationBar(title: show.name, offset: $offset) {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    )
+                    .blur(radius: isListsSharePresented ? 10 : 0)
+                    if isListsSharePresented {
+                        VStack(spacing: 0) {
+                            if !isOtherListsPresented {
+                                Button(action: { isInWatching.toggle() }) {
+                                    HStack {
+                                        Image(systemName: isInWatching ? "eye.fill" : "eye")
+                                            .foregroundStyle(Color.primary)
+                                            .frame(width: 28)
+                                        Text("Serie TV in visione")
+                                            .foregroundStyle(Color.primary)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        Spacer()
+                                        Image(systemName: isInWatching ? "checkmark.circle.fill" : "checkmark.circle")
+                                            .foregroundStyle(isInWatching ? Color.mint : Color.primary)
+                                            .frame(width: 28)
+                                    }
+                                    .padding()
+                                }
                                 
                                 Divider()
                                 
-                                Text("Tutti gli episodi")
-                                    .fontWeight(.semibold)
-                                    .font(.title3)
-                                    .foregroundColor(.accentColor)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal)
-                                
-                                if let seasons = show?.seasons {
-                                    ForEach(seasons, id: \.self) { season in
-                                        if season.seasonNumber != 0 {
-                                            SeasonView(season: season, isSeasonDetailsPresented: $isSeasonDetailsPresented, isEpisodeWatched: $isEpisodeWatched, linearGradient: linearGradient)
-                                        }
+                                Button(action: { isInWatchlist.toggle() }) {
+                                    HStack {
+                                        Image(systemName: isInWatchlist ? "bookmark.fill" : "bookmark")
+                                            .foregroundStyle(Color.primary)
+                                            .frame(width: 28)
+                                        Text("Watchlist")
+                                            .foregroundStyle(Color.primary)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        Spacer()
+                                        Image(systemName: isInWatchlist ? "checkmark.circle.fill" : "checkmark.circle")
+                                            .foregroundStyle(isInWatchlist ? Color.mint : Color.primary)
+                                            .frame(width: 28)
                                     }
-                                    if let specialSeason = seasons.first(where: { $0.seasonNumber == 0 }) {
-                                        SeasonView(season: specialSeason, isSeasonDetailsPresented: $isSeasonDetailsPresented, isEpisodeWatched: $isEpisodeWatched, linearGradient: linearGradient)
-                                    }
+                                    .padding()
                                 }
                                 
-                            }.transition(.move(edge: .trailing))
-                        }
-                    }
-                }
-                .ignoresSafeArea()
-                .onAppear {
-                    Task {
-                        do {
-                            var show = try await getTVShowDetails()
-                            
-                            for (index, season) in show.seasons!.enumerated() {
-                                do {
-                                    let detailedSeason = try await getSeasonDetails(seasonNumber: Int32(season.seasonNumber))
-                                    isSeasonDetailsPresented[season.seasonNumber] = false
-                                    if season.seasonNumber != 0 {
-                                        self.episodes.append(contentsOf: detailedSeason.episodes ?? [])
+                                Divider()
+                                
+                                Button(action: { isInFavorites.toggle() }) {
+                                    HStack {
+                                        Image(systemName: isInFavorites ? "heart.fill" : "heart")
+                                            .foregroundStyle(Color.primary)
+                                            .frame(width: 28)
+                                        Text("Preferiti")
+                                            .foregroundStyle(Color.primary)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        Spacer()
+                                        Image(systemName: isInFavorites ? "checkmark.circle.fill" : "checkmark.circle")
+                                            .foregroundStyle(isInFavorites ? Color.mint : Color.primary)
+                                            .frame(width: 28)
                                     }
-                                    show.seasons?[index] = detailedSeason
-                                } catch {
-                                    print("Error fetching details for season \(season.seasonNumber): \(error)")
+                                    .padding()
                                 }
+                                
+                                Divider()
+                                
+                                HStack {
+                                    Image(systemName: "list.bullet")
+                                        .frame(width: 28)
+                                    Text("Altre liste")
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .frame(width: 28)
+                                }
+                                .padding()
+                                
+                                Divider()
+                                
+                                HStack {
+                                    Image(systemName: "square.and.arrow.up")
+                                        .frame(width: 28)
+                                    Text("Condividi")
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    Image(systemName: "chevron.right")
+                                        .frame(width: 28)
+                                }
+                                .padding()
+                                
                             }
                             
-                            self.show = show
+                            Utils.linearGradient
+                                .frame(width: .infinity, height: 1)
                             
-                        } catch {
-                            print("Error fetching show details: \(error)")
+                            Button(action: {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    isListsSharePresented = false
+                                }
+                            }) {
+                                Text("Annulla")
+                                    .foregroundStyle(Color.primary)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding()
+                            }
                         }
+                        .background(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .strokeBorder(Utils.linearGradient)
+                        )
+                        .cornerRadius(12)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                        .padding()
+                        .transition(.move(edge: .bottom))
                     }
-                }
-                .blur(radius: isListsSharePresented ? 10 : 0)
-                if isListsSharePresented {
-                    VStack(spacing: 0) {
-                        if !isOtherListsPresented {
-                            Button(action: { isInWatching.toggle() }) {
-                                HStack {
-                                    Image(systemName: isInWatching ? "eye.fill" : "eye")
-                                        .foregroundStyle(Color.primary)
-                                        .frame(width: 28)
-                                    Text("Serie TV in visione")
-                                        .foregroundStyle(Color.primary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Spacer()
-                                    Image(systemName: isInWatching ? "checkmark.circle.fill" : "checkmark.circle")
-                                        .foregroundStyle(isInWatching ? Color.mint : Color.primary)
-                                        .frame(width: 28)
-                                }
-                                .padding()
-                            }
-                            
-                            Divider()
-                            
-                            Button(action: { isInWatchlist.toggle() }) {
-                                HStack {
-                                    Image(systemName: isInWatchlist ? "bookmark.fill" : "bookmark")
-                                        .foregroundStyle(Color.primary)
-                                        .frame(width: 28)
-                                    Text("Watchlist")
-                                        .foregroundStyle(Color.primary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Spacer()
-                                    Image(systemName: isInWatchlist ? "checkmark.circle.fill" : "checkmark.circle")
-                                        .foregroundStyle(isInWatchlist ? Color.mint : Color.primary)
-                                        .frame(width: 28)
-                                }
-                                .padding()
-                            }
-                            
-                            Divider()
-                            
-                            Button(action: { isInFavorites.toggle() }) {
-                                HStack {
-                                    Image(systemName: isInFavorites ? "heart.fill" : "heart")
-                                        .foregroundStyle(Color.primary)
-                                        .frame(width: 28)
-                                    Text("Preferiti")
-                                        .foregroundStyle(Color.primary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Spacer()
-                                    Image(systemName: isInFavorites ? "checkmark.circle.fill" : "checkmark.circle")
-                                        .foregroundStyle(isInFavorites ? Color.mint : Color.primary)
-                                        .frame(width: 28)
-                                }
-                                .padding()
-                            }
-                            
-                            Divider()
-                            
-                            HStack {
-                                Image(systemName: "list.bullet")
-                                    .frame(width: 28)
-                                Text("Altre liste")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .frame(width: 28)
-                            }
-                            .padding()
-                            
-                            Divider()
-                            
-                            HStack {
-                                Image(systemName: "square.and.arrow.up")
-                                    .frame(width: 28)
-                                Text("Condividi")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                Image(systemName: "chevron.right")
-                                    .frame(width: 28)
-                            }
-                            .padding()
-                            
-                        }
-                        
-                        linearGradient
-                            .frame(width: .infinity, height: 1)
-                        
-                        Button(action: {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                isListsSharePresented = false
-                            }
-                        }) {
-                            Text("Annulla")
-                                .foregroundStyle(Color.primary)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding()
-                        }
-                    }
-                    .background(.ultraThinMaterial)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .strokeBorder(linearGradient)
-                    )
-                    .cornerRadius(12)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .padding()
-                    .transition(.move(edge: .bottom))
+                } else {
+                    ProgressView("Caricamento in corso...")
+                        .progressViewStyle(.circular)
+                        .tint(.accentColor)
+                        .controlSize(.large)
+                    
                 }
             }
-            
+            .onAppear {
+                Task {
+                    do {
+                        var show = try await getTVShowDetails()
+                        
+                        for (index, season) in show.seasons!.enumerated() {
+                            do {
+                                let detailedSeason = try await getSeasonDetails(seasonNumber: Int32(season.seasonNumber))
+                                isSeasonDetailsPresented[season.seasonNumber] = false
+                                if season.seasonNumber != 0 {
+                                    self.episodes.append(contentsOf: detailedSeason.episodes ?? [])
+                                }
+                                show.seasons?[index] = detailedSeason
+                            } catch {
+                                print("Error fetching details for season \(season.seasonNumber): \(error)")
+                            }
+                        }
+                        
+                        self.show = show
+                        
+                    } catch {
+                        print("Error fetching show details: \(error)")
+                    }
+                }
+            }
         }
-        .overlay(
-            NavigationBar(title: show?.name ?? "", offset: $offset) {
-                presentationMode.wrappedValue.dismiss()
-            }
-        )
-        .navigationBarBackButtonHidden(true)
-        .padding(.bottom, 1)
-    }
-    
-    var linearGradient: LinearGradient {
-        LinearGradient(colors: [.primary.opacity(0.1), .primary.opacity(0.3), .primary.opacity(0.1)], startPoint: .topLeading, endPoint: .bottomTrailing)
+            .navigationBarBackButtonHidden(true)
+            .padding(.bottom, 1)
     }
     
     func getTVShowDetails() async throws -> TVShow {
@@ -884,95 +887,99 @@ struct TVShowDetailsView: View {
     }
     
     func castView(castMember: Cast) -> some View {
-        VStack(spacing: 0) {
-            if let profilePath = castMember.profile_path {
-                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(profilePath)"))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(12)
+        NavigationLink(destination: PersonDetailsView(personId: castMember.id)) {
+            VStack(spacing: 0) {
+                if let profilePath = castMember.profile_path {
+                    KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(profilePath)"))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(12)
+                        .padding(.horizontal, 4)
+                        .padding(.top, 4)
+                } else {
+                    Image("error_404")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(12)
+                        .padding(.horizontal, 4)
+                        .padding(.top, 4)
+                }
+                Text(castMember.name)
+                    .font(.subheadline)
+                    .lineLimit(2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.accentColor)
+                    .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
-            } else {
-                Image("error_404")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(12)
+                Text(castMember.character)
+                    .font(.caption)
+                    .lineLimit(1)
+                    .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
+                Spacer()
             }
-            Text(castMember.name)
-                .font(.subheadline)
-                .lineLimit(2)
-                .fontWeight(.semibold)
-                .foregroundColor(.accentColor)
-                .frame(maxWidth: 100, alignment: .leading)
-                .padding(.horizontal, 4)
-                .padding(.top, 4)
-            Text(castMember.character)
-                .font(.caption)
-                .lineLimit(1)
-                .frame(maxWidth: 100, alignment: .leading)
-                .padding(.horizontal, 4)
-                .padding(.top, 4)
-            Spacer()
-        }
-        .frame(height: 174)
-        .background(.ultraThinMaterial)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(linearGradient)
-        )
-        .cornerRadius(12)
-        .shadow(color: .primary.opacity(0.2) , radius: 3)
+            .frame(height: 174)
+            .background(.ultraThinMaterial)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(Utils.linearGradient)
+            )
+            .cornerRadius(12)
+            .shadow(color: .primary.opacity(0.2) , radius: 3)
         .padding(.vertical, 8)
+        }
     }
     
     func crewView(crewMember: Crew) -> some View {
-        VStack(spacing: 0) {
-            if let profilePath = crewMember.profile_path {
-                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(profilePath)"))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(12)
+        NavigationLink(destination: PersonDetailsView(personId: crewMember.id)) {
+            VStack(spacing: 0) {
+                if let profilePath = crewMember.profile_path {
+                    KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(profilePath)"))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(12)
+                        .padding(.horizontal, 4)
+                        .padding(.top, 4)
+                } else {
+                    Image("error_404")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(12)
+                        .padding(.horizontal, 4)
+                        .padding(.top, 4)
+                }
+                Text(crewMember.name)
+                    .font(.subheadline)
+                    .lineLimit(2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.accentColor)
+                    .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
-            } else {
-                Image("error_404")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(12)
+                Text(crewMember.job)
+                    .font(.caption)
+                    .lineLimit(1)
+                    .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
+                Spacer()
             }
-            Text(crewMember.name)
-                .font(.subheadline)
-                .lineLimit(2)
-                .fontWeight(.semibold)
-                .foregroundColor(.accentColor)
-                .frame(maxWidth: 100, alignment: .leading)
-                .padding(.horizontal, 4)
-                .padding(.top, 4)
-            Text(crewMember.job)
-                .font(.caption)
-                .lineLimit(1)
-                .frame(maxWidth: 100, alignment: .leading)
-                .padding(.horizontal, 4)
-                .padding(.top, 4)
-            Spacer()
-        }
-        .frame(height: 174)
-        .background(.ultraThinMaterial)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(linearGradient)
-        )
-        .cornerRadius(12)
-        .shadow(color: .primary.opacity(0.2) , radius: 3)
+            .frame(height: 174)
+            .background(.ultraThinMaterial)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(Utils.linearGradient)
+            )
+            .cornerRadius(12)
+            .shadow(color: .primary.opacity(0.2) , radius: 3)
         .padding(.vertical, 8)
+        }
     }
     
 }

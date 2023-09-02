@@ -10,6 +10,8 @@ import SwiftUI
 struct NavigationBar: View {
     var title = ""
     @Binding var offset: CGFloat
+    var startOffset: CGFloat = 175
+    var endOffset: CGFloat = 225
     var action: () -> Void
     
     var body: some View {
@@ -48,8 +50,6 @@ struct NavigationBar: View {
     }
     
     private func getOpacity(from offset: CGFloat) -> Double {
-        let startOffset: CGFloat = 175
-        let endOffset: CGFloat = 225
         let opacity = (offset - startOffset) / (endOffset - startOffset)
         
         return Double(min(max(opacity, 0), 1))

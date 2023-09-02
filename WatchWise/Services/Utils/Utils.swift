@@ -6,8 +6,13 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Utils {
+    static var linearGradient: LinearGradient {
+        LinearGradient(colors: [.primary.opacity(0.1), .primary.opacity(0.3), .primary.opacity(0.1)], startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
+    
     static func formatDateToLocalString(dateString: String) -> String? {
         // Creare un DateFormatter per interpretare la stringa di data nel formato "YYYY-MM-DD"
         let inputFormatter = DateFormatter()

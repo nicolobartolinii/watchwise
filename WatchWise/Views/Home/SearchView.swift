@@ -22,6 +22,8 @@ enum SearchTabs: String, CaseIterable {
 }
 
 struct SearchView: View {
+    @EnvironmentObject var authManager: AuthManager
+    
     @State private var searchText: String = ""
     @State private var moviesTask: Task<Void, Never>?
     @State private var showsTask: Task<Void, Never>?
@@ -35,6 +37,7 @@ struct SearchView: View {
     @State private var searchMoviesResults: [DiscoveredMovie]?
     @State private var searchShowsResults: [DiscoveredTVShow]?
     @State private var searchPeopleResults: [DiscoveredPerson]?
+    @State private var searchUsersResults: [User]?
     
     @State private var showSearchResults = false
     @State private var isPressed = false
@@ -49,401 +52,439 @@ struct SearchView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                HStack(spacing: 16) {
-                    Image("logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 35)
+            if let popularMovies = popularMovies, let popularTVShows = popularTVShows, let trendingMovies = trendingMovies, let trendingTVShows = trendingTVShows {
+                VStack {
+                    HStack(spacing: 16) {
+                        Image("logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 35)
+                        
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .frame(width: 24, height: 24)
+                            TextField("Ricerca film, serie TV, persone o utenti", text: $searchText, axis: .horizontal)
+                                .keyboardType(.default)
+                                .textInputAutocapitalization(.sentences)
+                                .autocorrectionDisabled(false)
+                                .onChange(of: searchText) { newValue in
+                                    if newValue != "" {
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            showSearchResults = true
+                                        }
+                                        searchMoviesResults = []
+                                        currentMoviesPage = 1
+                                        searchShowsResults = []
+                                        currentShowsPage = 1
+                                        searchPeopleResults = []
+                                        currentPeoplePage = 1
+                                        searchUsersResults = []
+                                        searchMovies(query: newValue, page: currentMoviesPage)
+                                        searchShows(query: newValue, page: currentShowsPage)
+                                        searchPeople(query: newValue, page: currentPeoplePage)
+                                        searchUsers(query: newValue.lowercased())
+                                    } else {
+                                        withAnimation(.easeInOut(duration: 0.1)) {
+                                            showSearchResults = false
+                                        }
+                                        searchMoviesResults = []
+                                        currentMoviesPage = 1
+                                        searchShowsResults = []
+                                        currentShowsPage = 1
+                                        searchPeopleResults = []
+                                        currentPeoplePage = 1
+                                        searchUsersResults = []
+                                        selectedSearchTab = .movies
+                                    }
+                                }
+                            if !searchText.isEmpty {
+                                Button(action: {
+                                    self.searchText = ""
+                                }) {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.gray)
+                                        .scaleEffect(isPressed ? 0.7 : 1)
+                                        .animation(.easeInOut(duration: 0.2), value: isPressed)
+                                        .frame(width: 24, height: 24)
+                                }
+                                .onLongPressGesture(minimumDuration: .infinity, maximumDistance: .infinity, pressing: { pressing in
+                                    self.isPressed = pressing
+                                }, perform: {})
+                            }
+                        }
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(.gray, lineWidth: 1))
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom)
                     
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .frame(width: 24, height: 24)
-                        TextField("Ricerca film, serie TV, persone o utenti", text: $searchText, axis: .horizontal)
-                            .keyboardType(.default)
-                            .textInputAutocapitalization(.sentences)
-                            .autocorrectionDisabled(false)
-                            .onChange(of: searchText) { newValue in
-                                if newValue != "" {
-                                    withAnimation(.easeInOut(duration: 0.3)) {
-                                        showSearchResults = true
-                                    }
-                                    searchMoviesResults = []
-                                    currentMoviesPage = 1
-                                    searchShowsResults = []
-                                    currentShowsPage = 1
-                                    searchPeopleResults = []
-                                    currentPeoplePage = 1
-                                    searchMovies(query: newValue, page: currentMoviesPage)
-                                    searchShows(query: newValue, page: currentShowsPage)
-                                    searchPeople(query: newValue, page: currentPeoplePage)
-                                } else {
-                                    withAnimation(.easeInOut(duration: 0.1)) {
-                                        showSearchResults = false
-                                    }
-                                    searchMoviesResults = []
-                                    currentMoviesPage = 1
-                                    searchShowsResults = []
-                                    currentShowsPage = 1
-                                    searchPeopleResults = []
-                                    currentPeoplePage = 1
-                                    selectedSearchTab = .movies
-                                }
-                            }
-                        if !searchText.isEmpty {
-                            Button(action: {
-                                self.searchText = ""
-                            }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
-                                    .scaleEffect(isPressed ? 0.7 : 1)
-                                    .animation(.easeInOut(duration: 0.2), value: isPressed)
-                                    .frame(width: 24, height: 24)
-                            }
-                            .onLongPressGesture(minimumDuration: .infinity, maximumDistance: .infinity, pressing: { pressing in
-                                self.isPressed = pressing
-                            }, perform: {})
-                        }
-                    }
-                    .padding()
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(.gray, lineWidth: 1))
-                }
-                .padding(.horizontal)
-                .padding(.bottom)
-                
-                ZStack {
-                    ScrollView(.vertical) {
-                        VStack {
-                            Text("Film popolari")
-                                .font(.title2)
-                                .foregroundColor(.accentColor)
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 10) {
-                                    ForEach(popularMovies ?? [], id: \.self) { movie in
-                                        NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                                            if let posterPath = movie.poster_path {
-                                                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                                    .shadow(color: .primary.opacity(0.2) , radius: 5)
-                                                    .cornerRadius(10)
-                                            } else {
-                                                Image("error_404")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                                    .shadow(color: .primary.opacity(0.2) , radius: 5)
-                                                    .cornerRadius(10)
-                                            }
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal)
-                            }
-                            
-                            Divider()
-                            
-                            Text("Serie TV popolari")
-                                .font(.title2)
-                                .foregroundColor(.accentColor)
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 10) {
-                                    ForEach(popularTVShows ?? [], id: \.self) { show in
-                                        NavigationLink(destination: TVShowDetailsView(showId: show.id)) {
-                                            if let posterPath = show.poster_path {
-                                                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                                    .shadow(color: .primary.opacity(0.2) , radius: 5)
-                                                    .cornerRadius(10)
-                                            } else {
-                                                Image("error_404")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                                    .shadow(color: .primary.opacity(0.2) , radius: 5)
-                                                    .cornerRadius(10)
-                                            }
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal)
-                            }
-                            
-                            Divider()
-                            
-                            Text("Film di tendenza")
-                                .font(.title2)
-                                .foregroundColor(.accentColor)
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 10) {
-                                    ForEach(trendingMovies ?? [], id: \.self) { movie in
-                                        NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                                            if let posterPath = movie.poster_path {
-                                                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                                    .shadow(color: .primary.opacity(0.2) , radius: 5)
-                                                    .cornerRadius(10)
-                                            } else {
-                                                Image("error_404")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                                    .shadow(color: .primary.opacity(0.2) , radius: 5)
-                                                    .cornerRadius(10)
-                                            }
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal)
-                            }
-                            
-                            Divider()
-                            
-                            Text("Serie TV di tendenza")
-                                .font(.title2)
-                                .foregroundColor(.accentColor)
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 10) {
-                                    ForEach(trendingTVShows ?? [], id: \.self) { show in
-                                        NavigationLink(destination: TVShowDetailsView(showId: show.id)) {
-                                            if let posterPath = show.poster_path {
-                                                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                                    .shadow(color: .primary.opacity(0.2) , radius: 5)
-                                                    .cornerRadius(10)
-                                            } else {
-                                                Image("error_404")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
-                                                    .shadow(color: .primary.opacity(0.2) , radius: 5)
-                                                    .cornerRadius(10)
-                                            }
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal)
-                            }
-                        }.onAppear {
-                            getPopularMovies()
-                            getPopularTVShows()
-                            getTrendingMovies()
-                            getTrendingTVShows()
-                        }
-                    }
-                    if showSearchResults {
-                        VStack(spacing: 0) {
-                            
-                            Picker("Ambiti di ricerca", selection: $selectedSearchTab) {
-                                ForEach(SearchTabs.allCases, id: \.self) { tab in
-                                    Text(tab.localized).tag(tab)
-                                }
-                            }
-                            .pickerStyle(.segmented)
-                            .padding()
-                            
-                            switch selectedSearchTab {
-                            case .movies:
-                                List {
-                                    if !(searchMoviesResults?.isEmpty ?? false) {
-                                        ForEach(searchMoviesResults ?? [], id: \.self) { movie in
+                    ZStack {
+                        ScrollView(.vertical) {
+                            VStack {
+                                Text("Film popolari")
+                                    .font(.title2)
+                                    .foregroundColor(.accentColor)
+                                    .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 10) {
+                                        ForEach(popularMovies, id: \.self) { movie in
                                             NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
-                                                HStack {
-                                                    if let posterPath = movie.poster_path {
-                                                        KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)"))
-                                                            .resizable()
-                                                            .scaledToFill()
-                                                            .frame(width: 50, height: 50)
-                                                            .cornerRadius(8)
-                                                            .padding(.leading, -8)
-                                                    } else {
-                                                        Image("error_404")
-                                                            .resizable()
-                                                            .scaledToFill()
-                                                            .frame(width: 50, height: 50)
-                                                            .cornerRadius(8)
-                                                            .padding(.leading, -8)
-                                                    }
-                                                    Text(movie.title)
-                                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                                        .lineLimit(2)
-                                                        .padding(.trailing)
+                                                if let posterPath = movie.poster_path {
+                                                    KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
+                                                } else {
+                                                    Image("error_404")
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
                                                 }
                                             }
                                         }
-                                    } else {
-                                        if isLoading {
-                                            ProgressView()
-                                                .frame(maxWidth: .infinity, alignment: .center)
-                                                .listRowBackground(Color.clear)
-                                        } else {
-                                            Text("Nessun risultato")
-                                        }
                                     }
-                                    
-                                    Section("") {
-                                        if let _ = searchMoviesResults?.last {
-                                            Color.clear
-                                                .listRowBackground(Color.clear)
-                                                .onAppear {
-                                                    loadMoreMovies()
-                                                }
-                                        }
-                                    }
+                                    .padding(.horizontal)
                                 }
-                                .scrollContentBackground(.hidden)
-                            case .shows:
-                                List {
-                                    if !(searchShowsResults?.isEmpty ?? false) {
-                                        ForEach(searchShowsResults ?? [], id: \.self) { show in
+                                
+                                Divider()
+                                
+                                Text("Serie TV popolari")
+                                    .font(.title2)
+                                    .foregroundColor(.accentColor)
+                                    .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 10) {
+                                        ForEach(popularTVShows, id: \.self) { show in
                                             NavigationLink(destination: TVShowDetailsView(showId: show.id)) {
-                                                HStack {
-                                                    if let posterPath = show.poster_path {
-                                                        KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)"))
-                                                            .resizable()
-                                                            .scaledToFill()
-                                                            .frame(width: 50, height: 50)
-                                                            .cornerRadius(8)
-                                                            .padding(.leading, -8)
-                                                    } else {
-                                                        Image("error_404")
-                                                            .resizable()
-                                                            .scaledToFill()
-                                                            .frame(width: 50, height: 50)
-                                                            .cornerRadius(8)
-                                                            .padding(.leading, -8)
-                                                    }
-                                                    Text(show.name)
-                                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                                        .lineLimit(2)
-                                                        .padding(.trailing)
+                                                if let posterPath = show.poster_path {
+                                                    KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
+                                                } else {
+                                                    Image("error_404")
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
                                                 }
                                             }
                                         }
-                                    } else {
-                                        if isLoading {
-                                            ProgressView()
-                                                .frame(maxWidth: .infinity, alignment: .center)
-                                                .listRowBackground(Color.clear)
-                                        } else {
-                                            Text("Nessun risultato")
-                                        }
                                     }
-                                    
-                                    Section("") {
-                                        
-                                        if let _ = searchShowsResults?.last {
-                                            Color.clear
-                                                .listRowBackground(Color.clear)
-                                                .onAppear {
-                                                    loadMoreShows()
-                                                }
-                                        }
-                                    }
+                                    .padding(.horizontal)
                                 }
-                                .scrollContentBackground(.hidden)
-                            case .people:
-                                List {
-                                    if !(searchPeopleResults?.isEmpty ?? false) {
-                                        ForEach(searchPeopleResults ?? [], id: \.self) { person in
-                                            NavigationLink(destination: MovieDetailsView(movieId: person.id)) {
-                                                HStack {
-                                                    if let profilePath = person.profile_path {
-                                                        KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(profilePath)"))
-                                                            .resizable()
-                                                            .scaledToFill()
-                                                            .frame(width: 50, height: 50)
-                                                            .cornerRadius(8)
-                                                            .padding(.leading, -8)
-                                                    } else {
-                                                        Image("error_404")
-                                                            .resizable()
-                                                            .scaledToFill()
-                                                            .frame(width: 50, height: 50)
-                                                            .cornerRadius(8)
-                                                            .padding(.leading, -8)
-                                                    }
-                                                    Text(person.name)
-                                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                                        .lineLimit(2)
-                                                        .padding(.trailing)
+                                
+                                Divider()
+                                
+                                Text("Film di tendenza")
+                                    .font(.title2)
+                                    .foregroundColor(.accentColor)
+                                    .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 10) {
+                                        ForEach(trendingMovies, id: \.self) { movie in
+                                            NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                                                if let posterPath = movie.poster_path {
+                                                    KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
+                                                } else {
+                                                    Image("error_404")
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
                                                 }
                                             }
                                         }
-                                    } else {
-                                        if isLoading {
-                                            ProgressView()
-                                                .frame(maxWidth: .infinity, alignment: .center)
-                                                .listRowBackground(Color.clear)
-                                        } else {
-                                            Text("Nessun risultato")
-                                        }
                                     }
-                                    
-                                    Section("") {
-                                        
-                                        
-                                        if let _ = searchPeopleResults?.last {
-                                            Color.clear
-                                                .listRowBackground(Color.clear)
-                                                .onAppear {
-                                                    loadMorePeople()
+                                    .padding(.horizontal)
+                                }
+                                
+                                Divider()
+                                
+                                Text("Serie TV di tendenza")
+                                    .font(.title2)
+                                    .foregroundColor(.accentColor)
+                                    .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 10) {
+                                        ForEach(trendingTVShows, id: \.self) { show in
+                                            NavigationLink(destination: TVShowDetailsView(showId: show.id)) {
+                                                if let posterPath = show.poster_path {
+                                                    KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
+                                                } else {
+                                                    Image("error_404")
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
                                                 }
+                                            }
                                         }
                                     }
+                                    .padding(.horizontal)
                                 }
-                                .scrollContentBackground(.hidden)
-                            default:
-                                List {
-                                    Text("Prova")
-                                    Text("Prova")
-                                    Text("Prova")
-                                    Text("Prova")
-                                    Text("Prova")
-                                    Text("Prova")
-                                    Text("Prova")
-                                }
-                                .scrollContentBackground(.hidden)
                             }
-                            
-                            
                         }
-                        .background(.regularMaterial)
-                        .overlay(
-                            UnevenRoundedRectangle(topLeadingRadius: 12, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 12, style: .continuous)
-                                .strokeBorder(linearGradient)
-                        )
-                        .clipShape(
-                            UnevenRoundedRectangle(topLeadingRadius: 12, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 12, style: .continuous)
-                        )
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                        .transition(.move(edge: .bottom))
+                        if showSearchResults {
+                            VStack(spacing: 0) {
+                                
+                                Picker("Ambiti di ricerca", selection: $selectedSearchTab) {
+                                    ForEach(SearchTabs.allCases, id: \.self) { tab in
+                                        Text(tab.localized).tag(tab)
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                                .padding()
+                                
+                                switch selectedSearchTab {
+                                case .movies:
+                                    List {
+                                        if !(searchMoviesResults?.isEmpty ?? false) {
+                                            ForEach(searchMoviesResults ?? [], id: \.self) { movie in
+                                                NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                                                    HStack {
+                                                        if let posterPath = movie.poster_path {
+                                                            KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)"))
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 50, height: 50)
+                                                                .cornerRadius(8)
+                                                                .padding(.leading, -8)
+                                                        } else {
+                                                            Image("error_404")
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 50, height: 50)
+                                                                .cornerRadius(8)
+                                                                .padding(.leading, -8)
+                                                        }
+                                                        Text(movie.title)
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .lineLimit(2)
+                                                            .padding(.trailing)
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            if isLoading {
+                                                ProgressView()
+                                                    .frame(maxWidth: .infinity, alignment: .center)
+                                                    .listRowBackground(Color.clear)
+                                            } else {
+                                                Text("Nessun risultato")
+                                            }
+                                        }
+                                        
+                                        Section("") {
+                                            if let _ = searchMoviesResults?.last {
+                                                Color.clear
+                                                    .listRowBackground(Color.clear)
+                                                    .onAppear {
+                                                        loadMoreMovies()
+                                                    }
+                                            }
+                                        }
+                                    }
+                                    .scrollContentBackground(.hidden)
+                                case .shows:
+                                    List {
+                                        if !(searchShowsResults?.isEmpty ?? false) {
+                                            ForEach(searchShowsResults ?? [], id: \.self) { show in
+                                                NavigationLink(destination: TVShowDetailsView(showId: show.id)) {
+                                                    HStack {
+                                                        if let posterPath = show.poster_path {
+                                                            KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)"))
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 50, height: 50)
+                                                                .cornerRadius(8)
+                                                                .padding(.leading, -8)
+                                                        } else {
+                                                            Image("error_404")
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 50, height: 50)
+                                                                .cornerRadius(8)
+                                                                .padding(.leading, -8)
+                                                        }
+                                                        Text(show.name)
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .lineLimit(2)
+                                                            .padding(.trailing)
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            if isLoading {
+                                                ProgressView()
+                                                    .frame(maxWidth: .infinity, alignment: .center)
+                                                    .listRowBackground(Color.clear)
+                                            } else {
+                                                Text("Nessun risultato")
+                                            }
+                                        }
+                                        
+                                        Section("") {
+                                            
+                                            if let _ = searchShowsResults?.last {
+                                                Color.clear
+                                                    .listRowBackground(Color.clear)
+                                                    .onAppear {
+                                                        loadMoreShows()
+                                                    }
+                                            }
+                                        }
+                                    }
+                                    .scrollContentBackground(.hidden)
+                                case .people:
+                                    List {
+                                        if !(searchPeopleResults?.isEmpty ?? false) {
+                                            ForEach(searchPeopleResults ?? [], id: \.self) { person in
+                                                NavigationLink(destination: PersonDetailsView(personId: person.id)) {
+                                                    HStack {
+                                                        if let profilePath = person.profile_path {
+                                                            KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(profilePath)"))
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 50, height: 50)
+                                                                .cornerRadius(8)
+                                                                .padding(.leading, -8)
+                                                        } else {
+                                                            Image("error_404")
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 50, height: 50)
+                                                                .cornerRadius(8)
+                                                                .padding(.leading, -8)
+                                                        }
+                                                        Text(person.name)
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .lineLimit(2)
+                                                            .padding(.trailing)
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            if isLoading {
+                                                ProgressView()
+                                                    .frame(maxWidth: .infinity, alignment: .center)
+                                                    .listRowBackground(Color.clear)
+                                            } else {
+                                                Text("Nessun risultato")
+                                            }
+                                        }
+                                        
+                                        Section("") {
+                                            
+                                            
+                                            if let _ = searchPeopleResults?.last {
+                                                Color.clear
+                                                    .listRowBackground(Color.clear)
+                                                    .onAppear {
+                                                        loadMorePeople()
+                                                    }
+                                            }
+                                        }
+                                    }
+                                    .scrollContentBackground(.hidden)
+                                default:
+                                    List {
+                                        if !(searchUsersResults?.isEmpty ?? false) {
+                                            ForEach(searchUsersResults ?? [], id: \.uid) { user in
+                                                NavigationLink(destination: UserDetailsView(uid: user.uid)) {
+                                                    HStack {
+                                                        KFImage(URL(string: user.profilePath))
+                                                            .resizable()
+                                                            .clipShape(Circle())
+                                                            .scaledToFill()
+                                                            .frame(width: 50, height: 50)
+                                                            .cornerRadius(8)
+                                                            .padding(.leading, -8)
+                                                        VStack {
+                                                            Text(user.username)
+                                                                .fontWeight(.semibold)
+                                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                                .lineLimit(1)
+                                                            Text(user.displayName)
+                                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                                .lineLimit(1)
+                                                                .foregroundStyle(Color.secondary)
+                                                        }
+                                                        .padding(.trailing)
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            if isLoading {
+                                                ProgressView()
+                                                    .frame(maxWidth: .infinity, alignment: .center)
+                                                    .listRowBackground(Color.clear)
+                                            } else {
+                                                Text("Nessun risultato")
+                                            }
+                                        }
+                                    }
+                                    .scrollContentBackground(.hidden)
+                                }
+                                
+                                
+                            }
+                            .background(.regularMaterial)
+                            .overlay(
+                                UnevenRoundedRectangle(topLeadingRadius: 12, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 12, style: .continuous)
+                                    .strokeBorder(linearGradient)
+                            )
+                            .clipShape(
+                                UnevenRoundedRectangle(topLeadingRadius: 12, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 12, style: .continuous)
+                            )
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                            .transition(.move(edge: .bottom))
+                        }
                     }
                 }
+            } else {
+                ProgressView("Caricamento in corso...")
+                    .progressViewStyle(.circular)
+                    .tint(.accentColor)
+                    .controlSize(.large)
             }
+        }
+        .onAppear {
+            getPopularMovies()
+            getPopularTVShows()
+            getTrendingMovies()
+            getTrendingTVShows()
         }
     }
     
@@ -636,6 +677,28 @@ struct SearchView: View {
             case .failure(let error):
                 print("Error searching movies: \(error)")
             }
+        }
+    }
+    
+    func searchUsers(query: String) {
+        // Annulla il lavoro di ricerca precedente, se esiste.
+        usersTask?.cancel()
+        
+        // Crea un nuovo lavoro di ricerca.
+        usersTask = Task {
+            await performUsersSearch(for: query)
+        }
+    }
+    
+    private func performUsersSearch(for query: String) async {
+        do {
+            isLoading = true
+            try await Task.sleep(nanoseconds: 1_000_000_000)
+            FirestoreService().searchUsers(by: query, currentUserUid: authManager.currentUserUid) { users in
+                searchUsersResults = users
+            }
+        } catch {
+            print(error)
         }
     }
 }

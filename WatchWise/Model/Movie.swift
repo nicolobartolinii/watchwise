@@ -93,7 +93,7 @@ struct Credits: Codable {
 struct Cast: Codable, Hashable {
     let adult: Bool
     let gender: Int
-    let id: Int64
+    let id: Int32
     let known_for_department: String?
     let name: String
     let original_name: String
@@ -104,7 +104,7 @@ struct Cast: Codable, Hashable {
 struct Crew: Codable, Hashable {
     let adult: Bool
     let gender: Int
-    let id: Int64
+    let id: Int32
     let known_for_department: String?
     let name: String
     let original_name: String

@@ -20,6 +20,7 @@ enum APIRouter: URLRequestConvertible {
     case searchPeople(query: String, page: Int32)
     case getTVShowDetails(showId: Int64)
     case getSeasonDetails(showId: Int64, seasonNumber: Int32)
+    case getPersonDetails(personId: Int32)
     
     static let baseURL = URL(string: "https://api.themoviedb.org/3")
     
@@ -47,6 +48,8 @@ enum APIRouter: URLRequestConvertible {
             return "/tv/\(showId)"
         case .getSeasonDetails(let showId, let seasonNumber):
             return "/tv/\(showId)/season/\(seasonNumber)"
+        case .getPersonDetails(let personId):
+            return "/person/\(personId)"
         }
     }
     
@@ -116,6 +119,11 @@ enum APIRouter: URLRequestConvertible {
             return ["api_key": APIConstants.apiKey,
                     "language": "it-IT",
                     "region": "IT"]
+        case .getPersonDetails:
+            return ["api_key": APIConstants.apiKey,
+                    "language": "it-IT",
+                    "region": "IT",
+                    "append_to_response": "combined_credits"]
         }
     }
     

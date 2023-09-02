@@ -37,7 +37,7 @@ class AuthManager: ObservableObject {
     
     @Published var flow: AuthenticationFlow = .login
     
-    @Published var isValid  = false
+    @Published var isValid = false
     @Published var authenticationState: AuthenticationState = .unauthenticated
     @Published var errorLogin = false
     @Published var errorSignup = false
@@ -47,6 +47,8 @@ class AuthManager: ObservableObject {
     @Published var user: FirebaseAuth.User?
     
     private var loggingWithGoogle: Bool = false
+    
+    @Published var currentUserUid: String = ""
     
     init() {
         self.authenticationState = .openingApp
@@ -60,6 +62,8 @@ class AuthManager: ObservableObject {
                 : !(email.isEmpty || password.isEmpty || passwordConfirmation.isEmpty)
             }
             .assign(to: &$isValid)
+        
+        self.currentUserUid = FirebaseAuth.Auth.auth().currentUser?.uid ?? ""
     }
     
     private var authStateHandler: AuthStateDidChangeListenerHandle?
@@ -178,7 +182,7 @@ extension AuthManager {
                 "username": username,
                 "displayName": displayName,
                 "profilePath": profileImageStorageRef.downloadURL().absoluteString,
-                "backdropPath": "",
+                "backdropPath": "https://firebasestorage.googleapis.com/v0/b/watchwise-tesi.appspot.com/o/desert.jpg?alt=media&token=0b21bfaf-1e8a-4d25-95c7-df439fae20ee",
                 "movieMinutes": 0,
                 "tvMinutes": 0,
                 "movieNumber": 0,

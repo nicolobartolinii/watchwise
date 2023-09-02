@@ -16,7 +16,6 @@
 		B922125A2A90B57E00AFFB9C /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212592A90B57E00AFFB9C /* FeedView.swift */; };
 		B922125C2A90B59000AFFB9C /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922125B2A90B59000AFFB9C /* SearchView.swift */; };
 		B922125E2A90B59D00AFFB9C /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922125D2A90B59D00AFFB9C /* EpisodesView.swift */; };
-		B92212622A90B5C000AFFB9C /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212612A90B5C000AFFB9C /* ProfileView.swift */; };
 		B92212652A90E01300AFFB9C /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212642A90E01300AFFB9C /* APIConstants.swift */; };
 		B92212672A90E04A00AFFB9C /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212662A90E04A00AFFB9C /* APIRouter.swift */; };
 		B92212692A90E15400AFFB9C /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212682A90E15400AFFB9C /* APIService.swift */; };
@@ -24,6 +23,11 @@
 		B922126E2A90E68A00AFFB9C /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922126D2A90E68A00AFFB9C /* APIManager.swift */; };
 		B92212702A90FBC400AFFB9C /* DiscoverMoviesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922126F2A90FBC400AFFB9C /* DiscoverMoviesResponse.swift */; };
 		B92212732A910E4700AFFB9C /* MovieDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212722A910E4700AFFB9C /* MovieDetailsView.swift */; };
+		B922963C2AA0BBB300826537 /* UserDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922963B2AA0BBB300826537 /* UserDetailsView.swift */; };
+		B922963E2AA0BCFC00826537 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B922963D2AA0BCFC00826537 /* User.swift */; };
+		B92296422AA0BFFD00826537 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92296412AA0BFFD00826537 /* FirestoreService.swift */; };
+		B92296452AA0C01400826537 /* UsersRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92296442AA0C01400826537 /* UsersRepository.swift */; };
+		B92296472AA0C03200826537 /* UserDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92296462AA0C03200826537 /* UserDetailsViewModel.swift */; };
 		B936CA722A927A62001F4908 /* CompleteRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA712A927A62001F4908 /* CompleteRegistrationView.swift */; };
 		B936CA752A929D44001F4908 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA742A929D44001F4908 /* AuthManager.swift */; };
 		B936CA772A929F77001F4908 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B936CA762A929F77001F4908 /* SplashScreen.swift */; };
@@ -43,6 +47,10 @@
 		B97B1C172A9E30D700A0D767 /* ShuffleDeck in Frameworks */ = {isa = PBXBuildFile; productRef = B97B1C162A9E30D700A0D767 /* ShuffleDeck */; };
 		B97B1C192A9E30D700A0D767 /* ShuffleIt in Frameworks */ = {isa = PBXBuildFile; productRef = B97B1C182A9E30D700A0D767 /* ShuffleIt */; };
 		B97B1C1B2A9E30D700A0D767 /* ShuffleStack in Frameworks */ = {isa = PBXBuildFile; productRef = B97B1C1A2A9E30D700A0D767 /* ShuffleStack */; };
+		B98D01182AA3785B009F611F /* PeopleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D01172AA3785B009F611F /* PeopleRepository.swift */; };
+		B98D011A2AA37C67009F611F /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D01192AA37C67009F611F /* Person.swift */; };
+		B98D011C2AA380BC009F611F /* PersonDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D011B2AA380BC009F611F /* PersonDetailsViewModel.swift */; };
+		B98D011E2AA3825B009F611F /* PersonDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D011D2AA3825B009F611F /* PersonDetailsView.swift */; };
 		B98DE9902A8BCFFD0076F379 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98DE98F2A8BCFFD0076F379 /* LoginView.swift */; };
 		B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */; };
 		B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AAAE262A92214E00226A35 /* ClearableTextField.swift */; };
@@ -125,7 +133,6 @@
 		B92212592A90B57E00AFFB9C /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		B922125B2A90B59000AFFB9C /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		B922125D2A90B59D00AFFB9C /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
-		B92212612A90B5C000AFFB9C /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		B92212642A90E01300AFFB9C /* APIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		B92212662A90E04A00AFFB9C /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
 		B92212682A90E15400AFFB9C /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
@@ -133,6 +140,11 @@
 		B922126D2A90E68A00AFFB9C /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		B922126F2A90FBC400AFFB9C /* DiscoverMoviesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMoviesResponse.swift; sourceTree = "<group>"; };
 		B92212722A910E4700AFFB9C /* MovieDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsView.swift; sourceTree = "<group>"; };
+		B922963B2AA0BBB300826537 /* UserDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsView.swift; sourceTree = "<group>"; };
+		B922963D2AA0BCFC00826537 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B92296412AA0BFFD00826537 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
+		B92296442AA0C01400826537 /* UsersRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersRepository.swift; sourceTree = "<group>"; };
+		B92296462AA0C03200826537 /* UserDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewModel.swift; sourceTree = "<group>"; };
 		B936CA712A927A62001F4908 /* CompleteRegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteRegistrationView.swift; sourceTree = "<group>"; };
 		B936CA742A929D44001F4908 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		B936CA762A929F77001F4908 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
@@ -143,6 +155,10 @@
 		B978F9372A9A2BF20076A03A /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
 		B97984342A97668C00A9EC42 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B97984362A97736500A9EC42 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		B98D01172AA3785B009F611F /* PeopleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleRepository.swift; sourceTree = "<group>"; };
+		B98D01192AA37C67009F611F /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		B98D011B2AA380BC009F611F /* PersonDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailsViewModel.swift; sourceTree = "<group>"; };
+		B98D011D2AA3825B009F611F /* PersonDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailsView.swift; sourceTree = "<group>"; };
 		B98DE98F2A8BCFFD0076F379 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B9AAAE242A92211200226A35 /* ToggleableSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleableSecureField.swift; sourceTree = "<group>"; };
 		B9AAAE262A92214E00226A35 /* ClearableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearableTextField.swift; sourceTree = "<group>"; };
@@ -253,7 +269,6 @@
 				B92212592A90B57E00AFFB9C /* FeedView.swift */,
 				B922125B2A90B59000AFFB9C /* SearchView.swift */,
 				B922125D2A90B59D00AFFB9C /* EpisodesView.swift */,
-				B92212612A90B5C000AFFB9C /* ProfileView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -277,6 +292,8 @@
 				B9ACBA732A9BF8710046E3F7 /* DiscoverTVShowsResponse.swift */,
 				B9ACBA752A9BF87A0046E3F7 /* TVShow.swift */,
 				B94713A32A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift */,
+				B922963D2AA0BCFC00826537 /* User.swift */,
+				B98D01192AA37C67009F611F /* Person.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -286,8 +303,36 @@
 			children = (
 				B92212722A910E4700AFFB9C /* MovieDetailsView.swift */,
 				B94713A52A9CF88800B3FDB1 /* TVShowDetailsView.swift */,
+				B922963B2AA0BBB300826537 /* UserDetailsView.swift */,
+				B98D011D2AA3825B009F611F /* PersonDetailsView.swift */,
 			);
 			path = Details;
+			sourceTree = "<group>";
+		};
+		B922963F2AA0BEE200826537 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B92296462AA0C03200826537 /* UserDetailsViewModel.swift */,
+				B98D011B2AA380BC009F611F /* PersonDetailsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		B92296402AA0BFF000826537 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				B92296412AA0BFFD00826537 /* FirestoreService.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		B92296432AA0C00500826537 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				B92296442AA0C01400826537 /* UsersRepository.swift */,
+				B98D01172AA3785B009F611F /* PeopleRepository.swift */,
+			);
+			path = Repositories;
 			sourceTree = "<group>";
 		};
 		B936CA732A929D33001F4908 /* Utils */ = {
@@ -326,6 +371,7 @@
 		B98DE98E2A8BCFD20076F379 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				B92296402AA0BFF000826537 /* Firebase */,
 				B936CA732A929D33001F4908 /* Utils */,
 				B92212632A90D79100AFFB9C /* Api */,
 			);
@@ -370,6 +416,8 @@
 		B9F2B1362A8B867A00B18E44 /* WatchWise */ = {
 			isa = PBXGroup;
 			children = (
+				B92296432AA0C00500826537 /* Repositories */,
+				B922963F2AA0BEE200826537 /* ViewModels */,
 				B9D9EA9B2A960B00000C05CE /* Info.plist */,
 				B922126A2A90E1EB00AFFB9C /* Model */,
 				B98DE98E2A8BCFD20076F379 /* Services */,
@@ -715,8 +763,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B92212622A90B5C000AFFB9C /* ProfileView.swift in Sources */,
+				B922963C2AA0BBB300826537 /* UserDetailsView.swift in Sources */,
 				B92212672A90E04A00AFFB9C /* APIRouter.swift in Sources */,
+				B98D011E2AA3825B009F611F /* PersonDetailsView.swift in Sources */,
+				B92296472AA0C03200826537 /* UserDetailsViewModel.swift in Sources */,
 				B922126C2A90E20300AFFB9C /* Movie.swift in Sources */,
 				B922125A2A90B57E00AFFB9C /* FeedView.swift in Sources */,
 				B9ACBA742A9BF8710046E3F7 /* DiscoverTVShowsResponse.swift in Sources */,
@@ -724,9 +774,11 @@
 				B9AAAE292A92234400226A35 /* EmailRegistrationView.swift in Sources */,
 				B97984372A97736500A9EC42 /* Utils.swift in Sources */,
 				B9ACBA762A9BF87A0046E3F7 /* TVShow.swift in Sources */,
+				B92296452AA0C01400826537 /* UsersRepository.swift in Sources */,
 				B92212702A90FBC400AFFB9C /* DiscoverMoviesResponse.swift in Sources */,
 				B98DE9902A8BCFFD0076F379 /* LoginView.swift in Sources */,
 				B936CA722A927A62001F4908 /* CompleteRegistrationView.swift in Sources */,
+				B98D011A2AA37C67009F611F /* Person.swift in Sources */,
 				B92212692A90E15400AFFB9C /* APIService.swift in Sources */,
 				B936CA772A929F77001F4908 /* SplashScreen.swift in Sources */,
 				B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */,
@@ -735,9 +787,12 @@
 				B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */,
 				B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */,
 				B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */,
+				B92296422AA0BFFD00826537 /* FirestoreService.swift in Sources */,
 				B92212732A910E4700AFFB9C /* MovieDetailsView.swift in Sources */,
 				B94713A42A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift in Sources */,
 				B973F5112A936D8B00AB7DC8 /* AuthenticatedView.swift in Sources */,
+				B922963E2AA0BCFC00826537 /* User.swift in Sources */,
+				B98D011C2AA380BC009F611F /* PersonDetailsViewModel.swift in Sources */,
 				B92212652A90E01300AFFB9C /* APIConstants.swift in Sources */,
 				B973F5132A936DC700AB7DC8 /* AuthenticationView.swift in Sources */,
 				B97984352A97668C00A9EC42 /* Extensions.swift in Sources */,
@@ -746,6 +801,7 @@
 				B922126E2A90E68A00AFFB9C /* APIManager.swift in Sources */,
 				B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */,
 				B94713A62A9CF88800B3FDB1 /* TVShowDetailsView.swift in Sources */,
+				B98D01182AA3785B009F611F /* PeopleRepository.swift in Sources */,
 				B922125E2A90B59D00AFFB9C /* EpisodesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

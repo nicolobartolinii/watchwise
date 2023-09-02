@@ -269,8 +269,3 @@ struct CompleteRegistrationView: View {
         return !querySnapshot.documents.isEmpty
     }
 }
-
-#Preview {
-    CompleteRegistrationView()
-        .accentColor(.cyan)
-}

@@ -37,7 +37,7 @@ struct HomeNavigationView: View {
                             Label(NSLocalizedString("Episodi", comment: "Episodi"), systemImage: "tv.inset.filled")
                         }
                         .tag(3)
-                    ProfileView()
+                    UserDetailsView(uid: authManager.currentUserUid)
                         .accentColor(.cyan)
                         .tabItem {
                             Label(NSLocalizedString("Profilo", comment: "Profile"), systemImage: "person")

@@ -13,7 +13,7 @@ struct DiscoverPeopleResponse: Codable {
 }
 
 struct DiscoveredPerson: Codable, Hashable {
-    let id: Int64
+    let id: Int32
     let name: String
     let profile_path: String?
 }

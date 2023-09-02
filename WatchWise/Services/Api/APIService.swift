@@ -70,4 +70,8 @@ class APIService {
     static func getSeasonDetails(showId: Int64, seasonNumber: Int32, completion: @escaping (AFResult<Season>) -> Void) {
         performRequest(route: APIRouter.getSeasonDetails(showId: showId, seasonNumber: seasonNumber), completion: completion)
     }
+    
+    static func getPersonDetails(personId: Int32, completion: @escaping (AFResult<Person>) -> Void) {
+        performRequest(route: APIRouter.getPersonDetails(personId: personId), completion: completion)
+    }
 }
