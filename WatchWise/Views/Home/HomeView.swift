@@ -11,6 +11,7 @@ import FirebaseAuth
 import Alamofire
 
 struct HomeView: View {
+    @EnvironmentObject var authManager: AuthManager
     @State private var nowPlayingMovies: [DiscoveredMovie]?
     
     var body: some View {
@@ -53,7 +54,7 @@ struct HomeView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
                                 ForEach(nowPlayingMovies, id: \.self) { movie in
-                                    NavigationLink(destination: MovieDetailsView(movieId: movie.id)) {
+                                    NavigationLink(destination: MovieDetailsView(movieId: movie.id, currentUserUid: authManager.currentUserUid)) {
                                         if let posterPath = movie.poster_path {
                                             KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
                                                 .resizable()

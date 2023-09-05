@@ -236,6 +236,8 @@ struct PersonDetailsView: View {
 }
 
 struct ProductsView: View {
+    @EnvironmentObject var authManager: AuthManager
+    
     var products: [Product]
     
     var body: some View {
@@ -245,7 +247,7 @@ struct ProductsView: View {
                     Divider()
                         .padding(.horizontal)
                 }
-                NavigationLink(destination: products[index].mediaType == "movie" ? AnyView(MovieDetailsView(movieId: products[index].id)) : AnyView(TVShowDetailsView(showId: products[index].id))) {
+                NavigationLink(destination: products[index].mediaType == "movie" ? AnyView(MovieDetailsView(movieId: products[index].id, currentUserUid: authManager.currentUserUid)) : AnyView(TVShowDetailsView(showId: products[index].id))) {
                     HStack(spacing: 0) {
                         if let posterPath = products[index].posterPath {
                             KFImage(URL(string: "https://image.tmdb.org/t/p/w92\(posterPath)"))

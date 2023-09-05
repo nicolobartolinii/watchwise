@@ -23,47 +23,30 @@ enum InfoTabs: String, CaseIterable {
 }
 
 struct MovieDetailsView: View {
-    let movieId: Int64
-    @State private var movie: Movie?
-    
-    @State private var navBarHidden: Bool = true
+    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var viewModel: MovieDetailsViewModel
     
     @State var offset: CGFloat = 0
-    
     @State var rating: CGFloat = 0.0
-    
     @State private var showReviews = false
-    
     @State private var unitType: Int = 1
-    
     @State private var review = ""
-    
     @State private var reviewError = false
-    
     @State private var selectedInfoTab = InfoTabs.cast
-    
     @State private var showNavigationBar: Bool = false
-    
-    
     @State private var tableContentHeight: CGFloat = 0
     @State private var observation: NSKeyValueObservation?
-    
-    @Environment(\.presentationMode) var presentationMode
-    
-    @State private var isInWatched = false
-    
-    @State private var isInWatchlist = false
-    
-    @State private var isInFavorites = false
-    
     @State private var isListsSharePresented = false
-    
     @State private var isOtherListsPresented = false
+    
+    init(movieId: Int64, currentUserUid: String) {
+        self.viewModel = MovieDetailsViewModel(movieId: movieId, currentUserUid: currentUserUid)
+    }
     
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottom) {
-                if let movie = movie {
+                if let movie = viewModel.movie {
                     OffsetScrollView(offset: $offset, showIndicators: true, axis: .vertical) {
                         VStack {
                             BackgroundImageView(backdrop_path: movie.backdrop_path, offset: offset)
@@ -603,17 +586,19 @@ struct MovieDetailsView: View {
                     if isListsSharePresented {
                         VStack(spacing: 0) {
                             if !isOtherListsPresented {
-                                Button(action: { isInWatched.toggle() }) {
+                                Button(action: {
+                                    viewModel.toggleMovieToList(listName: "watched_m")
+                                }) {
                                     HStack {
-                                        Image(systemName: isInWatched ? "eye.fill" : "eye")
+                                        Image(systemName: viewModel.isInList["watched_m"]! ? "eye.fill" : "eye")
                                             .foregroundStyle(Color.primary)
                                             .frame(width: 28)
                                         Text("Film visti")
                                             .foregroundStyle(Color.primary)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                         Spacer()
-                                        Image(systemName: isInWatched ? "checkmark.circle.fill" : "checkmark.circle")
-                                            .foregroundStyle(isInWatched ? Color.mint : Color.primary)
+                                        Image(systemName: viewModel.isInList["watched_m"]! ? "checkmark.circle.fill" : "checkmark.circle")
+                                            .foregroundStyle(viewModel.isInList["watched_m"]! ? Color.mint : Color.primary)
                                             .frame(width: 28)
                                     }
                                     .padding()
@@ -621,17 +606,19 @@ struct MovieDetailsView: View {
                                 
                                 Divider()
                                 
-                                Button(action: { isInWatchlist.toggle() }) {
+                                Button(action: {
+                                    viewModel.toggleMovieToList(listName: "watchlist")
+                                }) {
                                     HStack {
-                                        Image(systemName: isInWatchlist ? "bookmark.fill" : "bookmark")
+                                        Image(systemName: viewModel.isInList["watchlist"]! ? "bookmark.fill" : "bookmark")
                                             .foregroundStyle(Color.primary)
                                             .frame(width: 28)
                                         Text("Watchlist")
                                             .foregroundStyle(Color.primary)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                         Spacer()
-                                        Image(systemName: isInWatchlist ? "checkmark.circle.fill" : "checkmark.circle")
-                                            .foregroundStyle(isInWatchlist ? Color.mint : Color.primary)
+                                        Image(systemName: viewModel.isInList["watchlist"]! ? "checkmark.circle.fill" : "checkmark.circle")
+                                            .foregroundStyle(viewModel.isInList["watchlist"]! ? Color.mint : Color.primary)
                                             .frame(width: 28)
                                     }
                                     .padding()
@@ -639,17 +626,19 @@ struct MovieDetailsView: View {
                                 
                                 Divider()
                                 
-                                Button(action: { isInFavorites.toggle() }) {
+                                Button(action: {
+                                    viewModel.toggleMovieToList(listName: "favorite")
+                                }) {
                                     HStack {
-                                        Image(systemName: isInFavorites ? "heart.fill" : "heart")
+                                        Image(systemName: viewModel.isInList["favorite"]! ? "heart.fill" : "heart")
                                             .foregroundStyle(Color.primary)
                                             .frame(width: 28)
                                         Text("Preferiti")
                                             .foregroundStyle(Color.primary)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                         Spacer()
-                                        Image(systemName: isInFavorites ? "checkmark.circle.fill" : "checkmark.circle")
-                                            .foregroundStyle(isInFavorites ? Color.mint : Color.primary)
+                                        Image(systemName: viewModel.isInList["favorite"]! ? "checkmark.circle.fill" : "checkmark.circle")
+                                            .foregroundStyle(viewModel.isInList["favorite"]! ? Color.mint : Color.primary)
                                             .frame(width: 28)
                                     }
                                     .padding()
@@ -683,7 +672,7 @@ struct MovieDetailsView: View {
                             }
                             
                             Utils.linearGradient
-                                .frame(width: .infinity, height: 1)
+                                .frame(maxWidth: .infinity, maxHeight: 1)
                             
                             Button(action: {
                                 withAnimation(.easeInOut(duration: 0.2)) {
@@ -714,24 +703,12 @@ struct MovieDetailsView: View {
                 }
             }
             .onAppear {
-                getMovieDetails()
+                viewModel.getMovieDetails()
             }
         }
         
         .navigationBarBackButtonHidden(true)
         .padding(.bottom, 1)
-    }
-    
-    func getMovieDetails() {
-        APIManager.getMovieDetails(movieId: self.movieId) { (result: AFResult<Movie>) in
-            switch result {
-            case .success(let movie):
-                self.movie = movie
-            case .failure(let error):
-                print("Error getting movie details: \(error)")
-            }
-            
-        }
     }
     
     func openVideo(_ video: Video) {
@@ -795,13 +772,15 @@ struct MovieDetailsView: View {
                     .font(.subheadline)
                     .lineLimit(2)
                     .fontWeight(.semibold)
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(Color.accentColor)
                     .frame(maxWidth: 100, alignment: .leading)
+                    .multilineTextAlignment(.leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
                 Text(castMember.character)
                     .font(.caption)
                     .lineLimit(1)
+                    .foregroundStyle(Color.secondary)
                     .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
@@ -815,7 +794,7 @@ struct MovieDetailsView: View {
             )
             .cornerRadius(12)
             .shadow(color: .primary.opacity(0.2) , radius: 3)
-        .padding(.vertical, 8)
+            .padding(.vertical, 8)
         }
     }
     
@@ -843,13 +822,15 @@ struct MovieDetailsView: View {
                     .font(.subheadline)
                     .lineLimit(2)
                     .fontWeight(.semibold)
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(Color.accentColor)
                     .frame(maxWidth: 100, alignment: .leading)
+                    .multilineTextAlignment(.leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
                 Text(crewMember.job)
                     .font(.caption)
                     .lineLimit(1)
+                    .foregroundStyle(Color.secondary)
                     .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
@@ -863,15 +844,10 @@ struct MovieDetailsView: View {
             )
             .cornerRadius(12)
             .shadow(color: .primary.opacity(0.2) , radius: 3)
-        .padding(.vertical, 8)
+            .padding(.vertical, 8)
         }
     }
     
-}
-
-#Preview {
-    MovieDetailsView(movieId: 299536) // 872585, 299564, 299536
-        .accentColor(.cyan)
 }
 
 struct OffsetKey: PreferenceKey {
@@ -957,11 +933,12 @@ struct BackgroundImageView: View {
 }
 
 struct HeaderView: View {
-    let movie: Movie?
+    let movie: Movie
+    @State var showDirectors = false
     
     var body: some View {
         HStack(alignment: .top) {
-            if let posterPath = movie?.poster_path {
+            if let posterPath = movie.poster_path {
                 KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)"))
                     .resizable()
                     .scaledToFill()
@@ -980,13 +957,13 @@ struct HeaderView: View {
             }
             
             VStack(spacing: 8) {
-                Text(movie?.title ?? "Non disponibile")
+                Text(movie.title)
                     .bold()
                     .font(.title2)
                     .foregroundColor(.accentColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                if let tagline = movie?.tagline {
+                if let tagline = movie.tagline {
                     if !tagline.isEmpty {
                         Text("\"\(tagline)\"")
                             .font(.caption)
@@ -996,38 +973,64 @@ struct HeaderView: View {
                     }
                 }
                 
-                HStack {
-                    if let releaseDate = movie?.release_date {
-                        Text("\(releaseDate.prefix(4))" + " | Diretto da:")
-                            .font(.footnote)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .lineLimit(1)
+                HStack(spacing: 0) {
+                    if movie.runtime != 0 {
+                        Text("\(movie.runtime)")
+                            .fontWeight(.semibold)
+                        Text(" min")
+                        if (movie.release_date != nil && !movie.release_date!.isEmpty) || (movie.credits?.crew.filter { $0.job == "Director" } != nil && !(movie.credits!.crew.filter { $0.job == "Director" }).isEmpty) {
+                            Text(" | ")
+                        }
                     }
-                    Spacer()
-                    if let runtime = movie?.runtime {
-                        Text("\(runtime) min")
-                            .font(.subheadline)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    if let releaseDate = movie.release_date, !releaseDate.isEmpty {
+                        Text(releaseDate.prefix(4))
+                            .fontWeight(.semibold)
+                        if movie.credits?.crew.filter({ $0.job == "Director" }) != nil && !(movie.credits!.crew.filter { $0.job == "Director" }).isEmpty {
+                            Text(" | ")
+                        }
+                    }
+                    if let directors = movie.credits?.crew.filter({ $0.job == "Director" }), !directors.isEmpty {
+                        Text("Diretto da:")
                     }
                 }
+                .font(.callout)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .lineLimit(1)
                 
-                //                            if let releaseDate = movie?.release_date {
-                //                                let formattedDate = Utils.convertDate(from: releaseDate)
-                //                                Text(formattedDate ?? "")
-                //                                    .font(.footnote)
-                //                                    .frame(maxWidth: .infinity, alignment: .leading)
-                //                            }
-                
-                let directors = movie?.credits?.crew.filter { $0.job == "Director" }.map { $0.name } ?? ["Non disponibile"]
-                let directorsString = directors.joined(separator: ", ")
-                
-                Text(directorsString)
-                    .font(.subheadline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .lineLimit(1)
+                if let directors = movie.credits?.crew.filter({ $0.job == "Director" }), !directors.isEmpty {
+                    if directors.count == 1 {
+                        NavigationLink(destination: PersonDetailsView(personId: directors[0].id)) {
+                            Text(directors[0].name)
+                                .bold()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .lineLimit(1)
+                                .foregroundStyle(Color.primary)
+                        }
+                    } else {
+                        Text(directors.map({ $0.name }).joined(separator: ", "))
+                            .bold()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .lineLimit(1)
+                            .onTapGesture {
+                                self.showDirectors = true
+                            }
+                            .sheet(isPresented: $showDirectors) {
+                                NavigationView {
+                                    List {
+                                        ForEach(directors, id: \.id) { director in
+                                            NavigationLink(destination: PersonDetailsView(personId: director.id)) {
+                                                Text(director.name)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                    }
+                }
             }
         }
-        .padding(.horizontal)
+        .padding(.leading)
+        .padding(.trailing, 8)
     }
 }
 

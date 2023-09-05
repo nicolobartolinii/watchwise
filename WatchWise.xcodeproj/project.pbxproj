@@ -10,6 +10,7 @@
 		35FB878C4910785280653742 /* Pods_WatchWise_WatchWiseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2CD3A0E4816C811EA020C5 /* Pods_WatchWise_WatchWiseUITests.framework */; };
 		997BEC852738F815AD416AB6 /* Pods_WatchWiseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCD4E15E36954A81010F71A /* Pods_WatchWiseTests.framework */; };
 		B90052A12A97B0D2005FC143 /* HistogramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90052A02A97B0D2005FC143 /* HistogramView.swift */; };
+		B90F58412AA72F450079C00C /* MoviesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90F58402AA72F450079C00C /* MoviesRepository.swift */; };
 		B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91FFEF42A8D3BEA005C15EF /* HomeView.swift */; };
 		B91FFEF82A8D3D3C005C15EF /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B91FFEF72A8D3D3C005C15EF /* Kingfisher */; };
 		B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92212572A90B56C00AFFB9C /* HomeNavigationView.swift */; };
@@ -60,6 +61,7 @@
 		B9ACBA762A9BF87A0046E3F7 /* TVShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9ACBA752A9BF87A0046E3F7 /* TVShow.swift */; };
 		B9D9EA982A960AEC000C05CE /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = B9D9EA972A960AEC000C05CE /* GoogleSignIn */; };
 		B9D9EA9A2A960AEC000C05CE /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B9D9EA992A960AEC000C05CE /* GoogleSignInSwift */; };
+		B9E15FC92AA72C1F00667846 /* MovieDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E15FC82AA72C1F00667846 /* MovieDetailsViewModel.swift */; };
 		B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */; };
 		B9F2B13C2A8B867F00B18E44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9F2B13B2A8B867F00B18E44 /* Assets.xcassets */; };
 		B9F2B13F2A8B867F00B18E44 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9F2B13E2A8B867F00B18E44 /* Preview Assets.xcassets */; };
@@ -128,6 +130,7 @@
 		85DD1888EA51BD629C67FE6A /* Pods-WatchWise-WatchWiseUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise-WatchWiseUITests.debug.xcconfig"; path = "Target Support Files/Pods-WatchWise-WatchWiseUITests/Pods-WatchWise-WatchWiseUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		ADE556216E1FB05C5D171D8B /* Pods-WatchWiseTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWiseTests.debug.xcconfig"; path = "Target Support Files/Pods-WatchWiseTests/Pods-WatchWiseTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B90052A02A97B0D2005FC143 /* HistogramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramView.swift; sourceTree = "<group>"; };
+		B90F58402AA72F450079C00C /* MoviesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesRepository.swift; sourceTree = "<group>"; };
 		B91FFEF42A8D3BEA005C15EF /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B92212572A90B56C00AFFB9C /* HomeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationView.swift; sourceTree = "<group>"; };
 		B92212592A90B57E00AFFB9C /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -167,6 +170,7 @@
 		B9ACBA732A9BF8710046E3F7 /* DiscoverTVShowsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTVShowsResponse.swift; sourceTree = "<group>"; };
 		B9ACBA752A9BF87A0046E3F7 /* TVShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShow.swift; sourceTree = "<group>"; };
 		B9D9EA9B2A960B00000C05CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B9E15FC82AA72C1F00667846 /* MovieDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsViewModel.swift; sourceTree = "<group>"; };
 		B9F2B1342A8B867A00B18E44 /* WatchWise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchWise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWiseApp.swift; sourceTree = "<group>"; };
 		B9F2B13B2A8B867F00B18E44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -314,6 +318,7 @@
 			children = (
 				B92296462AA0C03200826537 /* UserDetailsViewModel.swift */,
 				B98D011B2AA380BC009F611F /* PersonDetailsViewModel.swift */,
+				B9E15FC82AA72C1F00667846 /* MovieDetailsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -331,6 +336,7 @@
 			children = (
 				B92296442AA0C01400826537 /* UsersRepository.swift */,
 				B98D01172AA3785B009F611F /* PeopleRepository.swift */,
+				B90F58402AA72F450079C00C /* MoviesRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -773,6 +779,7 @@
 				B9ACBA722A9BE29B0046E3F7 /* ListsShareView.swift in Sources */,
 				B9AAAE292A92234400226A35 /* EmailRegistrationView.swift in Sources */,
 				B97984372A97736500A9EC42 /* Utils.swift in Sources */,
+				B9E15FC92AA72C1F00667846 /* MovieDetailsViewModel.swift in Sources */,
 				B9ACBA762A9BF87A0046E3F7 /* TVShow.swift in Sources */,
 				B92296452AA0C01400826537 /* UsersRepository.swift in Sources */,
 				B92212702A90FBC400AFFB9C /* DiscoverMoviesResponse.swift in Sources */,
@@ -784,6 +791,7 @@
 				B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */,
 				B936CA752A929D44001F4908 /* AuthManager.swift in Sources */,
 				B90052A12A97B0D2005FC143 /* HistogramView.swift in Sources */,
+				B90F58412AA72F450079C00C /* MoviesRepository.swift in Sources */,
 				B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */,
 				B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */,
 				B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */,
