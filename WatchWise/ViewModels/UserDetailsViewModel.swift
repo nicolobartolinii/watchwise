@@ -8,6 +8,7 @@
 import Combine
 import SwiftUI
 
+@MainActor
 class UserDetailsViewModel: ObservableObject {
     @Published var user: User?
     private var uid: String

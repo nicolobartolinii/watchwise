@@ -206,4 +206,46 @@ class FirestoreService {
         
         return snapshot.data()?["count"] as? Int ?? 0
     }
+    
+    // Metodo per aggiungere una serie TV alla collection episodes
+    func addShowToEpisodesCollection(userId: String, showId: Int64) async throws {
+        let docRef = db.collection("users").document(userId).collection("episodes").document(String(showId))
+        try await docRef.setData(["status": "watching"], mergeFields: ["status"])
+    }
+    
+    func removeShowFromEpisodesCollection(userId: String, showId: Int64) async throws {
+        let docRef = db.collection("users").document(userId).collection("episodes").document(String(showId))
+        try await docRef.setData(["status": "stopped"], mergeFields: ["status"])
+    }
+    
+    func addEpisodeToWatchedList(userId: String, showId: Int64, seasonNumber: Int, episodeNumber: Int) async throws {
+        let docRef = db.collection("users").document(userId).collection("episodes").document(String(showId))
+        
+        // Recupera i dati esistenti
+        let docSnapshot = try await docRef.getDocument()
+        if let data = docSnapshot.data() {
+            var updatedData = data
+            if var episodes = updatedData["\(seasonNumber)"] as? [Int] {
+                if !episodes.contains(episodeNumber) {
+                    episodes.append(episodeNumber)
+                }
+                updatedData["\(seasonNumber)"] = episodes
+            } else {
+                updatedData["\(seasonNumber)"] = [episodeNumber]
+            }
+            try await docRef.updateData(updatedData)
+        }
+    }
+
+    func addSeasonToWatchedList(userId: String, showId: Int64, seasonNumber: Int, episodes: [Int]) async throws {
+        let docRef = db.collection("users").document(userId).collection("episodes").document(String(showId))
+        
+        // Recupera i dati esistenti
+        let docSnapshot = try await docRef.getDocument()
+        if let data = docSnapshot.data() {
+            var updatedData = data
+            updatedData["\(seasonNumber)"] = episodes
+            try await docRef.updateData(updatedData)
+        }
+    }
 }

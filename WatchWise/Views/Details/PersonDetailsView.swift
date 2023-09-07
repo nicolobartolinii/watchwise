@@ -247,7 +247,7 @@ struct ProductsView: View {
                     Divider()
                         .padding(.horizontal)
                 }
-                NavigationLink(destination: products[index].mediaType == "movie" ? AnyView(MovieDetailsView(movieId: products[index].id, currentUserUid: authManager.currentUserUid)) : AnyView(TVShowDetailsView(showId: products[index].id))) {
+                NavigationLink(destination: products[index].mediaType == "movie" ? AnyView(MovieDetailsView(movieId: products[index].id, currentUserUid: authManager.currentUserUid)) : AnyView(TVShowDetailsView(showId: products[index].id, currentUserUid: authManager.currentUserUid))) {
                     HStack(spacing: 0) {
                         if let posterPath = products[index].posterPath {
                             KFImage(URL(string: "https://image.tmdb.org/t/p/w92\(posterPath)"))

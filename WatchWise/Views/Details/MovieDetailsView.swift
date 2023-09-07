@@ -299,7 +299,7 @@ struct MovieDetailsView: View {
                             
                             switch selectedInfoTab {
                             case .cast:
-                                if let cast = movie.credits?.cast {
+                                if let cast = movie.credits?.cast, !cast.isEmpty {
                                     ScrollView(.horizontal) {
                                         LazyHStack {
                                             ForEach(cast, id: \.self) { castMember in
@@ -308,9 +308,18 @@ struct MovieDetailsView: View {
                                         }
                                         .padding(.horizontal)
                                     }
+                                } else {
+                                    VStack(spacing: 0) {
+                                        Text("Non disponibile")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding()
+                                    }
+                                    .background(Color(UIColor.tertiarySystemFill)
+                                        .cornerRadius(12))
+                                    .padding(.horizontal)
                                 }
                             case .crew:
-                                if let crew = movie.credits?.crew.prefix(30) {
+                                if let crew = movie.credits?.crew.prefix(30), !crew.isEmpty {
                                     ScrollView(.horizontal) {
                                         LazyHStack {
                                             ForEach(crew, id: \.self) { crewMember in
@@ -319,9 +328,18 @@ struct MovieDetailsView: View {
                                         }
                                         .padding(.horizontal)
                                     }
+                                } else {
+                                    VStack(spacing: 0) {
+                                        Text("Non disponibile")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding()
+                                    }
+                                    .background(Color(UIColor.tertiarySystemFill)
+                                        .cornerRadius(12))
+                                    .padding(.horizontal)
                                 }
                             case .details:
-                                if let originalTitle = movie.original_title {
+                                if let originalTitle = movie.original_title, originalTitle != "" {
                                     Text(NSLocalizedString("Titolo originale e lingua originale", comment: "Titolo originale e lingua originale").uppercased())
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -888,6 +906,7 @@ struct MovieDetailsView: View {
                     .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
+                    .foregroundStyle(Color.secondary)
                 Spacer()
             }
             .frame(height: 174)
@@ -938,6 +957,7 @@ struct MovieDetailsView: View {
                     .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
+                    .foregroundStyle(Color.secondary)
                 Spacer()
             }
             .frame(height: 174)

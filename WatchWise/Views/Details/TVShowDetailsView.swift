@@ -18,56 +18,39 @@ enum TVShowTabSelection {
     case episodes
 }
 
+private enum FocusField: Int, CaseIterable {
+    case review
+}
+
 struct TVShowDetailsView: View {
-    let showId: Int64
-    @State private var show: TVShow?
-    
-    @State private var navBarHidden: Bool = true
+    @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var authManager: AuthManager
+    @ObservedObject var viewModel: TVShowDetailsViewModel
     
     @State var offset: CGFloat = 0
-    
-    @State var rating: CGFloat = 0.0
-    
     @State private var showReviews = false
-    
-    @State private var unitType: Int = 1
-    
     @State private var review = ""
-    
     @State private var reviewError = false
-    
     @State private var selectedInfoTab = InfoTabs.cast
-    
     @State private var showNavigationBar: Bool = false
-    
-    
-    @State private var tableContentHeight: CGFloat = 0
     @State private var observation: NSKeyValueObservation?
-    
-    @Environment(\.presentationMode) var presentationMode
-    
-    @State private var isInWatching = false
-    
-    @State private var isInWatchlist = false
-    
-    @State private var isInFavorites = false
-    
     @State private var isListsSharePresented = false
-    
     @State private var isOtherListsPresented = false
+    @State private var isEditingReview: Bool = false
+    
+    @FocusState private var focusedReview: FocusField?
+    
+    init(showId: Int64, currentUserUid: String) {
+        self.viewModel = TVShowDetailsViewModel(showId: showId, currentUserUid: currentUserUid)
+    }
     
     @State private var selectedTVShowTab = TVShowTabSelection.info
     
-    @State private var episodes: [Episode] = []
-    
-    @State private var isSeasonDetailsPresented: [Int: Bool] = [:]
-    
-    @State private var isEpisodeWatched: [Int: [Int: Bool]] = [:]
     
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottom) {
-                if let show = show {
+                if let show = viewModel.show {
                     OffsetScrollView(offset: $offset, showIndicators: true, axis: .vertical) {
                         VStack {
                             BackgroundImageView(backdrop_path: show.backdropPath, offset: offset)
@@ -208,21 +191,23 @@ struct TVShowDetailsView: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding(.horizontal)
                                     
-                                    HistogramView(ratings: .constant([]))
+                                    HistogramView(ratings: $viewModel.allRatings)
                                         .padding(.horizontal)
                                     
                                     HStack(spacing: 24) {
-                                        RatingBar(rating: $rating)
+                                        RatingBar(rating: $viewModel.currentUserRating)
                                         
                                         Button {
-                                            print("OK")
+                                            Task {
+                                                await viewModel.addOrUpdateRating(value: viewModel.currentUserRating * 5)
+                                            }
                                         } label: {
                                             Text(NSLocalizedString("Valuta", comment: "Valuta"))
                                                 .frame(height: 28)
                                                 .frame(maxWidth: .infinity)
                                         }
                                         .buttonStyle(.borderedProminent)
-                                        
+                                        .disabled(viewModel.currentUserRating == viewModel.oldRating || viewModel.currentUserRating == 0.0)
                                     }
                                     .padding()
                                     
@@ -235,45 +220,105 @@ struct TVShowDetailsView: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding(.horizontal)
                                     
-                                    ClearableTextField(hint: "Scrivi una recensione", text: $review, startIcon: "text.cursor", endIcon: "xmark.circle.fill", error: $reviewError, keyboardType: .default, textInputAutocapitalization: .sentences, autocorrectionDisabled: false, axis: .vertical)
+                                    ClearableTextField(hint: "Scrivi una recensione", text: $viewModel.reviewText, startIcon: "text.cursor", endIcon: "xmark.circle.fill", error: $reviewError, keyboardType: .default, textInputAutocapitalization: .sentences, autocorrectionDisabled: false, axis: .vertical)
                                         .padding(.horizontal)
+                                        .focused($focusedReview, equals: .review)
+                                        .toolbar {
+                                            ToolbarItem(placement: .keyboard) {
+                                                Button("Fatto") {
+                                                    focusedReview = nil
+                                                }
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                            }
+                                        }
+                                        .disabled(viewModel.currentUserReview != nil && !isEditingReview)
+                                    
+                                    if let currentUserReview = viewModel.currentUserReview {
+                                        Text("Ultima modifica: \(Utils.formatDateToLocalString(date: currentUserReview.timestamp.dateValue()))")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .lineLimit(1)
+                                            .font(.caption)
+                                            .foregroundStyle(Color.secondary)
+                                            .padding(.vertical, 0)
+                                            .padding(.horizontal)
+                                    }
                                     
                                     HStack {
                                         Button {
-                                            print("OK")
+                                            isEditingReview.toggle()
                                         } label: {
                                             Text(NSLocalizedString("Modifica", comment: "Modifica"))
                                                 .frame(height: 28)
                                                 .frame(maxWidth: .infinity)
                                         }
                                         .buttonStyle(.bordered)
-                                        .disabled(true)
+                                        .disabled(viewModel.currentUserReview == nil || isEditingReview)
                                         
                                         Button {
-                                            print("OK")
+                                            Task {
+                                                await viewModel.addOrUpdateReview(reviewText: viewModel.reviewText)
+                                                isEditingReview = false
+                                            }
                                         } label: {
                                             Text(NSLocalizedString("Conferma", comment: "Conferma"))
                                                 .frame(height: 28)
                                                 .frame(maxWidth: .infinity)
                                         }
                                         .buttonStyle(.borderedProminent)
-                                        .disabled(true)
+                                        .disabled(
+                                            viewModel.reviewText.count <= 3 ||
+                                            viewModel.reviewText == viewModel.oldReviewText ||
+                                            (viewModel.currentUserReview != nil && !isEditingReview)
+                                        )
                                     }
                                     .padding(.horizontal)
                                     
-                                    Button {
-                                        showReviews.toggle()
-                                    } label: {
-                                        Text("Visualizza tutte le recensioni (19)")
-                                            .frame(height: 28)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.horizontal)
-                                    }
-                                    .sheet(isPresented: $showReviews) {
-                                        List {
-                                            VStack {
-                                                Text("Recensione 1")
-                                                Text("Recensione 2")
+                                    if viewModel.reviewsCount != 0 {
+                                        Button {
+                                            Task {
+                                                await viewModel.fetchAllReviews()
+                                                showReviews.toggle()
+                                            }
+                                        } label: {
+                                            Text("Visualizza tutte le recensioni (\(viewModel.reviewsCount))")
+                                                .frame(height: 28)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.horizontal)
+                                        }
+                                        .sheet(isPresented: $showReviews) {
+                                            if !viewModel.allReviews.isEmpty {
+                                                List {
+                                                    ForEach(viewModel.allReviews, id: \.user.uid) { review in
+                                                        HStack(alignment: .top) {
+                                                            KFImage(URL(string: review.user.profilePath))
+                                                                .resizable()
+                                                                .clipShape(Circle())
+                                                                .scaledToFill()
+                                                                .frame(width: 50, height: 50)
+                                                                .cornerRadius(8)
+                                                                .padding(.leading, -8)
+                                                            VStack {
+                                                                Text("**\(review.user.username)** | Data recensione: \(Utils.formatDateToLocalString(date: review.timestamp.dateValue()))")
+                                                                    .foregroundStyle(Color.secondary)
+                                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                                    .lineLimit(2)
+                                                                    .multilineTextAlignment(.leading)
+                                                                    .font(.footnote)
+                                                                Text("\"\(review.text)\"")
+                                                                    .italic()
+                                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                                    .font(.subheadline)
+                                                                    .multilineTextAlignment(.leading)
+                                                            }
+                                                            .padding(.trailing, 5)
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                ProgressView("Caricamento in corso...")
+                                                    .progressViewStyle(.circular)
+                                                    .tint(.accentColor)
+                                                    .controlSize(.large)
                                             }
                                         }
                                     }
@@ -297,7 +342,7 @@ struct TVShowDetailsView: View {
                                     
                                     switch selectedInfoTab {
                                     case .cast:
-                                        if let cast = show.credits?.cast {
+                                        if let cast = show.credits?.cast, !cast.isEmpty {
                                             ScrollView(.horizontal) {
                                                 LazyHStack {
                                                     ForEach(cast, id: \.self) { castMember in
@@ -306,9 +351,18 @@ struct TVShowDetailsView: View {
                                                 }
                                                 .padding(.horizontal)
                                             }
+                                        } else {
+                                            VStack(spacing: 0) {
+                                                Text("Non disponibile")
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .padding()
+                                            }
+                                            .background(Color(UIColor.tertiarySystemFill)
+                                                .cornerRadius(12))
+                                            .padding(.horizontal)
                                         }
                                     case .crew:
-                                        if let crew = show.credits?.crew.prefix(30) {
+                                        if let crew = show.credits?.crew.prefix(30), !crew.isEmpty {
                                             ScrollView(.horizontal) {
                                                 LazyHStack {
                                                     ForEach(crew, id: \.self) { crewMember in
@@ -317,6 +371,15 @@ struct TVShowDetailsView: View {
                                                 }
                                                 .padding(.horizontal)
                                             }
+                                        } else {
+                                            VStack(spacing: 0) {
+                                                Text("Non disponibile")
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .padding()
+                                            }
+                                            .background(Color(UIColor.tertiarySystemFill)
+                                                .cornerRadius(12))
+                                            .padding(.horizontal)
                                         }
                                     case .details:
                                         if show.originalName != "" {
@@ -346,7 +409,7 @@ struct TVShowDetailsView: View {
                                             .padding(.horizontal)
                                         }
                                         
-                                        if let releaseDate = show.firstAirDate {
+                                        if let releaseDate = show.firstAirDate, !releaseDate.isEmpty {
                                             Text(NSLocalizedString("Prima data di rilascio", comment: "Prima data di rilascio").uppercased())
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
@@ -364,7 +427,7 @@ struct TVShowDetailsView: View {
                                             .padding(.horizontal)
                                         }
                                         
-                                        if let homepage = show.homepage {
+                                        if let homepage = show.homepage, !homepage.isEmpty {
                                             Text("Homepage".uppercased())
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
@@ -392,7 +455,7 @@ struct TVShowDetailsView: View {
                                         }
                                         
                                         
-                                        if let status = show.status {
+                                        if let status = show.status, !status.isEmpty {
                                             Text(NSLocalizedString("Stato", comment: "Stato").uppercased())
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
@@ -410,7 +473,7 @@ struct TVShowDetailsView: View {
                                             .padding(.horizontal)
                                         }
                                         
-                                        if let spokenLanguages = show.languages {
+                                        if let spokenLanguages = show.languages, !spokenLanguages.isEmpty, !spokenLanguages.contains(where: { $0 == "xx" }) {
                                             Text(NSLocalizedString("Lingue parlate", comment: "Lingue parlate").uppercased())
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
@@ -435,7 +498,7 @@ struct TVShowDetailsView: View {
                                             .padding(.horizontal)
                                         }
                                         
-                                        if let productionCompanies = show.productionCompanies {
+                                        if let productionCompanies = show.productionCompanies, !productionCompanies.isEmpty {
                                             Text(NSLocalizedString("Case produttrici", comment: "Case produttrici").uppercased())
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
@@ -470,7 +533,7 @@ struct TVShowDetailsView: View {
                                             .padding(.horizontal)
                                         }
                                         
-                                        if let productionCountries = show.productionCountries {
+                                        if let productionCountries = show.productionCountries, !productionCountries.isEmpty {
                                             Text(NSLocalizedString("Paesi di produzione", comment: "Paesi di produzione").uppercased())
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
@@ -495,7 +558,7 @@ struct TVShowDetailsView: View {
                                             .padding(.horizontal)
                                         }
                                     case .videos:
-                                        if let videos = show.videos?.results {
+                                        if let videos = show.videos?.results, !videos.isEmpty {
                                             let officialVideos = videos.filter { $0.official }
                                             
                                             if !officialVideos.isEmpty && !videos.isEmpty {
@@ -567,21 +630,58 @@ struct TVShowDetailsView: View {
                                         
                                     }
                                     
-                                    Divider()
-                                    
-                                    Text("Film simili")
-                                        .fontWeight(.semibold)
-                                        .font(.title3)
-                                        .foregroundColor(.accentColor)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.horizontal)
+                                    if let similarShows = viewModel.similarShows, !similarShows.isEmpty {
+                                        Divider()
+                                        
+                                        HStack(spacing: 0) {
+                                            Text("Serie correlate | Fornite da:")
+                                                .fontWeight(.semibold)
+                                                .font(.title3)
+                                                .foregroundColor(.accentColor)
+                                                .padding(.horizontal)
+                                            
+                                            Image("tmdb_logo")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 15)
+                                            
+                                            Spacer()
+                                        }
+                                        
+                                        ScrollView(.horizontal, showsIndicators: false) {
+                                            LazyHStack(spacing: 10) {
+                                                ForEach(similarShows, id: \.id) { show in
+                                                    NavigationLink(destination: TVShowDetailsView(showId: show.id, currentUserUid: authManager.currentUserUid)) {
+                                                        if let posterPath = show.poster_path {
+                                                            KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: UIScreen.main.bounds.width / 4, height: (UIScreen.main.bounds.width / 4) * 1.5)
+                                                                .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                                .cornerRadius(10)
+                                                        } else {
+                                                            Image("error_404")
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: UIScreen.main.bounds.width / 4, height: (UIScreen.main.bounds.width / 4) * 1.5)
+                                                                .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                                .cornerRadius(10)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            .padding(.horizontal)
+                                        }
+                                    }
                                     
                                     Spacer()
                                     
                                 }.transition(.move(edge: .leading))
                             case .episodes:
                                 VStack {
+                                    
                                     Divider()
+                                    
                                     Text("Inizia il monitoraggio")
                                         .fontWeight(.semibold)
                                         .font(.title3)
@@ -589,7 +689,7 @@ struct TVShowDetailsView: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding(.horizontal)
                                     
-                                    CarouselStack(episodes) { episode in
+                                    CarouselStack(viewModel.episodes) { episode in
                                         HStack(alignment: .center) {
                                             if let imagePath = episode.imagePath {
                                                 KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(imagePath)"))
@@ -658,11 +758,11 @@ struct TVShowDetailsView: View {
                                     if let seasons = show.seasons {
                                         ForEach(seasons, id: \.self) { season in
                                             if season.seasonNumber != 0 {
-                                                SeasonView(season: season, isSeasonDetailsPresented: $isSeasonDetailsPresented, isEpisodeWatched: $isEpisodeWatched, linearGradient: Utils.linearGradient)
+                                                SeasonView(season: season, viewModel: viewModel, linearGradient: Utils.linearGradient)
                                             }
                                         }
                                         if let specialSeason = seasons.first(where: { $0.seasonNumber == 0 }) {
-                                            SeasonView(season: specialSeason, isSeasonDetailsPresented: $isSeasonDetailsPresented, isEpisodeWatched: $isEpisodeWatched, linearGradient: Utils.linearGradient)
+                                            SeasonView(season: specialSeason, viewModel: viewModel, linearGradient: Utils.linearGradient)
                                         }
                                     }
                                     
@@ -680,17 +780,19 @@ struct TVShowDetailsView: View {
                     if isListsSharePresented {
                         VStack(spacing: 0) {
                             if !isOtherListsPresented {
-                                Button(action: { isInWatching.toggle() }) {
+                                Button(action: {
+                                    viewModel.toggleTVShowToList(listName: "watching_t")
+                                }) {
                                     HStack {
-                                        Image(systemName: isInWatching ? "eye.fill" : "eye")
+                                        Image(systemName: viewModel.isInList["watching_t"]! ? "eye.fill" : "eye")
                                             .foregroundStyle(Color.primary)
                                             .frame(width: 28)
                                         Text("Serie TV in visione")
                                             .foregroundStyle(Color.primary)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                         Spacer()
-                                        Image(systemName: isInWatching ? "checkmark.circle.fill" : "checkmark.circle")
-                                            .foregroundStyle(isInWatching ? Color.mint : Color.primary)
+                                        Image(systemName: viewModel.isInList["watching_t"]! ? "checkmark.circle.fill" : "checkmark.circle")
+                                            .foregroundStyle(viewModel.isInList["watching_t"]! ? Color.mint : Color.primary)
                                             .frame(width: 28)
                                     }
                                     .padding()
@@ -698,17 +800,19 @@ struct TVShowDetailsView: View {
                                 
                                 Divider()
                                 
-                                Button(action: { isInWatchlist.toggle() }) {
+                                Button(action: {
+                                    viewModel.toggleTVShowToList(listName: "watchlist")
+                                }) {
                                     HStack {
-                                        Image(systemName: isInWatchlist ? "bookmark.fill" : "bookmark")
+                                        Image(systemName: viewModel.isInList["watchlist"]! ? "bookmark.fill" : "bookmark")
                                             .foregroundStyle(Color.primary)
                                             .frame(width: 28)
                                         Text("Watchlist")
                                             .foregroundStyle(Color.primary)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                         Spacer()
-                                        Image(systemName: isInWatchlist ? "checkmark.circle.fill" : "checkmark.circle")
-                                            .foregroundStyle(isInWatchlist ? Color.mint : Color.primary)
+                                        Image(systemName: viewModel.isInList["watchlist"]! ? "checkmark.circle.fill" : "checkmark.circle")
+                                            .foregroundStyle(viewModel.isInList["watchlist"]! ? Color.mint : Color.primary)
                                             .frame(width: 28)
                                     }
                                     .padding()
@@ -716,17 +820,19 @@ struct TVShowDetailsView: View {
                                 
                                 Divider()
                                 
-                                Button(action: { isInFavorites.toggle() }) {
+                                Button(action: {
+                                    viewModel.toggleTVShowToList(listName: "favorite")
+                                }) {
                                     HStack {
-                                        Image(systemName: isInFavorites ? "heart.fill" : "heart")
+                                        Image(systemName: viewModel.isInList["favorite"]! ? "heart.fill" : "heart")
                                             .foregroundStyle(Color.primary)
                                             .frame(width: 28)
                                         Text("Preferiti")
                                             .foregroundStyle(Color.primary)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                         Spacer()
-                                        Image(systemName: isInFavorites ? "checkmark.circle.fill" : "checkmark.circle")
-                                            .foregroundStyle(isInFavorites ? Color.mint : Color.primary)
+                                        Image(systemName: viewModel.isInList["favorite"]! ? "checkmark.circle.fill" : "checkmark.circle")
+                                            .foregroundStyle(viewModel.isInList["favorite"]! ? Color.mint : Color.primary)
                                             .frame(width: 28)
                                     }
                                     .padding()
@@ -760,7 +866,7 @@ struct TVShowDetailsView: View {
                             }
                             
                             Utils.linearGradient
-                                .frame(width: .infinity, height: 1)
+                                .frame(maxWidth: .infinity, maxHeight: 1)
                             
                             Button(action: {
                                 withAnimation(.easeInOut(duration: 0.2)) {
@@ -793,59 +899,13 @@ struct TVShowDetailsView: View {
             }
             .onAppear {
                 Task {
-                    do {
-                        var show = try await getTVShowDetails()
-                        
-                        for (index, season) in show.seasons!.enumerated() {
-                            do {
-                                let detailedSeason = try await getSeasonDetails(seasonNumber: Int32(season.seasonNumber))
-                                isSeasonDetailsPresented[season.seasonNumber] = false
-                                if season.seasonNumber != 0 {
-                                    self.episodes.append(contentsOf: detailedSeason.episodes ?? [])
-                                }
-                                show.seasons?[index] = detailedSeason
-                            } catch {
-                                print("Error fetching details for season \(season.seasonNumber): \(error)")
-                            }
-                        }
-                        
-                        self.show = show
-                        
-                    } catch {
-                        print("Error fetching show details: \(error)")
-                    }
+                    await viewModel.getTVShowDetails()
+                    viewModel.getSimilarTVShows()
                 }
             }
         }
-            .navigationBarBackButtonHidden(true)
-            .padding(.bottom, 1)
-    }
-    
-    func getTVShowDetails() async throws -> TVShow {
-        return try await withCheckedThrowingContinuation { continuation in
-            APIManager.getTVShowDetails(showId: showId) { (result: AFResult<TVShow>) in
-                switch result {
-                case .success(let show):
-                    continuation.resume(returning: show)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
-    }
-    
-    
-    func getSeasonDetails(seasonNumber: Int32) async throws -> Season {
-        return try await withCheckedThrowingContinuation { continuation in
-            APIManager.getSeasonDetails(showId: showId, seasonNumber: seasonNumber) { (result: AFResult<Season>) in
-                switch result {
-                case .success(let season):
-                    continuation.resume(returning: season)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        .navigationBarBackButtonHidden(true)
+        .padding(.bottom, 1)
     }
     
     
@@ -911,6 +971,7 @@ struct TVShowDetailsView: View {
                     .lineLimit(2)
                     .fontWeight(.semibold)
                     .foregroundColor(.accentColor)
+                    .multilineTextAlignment(.leading)
                     .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
@@ -920,6 +981,7 @@ struct TVShowDetailsView: View {
                     .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
+                    .foregroundStyle(Color.secondary)
                 Spacer()
             }
             .frame(height: 174)
@@ -930,7 +992,7 @@ struct TVShowDetailsView: View {
             )
             .cornerRadius(12)
             .shadow(color: .primary.opacity(0.2) , radius: 3)
-        .padding(.vertical, 8)
+            .padding(.vertical, 8)
         }
     }
     
@@ -959,6 +1021,7 @@ struct TVShowDetailsView: View {
                     .lineLimit(2)
                     .fontWeight(.semibold)
                     .foregroundColor(.accentColor)
+                    .multilineTextAlignment(.leading)
                     .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
@@ -968,6 +1031,7 @@ struct TVShowDetailsView: View {
                     .frame(maxWidth: 100, alignment: .leading)
                     .padding(.horizontal, 4)
                     .padding(.top, 4)
+                    .foregroundStyle(Color.secondary)
                 Spacer()
             }
             .frame(height: 174)
@@ -978,15 +1042,10 @@ struct TVShowDetailsView: View {
             )
             .cornerRadius(12)
             .shadow(color: .primary.opacity(0.2) , radius: 3)
-        .padding(.vertical, 8)
+            .padding(.vertical, 8)
         }
     }
     
-}
-
-#Preview {
-    TVShowDetailsView(showId: 1396) // 872585, 299564, 299536
-        .accentColor(.cyan)
 }
 
 struct ShowHeaderView: View {
@@ -1044,13 +1103,6 @@ struct ShowHeaderView: View {
                     }
                 }
                 
-                //                            if let releaseDate = movie?.release_date {
-                //                                let formattedDate = Utils.convertDate(from: releaseDate)
-                //                                Text(formattedDate ?? "")
-                //                                    .font(.footnote)
-                //                                    .frame(maxWidth: .infinity, alignment: .leading)
-                //                            }
-                
                 if let createdBy = show?.createdBy, !createdBy.isEmpty {
                     let creatorsString = show?.createdBy?.map { creator in
                         creator.name
@@ -1076,12 +1128,11 @@ struct ShowHeaderView: View {
 
 struct SeasonView: View {
     var season: Season
-    @Binding var isSeasonDetailsPresented: [Int: Bool]
-    @Binding var isEpisodeWatched: [Int: [Int: Bool]]
+    @ObservedObject var viewModel: TVShowDetailsViewModel
     var linearGradient: LinearGradient
     
     var body: some View {
-        Button(action: { withAnimation(.easeInOut(duration: 0.2)) { isSeasonDetailsPresented[season.seasonNumber]?.toggle() } }) {
+        Button(action: { withAnimation(.easeInOut(duration: 0.2)) { viewModel.isSeasonDetailsPresented[season.seasonNumber]?.toggle() } }) {
             HStack {
                 if let posterPath = season.posterPath {
                     KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
@@ -1140,18 +1191,18 @@ struct SeasonView: View {
             .padding(.horizontal)
         }
         .sheet(isPresented: Binding<Bool>(
-            get: { self.isSeasonDetailsPresented[season.seasonNumber] ?? false },
-            set: { newValue in self.isSeasonDetailsPresented[season.seasonNumber] = newValue }
+            get: { viewModel.isSeasonDetailsPresented[season.seasonNumber] ?? false },
+            set: { newValue in viewModel.isSeasonDetailsPresented[season.seasonNumber] = newValue }
         ))
         {
-            SeasonDetailsView(season: season, isEpisodeWatched: $isEpisodeWatched, linearGradient: linearGradient)
+            SeasonDetailsView(season: season, viewModel: viewModel, linearGradient: linearGradient)
         }
     }
 }
 
 struct SeasonDetailsView: View {
     var season: Season
-    @Binding var isEpisodeWatched: [Int: [Int: Bool]]
+    @ObservedObject var viewModel: TVShowDetailsViewModel
     var linearGradient: LinearGradient
     
     @Environment(\.dismiss) var dismiss
@@ -1203,13 +1254,13 @@ struct SeasonDetailsView: View {
                                 
                             }
                             
-                                Text("Informazioni")
-                                    .fontWeight(.semibold)
-                                    .font(.headline)
-                                    .foregroundStyle(Color.accentColor)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            Text("Informazioni")
+                                .fontWeight(.semibold)
+                                .font(.headline)
+                                .foregroundStyle(Color.accentColor)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            let seasonWatchedEpisodes = isEpisodeWatched[season.seasonNumber]?.filter { $0.value == true }.count ?? 0
+                            let seasonWatchedEpisodes = viewModel.isEpisodeWatched[season.seasonNumber]?.filter { $0.value == true }.count ?? 0
                             let seasonTotalEpisodes = season.episodes?.count ?? 0
                             Text("\(seasonWatchedEpisodes) \(seasonWatchedEpisodes == 1 ? "episodio" : "episodi") visti su \(seasonTotalEpisodes) \(seasonTotalEpisodes == 1 ? "episodio" : "episodi") totali")
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -1236,65 +1287,78 @@ struct SeasonDetailsView: View {
                         .padding(.horizontal)
                     
                     ForEach(season.episodes ?? [], id: \.self) { episode in
-                        HStack(alignment: .center) {
-                            if let imagePath = episode.imagePath {
-                                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(imagePath)"))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 80, height: 80)
-                                    .cornerRadius(10)
-                                    .padding(5)
-                            } else {
-                                Image("error_404")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 80, height: 80)
-                                    .cornerRadius(10)
-                                    .padding(5)
-                            }
-                            VStack {
-                                HStack(spacing: 0) {
-                                    if let seasonNumber = episode.seasonNumber {
-                                        Text("S\(Utils.convertSeasonEpisodeNumber(seasonNumber)) | ")
-                                            .fontWeight(.semibold)
-                                    }
-                                    Text("E\(Utils.convertSeasonEpisodeNumber(episode.episodeNumber))")
-                                        .fontWeight(.semibold)
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                Text(episode.name ?? "Episodio \(episode.episodeNumber)")
-                                    .font(.callout)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .padding(.leading, -5)
-                            .padding(.trailing, 5)
-                            Spacer()
-                            Button(action: {}) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color(uiColor: .systemGray4))
-                                        .frame(width: 40, height: 40)
-                                    
-                                    Image(systemName: "checkmark")
-                                        .foregroundStyle(Color.gray)
-                                        .fontWeight(.medium)
-                                        .font(.title3)
-                                }
-                            }.padding(.trailing, 10)
-                        }
-                        .frame(height: 90)
-                        .background(.ultraThickMaterial)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .strokeBorder(linearGradient)
-                        )
-                        .cornerRadius(12)
-                        .padding(.horizontal)
+                        EpisodeView(episode: episode, viewModel: viewModel)
                     }
                 }
             }
             .navigationTitle(season.name ?? "Stagione \(season.seasonNumber)")
         }
         .accentColor(.cyan)
+    }
+}
+
+struct EpisodeView: View {
+    let episode: Episode
+    @ObservedObject var viewModel: TVShowDetailsViewModel
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            if let imagePath = episode.imagePath {
+                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(imagePath)"))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 80, height: 80)
+                    .cornerRadius(10)
+                    .padding(5)
+            } else {
+                Image("error_404")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 80, height: 80)
+                    .cornerRadius(10)
+                    .padding(5)
+            }
+            VStack {
+                HStack(spacing: 0) {
+                    if let seasonNumber = episode.seasonNumber {
+                        Text("S\(Utils.convertSeasonEpisodeNumber(seasonNumber)) | ")
+                            .fontWeight(.semibold)
+                    }
+                    Text("E\(Utils.convertSeasonEpisodeNumber(episode.episodeNumber))")
+                        .fontWeight(.semibold)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                Text((episode.name == nil || (episode.name?.isEmpty ?? true)) ? "Episodio \(episode.episodeNumber)" : episode.name!)
+                    .font(.callout)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.leading, -5)
+            .padding(.trailing, 5)
+            Spacer()
+            Button(action: {
+                Task {
+                    await viewModel.toggleWatchedEpisode(seasonNumber: episode.seasonNumber ?? 0, episodeNumber: episode.episodeNumber)
+                }
+            }) {
+                ZStack {
+                    Circle()
+                        .fill(Color(uiColor: .systemGray4))
+                        .frame(width: 40, height: 40)
+                    
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(Color.gray)
+                        .fontWeight(.medium)
+                        .font(.title3)
+                }
+            }.padding(.trailing, 10)
+        }
+        .frame(height: 90)
+        .background(.ultraThickMaterial)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(Utils.linearGradient)
+        )
+        .cornerRadius(12)
+        .padding(.horizontal)
     }
 }

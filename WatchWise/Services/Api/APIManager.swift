@@ -60,4 +60,8 @@ class APIManager {
     static func getSimilarMovies(movieId: Int64, completion: @escaping (AFResult<DiscoverMoviesResponse>) -> Void) {
         APIService.getSimilarMovies(movieId: movieId, completion: completion)
     }
+    
+    static func getSimilarTVShows(showId: Int64, completion: @escaping (AFResult<DiscoverTVShowsResponse>) -> Void) {
+        APIService.getSimilarTVShows(showId: showId, completion: completion)
+    }
 }

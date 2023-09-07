@@ -78,4 +78,8 @@ class APIService {
     static func getSimilarMovies(movieId: Int64, completion: @escaping (AFResult<DiscoverMoviesResponse>) -> Void) {
         performRequest(route: APIRouter.getSimilarMovies(movieId: movieId), completion: completion)
     }
+    
+    static func getSimilarTVShows(showId: Int64, completion: @escaping (AFResult<DiscoverTVShowsResponse>) -> Void) {
+        performRequest(route: APIRouter.getSimilarTVShows(showId: showId), completion: completion)
+    }
 }

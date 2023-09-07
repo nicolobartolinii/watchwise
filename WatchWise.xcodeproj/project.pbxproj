@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1174B74F2AA9F53D004F8783 /* TVShowDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1174B74E2AA9F53D004F8783 /* TVShowDetailsViewModel.swift */; };
+		1174B7512AA9F60F004F8783 /* TVShowsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1174B7502AA9F60F004F8783 /* TVShowsRepository.swift */; };
+		11DCD1DD2AA9ED0A00ECAD4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11DCD1DC2AA9ED0A00ECAD4B /* GoogleService-Info.plist */; };
 		35FB878C4910785280653742 /* Pods_WatchWise_WatchWiseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2CD3A0E4816C811EA020C5 /* Pods_WatchWise_WatchWiseUITests.framework */; };
 		997BEC852738F815AD416AB6 /* Pods_WatchWiseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCD4E15E36954A81010F71A /* Pods_WatchWiseTests.framework */; };
 		B90052A12A97B0D2005FC143 /* HistogramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90052A02A97B0D2005FC143 /* HistogramView.swift */; };
@@ -69,9 +72,6 @@
 		B9F2B14B2A8B867F00B18E44 /* WatchWiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B14A2A8B867F00B18E44 /* WatchWiseTests.swift */; };
 		B9F2B1552A8B867F00B18E44 /* WatchWiseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1542A8B867F00B18E44 /* WatchWiseUITests.swift */; };
 		B9F2B1572A8B867F00B18E44 /* WatchWiseUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F2B1562A8B867F00B18E44 /* WatchWiseUITestsLaunchTests.swift */; };
-		B9F2B1642A8B86BD00B18E44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B9F2B1632A8B86BD00B18E44 /* GoogleService-Info.plist */; };
-		B9F2B1652A8B86BD00B18E44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B9F2B1632A8B86BD00B18E44 /* GoogleService-Info.plist */; };
-		B9F2B1662A8B86BD00B18E44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B9F2B1632A8B86BD00B18E44 /* GoogleService-Info.plist */; };
 		B9F2B16A2A8B8B9B00B18E44 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B9F2B1692A8B8B9B00B18E44 /* FirebaseAnalytics */; };
 		B9F2B16C2A8B8B9B00B18E44 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = B9F2B16B2A8B8B9B00B18E44 /* FirebaseAuth */; };
 		B9F2B16E2A8B8B9B00B18E44 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = B9F2B16D2A8B8B9B00B18E44 /* FirebaseCrashlytics */; };
@@ -124,7 +124,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1174B74E2AA9F53D004F8783 /* TVShowDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetailsViewModel.swift; sourceTree = "<group>"; };
+		1174B7502AA9F60F004F8783 /* TVShowsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowsRepository.swift; sourceTree = "<group>"; };
 		1198DFA3BFF0229B15EDD988 /* Pods-WatchWise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.release.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.release.xcconfig"; sourceTree = "<group>"; };
+		11DCD1DC2AA9ED0A00ECAD4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4C6F31A77B1FD0BA2BE26426 /* Pods-WatchWise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.debug.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.debug.xcconfig"; sourceTree = "<group>"; };
 		57795A70F06874F1753D612E /* Pods_WatchWise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchWise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8093A0428160055D22BAB237 /* Pods-WatchWiseTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWiseTests.release.xcconfig"; path = "Target Support Files/Pods-WatchWiseTests/Pods-WatchWiseTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -182,7 +185,6 @@
 		B9F2B1502A8B867F00B18E44 /* WatchWiseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WatchWiseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F2B1542A8B867F00B18E44 /* WatchWiseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWiseUITests.swift; sourceTree = "<group>"; };
 		B9F2B1562A8B867F00B18E44 /* WatchWiseUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWiseUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		B9F2B1632A8B86BD00B18E44 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BF2CD3A0E4816C811EA020C5 /* Pods_WatchWise_WatchWiseUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchWise_WatchWiseUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EDCD4E15E36954A81010F71A /* Pods_WatchWiseTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchWiseTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD1F46C49F246AD6B821A1BA /* Pods-WatchWise-WatchWiseUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise-WatchWiseUITests.release.xcconfig"; path = "Target Support Files/Pods-WatchWise-WatchWiseUITests/Pods-WatchWise-WatchWiseUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				B92296462AA0C03200826537 /* UserDetailsViewModel.swift */,
 				B98D011B2AA380BC009F611F /* PersonDetailsViewModel.swift */,
 				B9E15FC82AA72C1F00667846 /* MovieDetailsViewModel.swift */,
+				1174B74E2AA9F53D004F8783 /* TVShowDetailsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -340,6 +343,7 @@
 				B92296442AA0C01400826537 /* UsersRepository.swift */,
 				B98D01172AA3785B009F611F /* PeopleRepository.swift */,
 				B90F58402AA72F450079C00C /* MoviesRepository.swift */,
+				1174B7502AA9F60F004F8783 /* TVShowsRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -425,13 +429,13 @@
 		B9F2B1362A8B867A00B18E44 /* WatchWise */ = {
 			isa = PBXGroup;
 			children = (
+				11DCD1DC2AA9ED0A00ECAD4B /* GoogleService-Info.plist */,
 				B92296432AA0C00500826537 /* Repositories */,
 				B922963F2AA0BEE200826537 /* ViewModels */,
 				B9D9EA9B2A960B00000C05CE /* Info.plist */,
 				B922126A2A90E1EB00AFFB9C /* Model */,
 				B98DE98E2A8BCFD20076F379 /* Services */,
 				B98DE98C2A8BCFB70076F379 /* Views */,
-				B9F2B1632A8B86BD00B18E44 /* GoogleService-Info.plist */,
 				B9F2B1372A8B867A00B18E44 /* WatchWiseApp.swift */,
 				B9F2B13B2A8B867F00B18E44 /* Assets.xcassets */,
 				B9F2B13D2A8B867F00B18E44 /* Preview Content */,
@@ -620,7 +624,7 @@
 			files = (
 				B9F2B13F2A8B867F00B18E44 /* Preview Assets.xcassets in Resources */,
 				B9F2B13C2A8B867F00B18E44 /* Assets.xcassets in Resources */,
-				B9F2B1642A8B86BD00B18E44 /* GoogleService-Info.plist in Resources */,
+				11DCD1DD2AA9ED0A00ECAD4B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -628,7 +632,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9F2B1652A8B86BD00B18E44 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,7 +639,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9F2B1662A8B86BD00B18E44 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -763,7 +765,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/Users/nicolobartolini/Library/Developer/Xcode/DerivedData/WatchWise-cesnlccuyzgzqrapoalxagzyieqf/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -792,12 +794,14 @@
 				B92212692A90E15400AFFB9C /* APIService.swift in Sources */,
 				B936CA772A929F77001F4908 /* SplashScreen.swift in Sources */,
 				B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */,
+				1174B74F2AA9F53D004F8783 /* TVShowDetailsViewModel.swift in Sources */,
 				B936CA752A929D44001F4908 /* AuthManager.swift in Sources */,
 				B90052A12A97B0D2005FC143 /* HistogramView.swift in Sources */,
 				B90F58412AA72F450079C00C /* MoviesRepository.swift in Sources */,
 				B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */,
 				B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */,
 				B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */,
+				1174B7512AA9F60F004F8783 /* TVShowsRepository.swift in Sources */,
 				B92296422AA0BFFD00826537 /* FirestoreService.swift in Sources */,
 				B92212732A910E4700AFFB9C /* MovieDetailsView.swift in Sources */,
 				B94713A42A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift in Sources */,

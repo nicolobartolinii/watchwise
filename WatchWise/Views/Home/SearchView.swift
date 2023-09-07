@@ -165,7 +165,7 @@ struct SearchView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(popularTVShows, id: \.self) { show in
-                                            NavigationLink(destination: TVShowDetailsView(showId: show.id)) {
+                                            NavigationLink(destination: TVShowDetailsView(showId: show.id, currentUserUid: authManager.currentUserUid)) {
                                                 if let posterPath = show.poster_path {
                                                     KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
                                                         .resizable()
@@ -233,7 +233,7 @@ struct SearchView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 10) {
                                         ForEach(trendingTVShows, id: \.self) { show in
-                                            NavigationLink(destination: TVShowDetailsView(showId: show.id)) {
+                                            NavigationLink(destination: TVShowDetailsView(showId: show.id, currentUserUid: authManager.currentUserUid)) {
                                                 if let posterPath = show.poster_path {
                                                     KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
                                                         .resizable()
@@ -321,7 +321,7 @@ struct SearchView: View {
                                     List {
                                         if !(searchShowsResults?.isEmpty ?? false) {
                                             ForEach(searchShowsResults ?? [], id: \.self) { show in
-                                                NavigationLink(destination: TVShowDetailsView(showId: show.id)) {
+                                                NavigationLink(destination: TVShowDetailsView(showId: show.id, currentUserUid: authManager.currentUserUid)) {
                                                     HStack {
                                                         if let posterPath = show.poster_path {
                                                             KFImage(URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)"))
