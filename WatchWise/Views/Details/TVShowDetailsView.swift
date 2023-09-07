@@ -208,7 +208,7 @@ struct TVShowDetailsView: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding(.horizontal)
                                     
-                                    HistogramView(ratings: [])
+                                    HistogramView(ratings: .constant([]))
                                         .padding(.horizontal)
                                     
                                     HStack(spacing: 24) {

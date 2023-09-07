@@ -18,9 +18,16 @@ class UserDetailsViewModel: ObservableObject {
         self.repository = UsersRepository()
     }
     
-    func fetchUserDetails() {
-        repository.getUser(by: uid) { user in
-            self.user = user
+    func fetchUserDetails() async {
+        do {
+            if let user = try await repository.getUser(by: self.uid) {
+                self.user = user
+            } else {
+                self.user = nil
+            }
+        } catch {
+            print("Errore nell'ottenimento dei dettagli dell'utente: \(error)")
+            self.user = nil
         }
     }
 }

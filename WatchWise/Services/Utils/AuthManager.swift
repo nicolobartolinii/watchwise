@@ -197,7 +197,6 @@ extension AuthManager {
         let listsRef = userRef.collection("lists")
         let episodesRef = userRef.collection("episodes")
         let followRef = userRef.collection("follow")
-        let reviewsRef = userRef.collection("reviews")
         let recommendationsRef = userRef.collection("recommendations")
         
         do {
@@ -234,12 +233,6 @@ extension AuthManager {
             ])
             try await followRef.document("followers").setData([
                 "users": [],
-                "count": 0
-            ])
-            try await reviewsRef.document("movies").setData([
-                "count": 0
-            ])
-            try await reviewsRef.document("tv").setData([
                 "count": 0
             ])
         } catch {

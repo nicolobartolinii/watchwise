@@ -12,9 +12,7 @@ class UsersRepository {
         self.firestoreService = FirestoreService()
     }
     
-    func getUser(by uid: String, completion: @escaping (User?) -> Void) {
-        firestoreService.getUserDetails(by: uid) { user in
-            completion(user)
-        }
+    func getUser(by uid: String) async throws -> User? {
+        return try await firestoreService.getUserDetails(by: uid)
     }
 }

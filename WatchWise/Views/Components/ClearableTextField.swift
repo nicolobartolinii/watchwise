@@ -20,7 +20,6 @@ struct ClearableTextField: View {
     var lowercaseText: Bool = false
     var axis: Axis = .horizontal
     
-    
     var body: some View {
         HStack {
             if startIcon != "" {

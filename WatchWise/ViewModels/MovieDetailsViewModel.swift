@@ -8,13 +8,23 @@
 import Foundation
 import Combine
 
+@MainActor
 class MovieDetailsViewModel: ObservableObject {
     @Published var movie: Movie?
+    @Published var similarMovies: [DiscoveredMovie]?
     @Published var isInList: [String: Bool] = [
         "watched_m": false,
         "watchlist": false,
         "favorite": false
     ]
+    @Published var currentUserRating: CGFloat = 0.0
+    @Published var oldRating: CGFloat = 0.0
+    @Published var allRatings: [CGFloat] = []
+    @Published var reviewText: String = ""
+    @Published var currentUserReview: Review?
+    @Published var oldReviewText: String = ""
+    @Published var reviewsCount: Int = 0
+    @Published var allReviews: [Review] = []
     
     private var movieId: Int64
     private var currentUserUid: String
@@ -28,11 +38,24 @@ class MovieDetailsViewModel: ObservableObject {
         self.firestoreService = FirestoreService()
         
         checkIfMovieInLists()
+        
+        Task {
+            await fetchCurrentUserRating()
+            await fetchAllRatings()
+            await fetchCurrentUserReview()
+            await fetchReviewsCount()
+        }
     }
     
     func getMovieDetails() {
         repository.getMovieDetails(by: movieId) { movie in
             self.movie = movie
+        }
+    }
+    
+    func getSimilarMovies() {
+        repository.getSimilarMovies(by: movieId) { discoveredMovies in
+            self.similarMovies = discoveredMovies?.results as? [DiscoveredMovie]
         }
     }
     
@@ -67,6 +90,75 @@ class MovieDetailsViewModel: ObservableObject {
                 }
                 self.isInList[listName] = isInThisList
             }
+        }
+    }
+    
+    func fetchCurrentUserRating() async {
+        do {
+            let rating = try await firestoreService.getCurrentUserRating(productId: movieId, userId: currentUserUid, type: "movies")
+            self.currentUserRating = (rating ?? 0.0) / 5
+            self.oldRating = self.currentUserRating
+        } catch {
+            print("Error fetching current user rating: \(error)")
+        }
+    }
+    
+    func fetchAllRatings() async {
+        do {
+            let ratings = try await firestoreService.getAllRatings(productId: movieId, type: "movies")
+            self.allRatings = ratings
+        } catch {
+            print("Error fetching all ratings: \(error)")
+        }
+    }
+    
+    func addOrUpdateRating(value: CGFloat) async {
+        do {
+            try await firestoreService.addOrUpdateRating(productId: movieId, userId: currentUserUid, ratingValue: value, type: "movies")
+            self.oldRating = value / 5
+            await fetchAllRatings()
+        } catch {
+            print("Error updating rating: \(error)")
+        }
+    }
+    
+    func fetchCurrentUserReview() async {
+        do {
+            let review = try await firestoreService.getCurrentUserReview(productId: movieId, userId: currentUserUid, type: "movies")
+            self.currentUserReview = review
+            self.reviewText = review?.text ?? ""
+            self.oldReviewText = self.reviewText
+        } catch {
+            print("Errore nel recupero della recensione: \(error)")
+        }
+    }
+    
+    func fetchReviewsCount() async {
+        do {
+            let reviewCount = try await firestoreService.getReviewsCount(productId: movieId, type: "movies")
+            self.reviewsCount = reviewCount
+        } catch {
+            print("Errore nel recupero del numero delle recensioni: \(error)")
+        }
+    }
+    
+    func fetchAllReviews() async {
+        do {
+            let reviews = try await firestoreService.getAllReviews(productId: movieId, type: "movies")
+            self.allReviews = reviews
+        } catch {
+            print("Errore nel recupero di tutte le recensioni: \(error)")
+        }
+    }
+    
+    func addOrUpdateReview(reviewText: String) async {
+        do {
+            try await firestoreService.addOrUpdateReview(productId: movieId, userId: currentUserUid, reviewText: reviewText, type: "movies")
+            self.oldReviewText = reviewText
+            await fetchCurrentUserReview()
+            await fetchReviewsCount()
+        } catch {
+            print("Errore durante l'aggiornamento della recensione: \(error)")
         }
     }
 }

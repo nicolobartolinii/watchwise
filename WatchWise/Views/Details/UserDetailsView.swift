@@ -164,7 +164,7 @@ struct UserDetailsView: View {
                             .padding(.horizontal)
                             .offset(y: -30)
                         
-                        HistogramView(ratings: [])
+                        HistogramView(ratings: .constant([]))
                             .padding(.horizontal)
                             .offset(y: -20)
                         
@@ -212,7 +212,9 @@ struct UserDetailsView: View {
             }
         }
         .onAppear {
-            viewModel.fetchUserDetails()
+            Task {
+                await viewModel.fetchUserDetails()
+            }
         }
         .navigationBarBackButtonHidden(true)
     }

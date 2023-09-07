@@ -9,7 +9,7 @@ import SwiftUI
 import AxisRatingBar
 
 struct HistogramView: View {
-    let ratings: [Double]
+    @Binding var ratings: [CGFloat]
     let maxRating: Double = 5.0
     let step: Double = 0.5
     
@@ -22,7 +22,7 @@ struct HistogramView: View {
         HStack {
             LeftHistogramPartView(ratingsCount: ratings.count)
             
-            HistogramBarView(ratingCounts: ratingCounts, maxCount: maxCount, ratings: ratings)
+            HistogramBarView(ratingCounts: ratingCounts, maxCount: maxCount, step: step, ratings: $ratings)
             
             RightHistogramPartView(averageRating: averageRating)
         }
@@ -48,7 +48,8 @@ struct LeftHistogramPartView: View {
 struct HistogramBarView: View {
     let ratingCounts: [Int]
     let maxCount: Int
-    let ratings: [Double]
+    let step: Double
+    @Binding var ratings: [CGFloat]
     
     var body: some View {
         VStack {
@@ -56,9 +57,12 @@ struct HistogramBarView: View {
             
             HStack(alignment: .bottom, spacing: 2) {
                 ForEach(0..<ratingCounts.count, id: \.self) { index in
-                    Rectangle()
-                        .fill(Color.accentColor.opacity(0.5))
-                        .frame(height: !ratings.isEmpty ? CGFloat(ratingCounts[index]) / CGFloat(maxCount) * 50 + 1 : 1)
+                    let actualRating = Double(index + 1) * step
+                    if actualRating > 0.0 {
+                        Rectangle()
+                            .fill(Color.accentColor.opacity(0.5))
+                            .frame(height: !ratings.isEmpty ? CGFloat(ratingCounts[index]) / CGFloat(maxCount) * 50 + 1 : 1)
+                    }
                 }
             }
         }
@@ -87,10 +91,10 @@ struct RightHistogramPartView: View {
 
 extension HistogramView {
     private func calculateRatingCounts() -> [Int] {
-        var counts = [Int](repeating: 0, count: Int(maxRating / step) + 1)
+        var counts = [Int](repeating: 0, count: Int(maxRating / step))
         for rating in ratings {
-            let index = Int(rating / step)
-            if index < counts.count {
+            let index = Int(rating / step) - 1
+            if index >= 0 && index < counts.count {
                 counts[index] += 1
             }
         }
@@ -100,6 +104,6 @@ extension HistogramView {
 
 
 #Preview {
-    HistogramView(ratings: [0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5, 0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5, 0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5, 0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5, 0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5])
+    HistogramView(ratings: .constant([0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5, 0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5, 0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5, 0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5, 0.5, 1, 1, 1.5, 2, 2, 2, 2.5, 3, 3, 4, 4.5, 5, 5]))
         .accentColor(.cyan)
 }

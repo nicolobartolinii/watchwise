@@ -22,22 +22,27 @@ enum InfoTabs: String, CaseIterable {
     }
 }
 
+private enum FocusField: Int, CaseIterable {
+    case review
+}
+
 struct MovieDetailsView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var authManager: AuthManager
     @ObservedObject var viewModel: MovieDetailsViewModel
     
     @State var offset: CGFloat = 0
-    @State var rating: CGFloat = 0.0
     @State private var showReviews = false
-    @State private var unitType: Int = 1
     @State private var review = ""
     @State private var reviewError = false
     @State private var selectedInfoTab = InfoTabs.cast
     @State private var showNavigationBar: Bool = false
-    @State private var tableContentHeight: CGFloat = 0
     @State private var observation: NSKeyValueObservation?
     @State private var isListsSharePresented = false
     @State private var isOtherListsPresented = false
+    @State private var isEditingReview: Bool = false
+    
+    @FocusState private var focusedReview: FocusField?
     
     init(movieId: Int64, currentUserUid: String) {
         self.viewModel = MovieDetailsViewModel(movieId: movieId, currentUserUid: currentUserUid)
@@ -142,20 +147,23 @@ struct MovieDetailsView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.horizontal)
                             
-                            HistogramView(ratings: [])
+                            HistogramView(ratings: $viewModel.allRatings)
                                 .padding(.horizontal)
                             
                             HStack(spacing: 24) {
-                                RatingBar(rating: $rating)
+                                RatingBar(rating: $viewModel.currentUserRating)
                                 
                                 Button {
-                                    print("OK")
+                                    Task {
+                                        await viewModel.addOrUpdateRating(value: viewModel.currentUserRating * 5)
+                                    }
                                 } label: {
                                     Text(NSLocalizedString("Valuta", comment: "Valuta"))
                                         .frame(height: 28)
                                         .frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.borderedProminent)
+                                .disabled(viewModel.currentUserRating == viewModel.oldRating || viewModel.currentUserRating == 0.0)
                                 
                             }
                             .padding()
@@ -169,45 +177,105 @@ struct MovieDetailsView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.horizontal)
                             
-                            ClearableTextField(hint: "Scrivi una recensione", text: $review, startIcon: "text.cursor", endIcon: "xmark.circle.fill", error: $reviewError, keyboardType: .default, textInputAutocapitalization: .sentences, autocorrectionDisabled: false, axis: .vertical)
+                            ClearableTextField(hint: "Scrivi una recensione", text: $viewModel.reviewText, startIcon: "text.cursor", endIcon: "xmark.circle.fill", error: $reviewError, keyboardType: .default, textInputAutocapitalization: .sentences, autocorrectionDisabled: false, axis: .vertical)
                                 .padding(.horizontal)
+                                .focused($focusedReview, equals: .review)
+                                .toolbar {
+                                    ToolbarItem(placement: .keyboard) {
+                                        Button("Fatto") {
+                                            focusedReview = nil
+                                        }
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                }
+                                .disabled(viewModel.currentUserReview != nil && !isEditingReview)
+                            
+                            if let currentUserReview = viewModel.currentUserReview {
+                                Text("Ultima modifica: \(Utils.formatDateToLocalString(date: currentUserReview.timestamp.dateValue()))")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .lineLimit(1)
+                                    .font(.caption)
+                                    .foregroundStyle(Color.secondary)
+                                    .padding(.vertical, 0)
+                                    .padding(.horizontal)
+                            }
                             
                             HStack {
                                 Button {
-                                    print("OK")
+                                    isEditingReview.toggle()
                                 } label: {
                                     Text(NSLocalizedString("Modifica", comment: "Modifica"))
                                         .frame(height: 28)
                                         .frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.bordered)
-                                .disabled(true)
+                                .disabled(viewModel.currentUserReview == nil || isEditingReview)
                                 
                                 Button {
-                                    print("OK")
+                                    Task {
+                                        await viewModel.addOrUpdateReview(reviewText: viewModel.reviewText)
+                                        isEditingReview = false
+                                    }
                                 } label: {
                                     Text(NSLocalizedString("Conferma", comment: "Conferma"))
                                         .frame(height: 28)
                                         .frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.borderedProminent)
-                                .disabled(true)
+                                .disabled(
+                                    viewModel.reviewText.count <= 3 ||
+                                    viewModel.reviewText == viewModel.oldReviewText ||
+                                    (viewModel.currentUserReview != nil && !isEditingReview)
+                                )
                             }
                             .padding(.horizontal)
                             
-                            Button {
-                                showReviews.toggle()
-                            } label: {
-                                Text("Visualizza tutte le recensioni (19)")
-                                    .frame(height: 28)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal)
-                            }
-                            .sheet(isPresented: $showReviews) {
-                                List {
-                                    VStack {
-                                        Text("Recensione 1")
-                                        Text("Recensione 2")
+                            if viewModel.reviewsCount != 0 {
+                                Button {
+                                    Task {
+                                        await viewModel.fetchAllReviews()
+                                        showReviews.toggle()
+                                    }
+                                } label: {
+                                    Text("Visualizza tutte le recensioni (\(viewModel.reviewsCount))")
+                                        .frame(height: 28)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal)
+                                }
+                                .sheet(isPresented: $showReviews) {
+                                    if !viewModel.allReviews.isEmpty {
+                                        List {
+                                            ForEach(viewModel.allReviews, id: \.user.uid) { review in
+                                                HStack(alignment: .top) {
+                                                    KFImage(URL(string: review.user.profilePath))
+                                                        .resizable()
+                                                        .clipShape(Circle())
+                                                        .scaledToFill()
+                                                        .frame(width: 50, height: 50)
+                                                        .cornerRadius(8)
+                                                        .padding(.leading, -8)
+                                                    VStack {
+                                                        Text("**\(review.user.username)** | Data recensione: \(Utils.formatDateToLocalString(date: review.timestamp.dateValue()))")
+                                                            .foregroundStyle(Color.secondary)
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .lineLimit(2)
+                                                            .multilineTextAlignment(.leading)
+                                                            .font(.footnote)
+                                                        Text("\"\(review.text)\"")
+                                                            .italic()
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .font(.subheadline)
+                                                            .multilineTextAlignment(.leading)
+                                                    }
+                                                    .padding(.trailing, 5)
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        ProgressView("Caricamento in corso...")
+                                            .progressViewStyle(.circular)
+                                            .tint(.accentColor)
+                                            .controlSize(.large)
                                     }
                                 }
                             }
@@ -280,7 +348,7 @@ struct MovieDetailsView: View {
                                     .padding(.horizontal)
                                 }
                                 
-                                if let releaseDate = movie.release_date {
+                                if let releaseDate = movie.release_date, !releaseDate.isEmpty {
                                     Text(NSLocalizedString("Prima data di rilascio", comment: "Prima data di rilascio").uppercased())
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -298,7 +366,7 @@ struct MovieDetailsView: View {
                                     .padding(.horizontal)
                                 }
                                 
-                                if let homepage = movie.homepage {
+                                if let homepage = movie.homepage, !homepage.isEmpty {
                                     Text("Homepage".uppercased())
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -389,7 +457,7 @@ struct MovieDetailsView: View {
                                     .padding(.horizontal)
                                 }
                                 
-                                if let status = movie.status {
+                                if let status = movie.status, !status.isEmpty {
                                     Text(NSLocalizedString("Stato", comment: "Stato").uppercased())
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -407,7 +475,7 @@ struct MovieDetailsView: View {
                                     .padding(.horizontal)
                                 }
                                 
-                                if let spokenLanguages = movie.spokenLanguages {
+                                if let spokenLanguages = movie.spokenLanguages, !spokenLanguages.isEmpty, !spokenLanguages.contains(where: { $0.iso_639_1 == "xx" }) {
                                     Text(NSLocalizedString("Lingue parlate", comment: "Lingue parlate").uppercased())
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -432,7 +500,7 @@ struct MovieDetailsView: View {
                                     .padding(.horizontal)
                                 }
                                 
-                                if let productionCompanies = movie.productionCompanies {
+                                if let productionCompanies = movie.productionCompanies, !productionCompanies.isEmpty {
                                     Text(NSLocalizedString("Case produttrici", comment: "Case produttrici").uppercased())
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -467,7 +535,7 @@ struct MovieDetailsView: View {
                                     .padding(.horizontal)
                                 }
                                 
-                                if let productionCountries = movie.productionCountries {
+                                if let productionCountries = movie.productionCountries, !productionCountries.isEmpty {
                                     Text(NSLocalizedString("Paesi di produzione", comment: "Paesi di produzione").uppercased())
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
@@ -492,7 +560,7 @@ struct MovieDetailsView: View {
                                     .padding(.horizontal)
                                 }
                             case .videos:
-                                if let videos = movie.videos?.results {
+                                if let videos = movie.videos?.results, !videos.isEmpty {
                                     let officialVideos = videos.filter { $0.official }
                                     
                                     if !officialVideos.isEmpty && !videos.isEmpty {
@@ -564,14 +632,49 @@ struct MovieDetailsView: View {
                                 
                             }
                             
-                            Divider()
-                            
-                            Text("Film simili")
-                                .fontWeight(.semibold)
-                                .font(.title3)
-                                .foregroundColor(.accentColor)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
+                            if let similarMovies = viewModel.similarMovies, !similarMovies.isEmpty {
+                                Divider()
+                                
+                                HStack(spacing: 0) {
+                                    Text("Film correlati | Forniti da:")
+                                        .fontWeight(.semibold)
+                                        .font(.title3)
+                                        .foregroundColor(.accentColor)
+                                        .padding(.horizontal)
+                                    
+                                    Image("tmdb_logo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 15)
+                                    
+                                    Spacer()
+                                }
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    LazyHStack(spacing: 10) {
+                                        ForEach(similarMovies, id: \.id) { movie in
+                                            NavigationLink(destination: MovieDetailsView(movieId: movie.id, currentUserUid: authManager.currentUserUid)) {
+                                                if let posterPath = movie.poster_path {
+                                                    KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(posterPath)"))
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 4, height: (UIScreen.main.bounds.width / 4) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
+                                                } else {
+                                                    Image("error_404")
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: UIScreen.main.bounds.width / 4, height: (UIScreen.main.bounds.width / 4) * 1.5)
+                                                        .shadow(color: .primary.opacity(0.2) , radius: 5)
+                                                        .cornerRadius(10)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .padding(.horizontal)
+                                }
+                            }
                             
                             Spacer()
                         }
@@ -704,6 +807,7 @@ struct MovieDetailsView: View {
             }
             .onAppear {
                 viewModel.getMovieDetails()
+                viewModel.getSimilarMovies()
             }
         }
         
@@ -847,7 +951,6 @@ struct MovieDetailsView: View {
             .padding(.vertical, 8)
         }
     }
-    
 }
 
 struct OffsetKey: PreferenceKey {

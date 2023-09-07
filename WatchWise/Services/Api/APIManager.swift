@@ -56,4 +56,8 @@ class APIManager {
     static func getPersonDetails(personId: Int32, completion: @escaping (AFResult<Person>) -> Void) {
         APIService.getPersonDetails(personId: personId, completion: completion)
     }
+    
+    static func getSimilarMovies(movieId: Int64, completion: @escaping (AFResult<DiscoverMoviesResponse>) -> Void) {
+        APIService.getSimilarMovies(movieId: movieId, completion: completion)
+    }
 }

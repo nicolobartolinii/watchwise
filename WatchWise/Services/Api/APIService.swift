@@ -74,4 +74,8 @@ class APIService {
     static func getPersonDetails(personId: Int32, completion: @escaping (AFResult<Person>) -> Void) {
         performRequest(route: APIRouter.getPersonDetails(personId: personId), completion: completion)
     }
+    
+    static func getSimilarMovies(movieId: Int64, completion: @escaping (AFResult<DiscoverMoviesResponse>) -> Void) {
+        performRequest(route: APIRouter.getSimilarMovies(movieId: movieId), completion: completion)
+    }
 }

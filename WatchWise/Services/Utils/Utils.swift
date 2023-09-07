@@ -33,6 +33,17 @@ struct Utils {
         return outputFormatter.string(from: date)
     }
     
+    static func formatDateToLocalString(date: Date) -> String {
+        // Creare un DateFormatter per convertire l'oggetto Date in una stringa localizzata
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long  // Formato lungo, es. "29 agosto 2023"
+        formatter.timeStyle = .short // Formato breve, es. "14:32"
+        formatter.locale = Locale.current // Utilizzare la lingua e le impostazioni locali correnti del dispositivo
+        
+        // Convertire l'oggetto Date in una stringa localizzata
+        return formatter.string(from: date)
+    }
+    
     static func formatNumber(_ number: Int) -> String {
         switch number {
         case 0..<1000:

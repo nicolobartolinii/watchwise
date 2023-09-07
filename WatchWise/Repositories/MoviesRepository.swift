@@ -20,4 +20,15 @@ class MoviesRepository {
             }
         }
     }
+    
+    func getSimilarMovies(by movieId: Int64, completion: @escaping (DiscoverMoviesResponse?) -> Void) {
+        APIManager.getSimilarMovies(movieId: movieId) { (result: AFResult<DiscoverMoviesResponse>) in
+            switch result {
+            case .success(let discoveredMovies):
+                completion(discoveredMovies)
+            case .failure(let error):
+                print("Error getting similar movies: \(error)")
+            }
+        }
+    }
 }
