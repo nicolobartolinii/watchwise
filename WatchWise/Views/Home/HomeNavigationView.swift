@@ -20,25 +20,21 @@ struct HomeNavigationView: View {
                         }
                         .tag(0)
                     FeedView()
-                        .accentColor(.cyan)
                         .tabItem {
                             Label(NSLocalizedString("Feed", comment: "Feed"), systemImage: "bell")
                         }
                         .tag(1)
                     SearchView()
-                        .accentColor(.cyan)
                         .tabItem {
                             Label(NSLocalizedString("Esplora", comment: "Esplora"), systemImage: "magnifyingglass")
                         }
                         .tag(2)
-                    EpisodesView()
-                        .accentColor(.cyan)
+                    EpisodesView(currentUserUid: authManager.currentUserUid)
                         .tabItem {
                             Label(NSLocalizedString("Episodi", comment: "Episodi"), systemImage: "tv.inset.filled")
                         }
                         .tag(3)
-                    UserDetailsView(uid: authManager.currentUserUid)
-                        .accentColor(.cyan)
+                    UserDetailsView(uid: authManager.currentUserUid, currentUserUid: authManager.currentUserUid)
                         .tabItem {
                             Label(NSLocalizedString("Profilo", comment: "Profile"), systemImage: "person")
                         }
@@ -50,5 +46,4 @@ struct HomeNavigationView: View {
 
 #Preview {
     HomeNavigationView()
-        .accentColor(.cyan)
 }

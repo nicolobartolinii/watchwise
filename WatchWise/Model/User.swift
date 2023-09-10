@@ -18,11 +18,6 @@ struct User {
     let movieNumber: Int
     let tvMinutes: Int
     let tvNumber: Int
-    let followers: [String]?
-    let following: [String]?
-    let lists: [String: Any]
-    let moviesReviews: [String: Any]
-    let tvReviews: [String: Any]
     
     init(dictionary: [String: Any]) {
         self.uid = dictionary["uid"] as? String ?? ""
@@ -35,10 +30,5 @@ struct User {
         self.movieNumber = dictionary["movieNumber"] as? Int ?? 0
         self.tvMinutes = dictionary["tvMinutes"] as? Int ?? 0
         self.tvNumber = dictionary["tvNumber"] as? Int ?? 0
-        self.followers = []
-        self.following = []
-        self.lists = [:]
-        self.moviesReviews = [:]
-        self.tvReviews = [:]
     }
 }

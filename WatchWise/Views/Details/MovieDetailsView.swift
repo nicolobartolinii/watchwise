@@ -708,7 +708,9 @@ struct MovieDetailsView: View {
                         VStack(spacing: 0) {
                             if !isOtherListsPresented {
                                 Button(action: {
-                                    viewModel.toggleMovieToList(listName: "watched_m")
+                                    Task {
+                                        try await viewModel.toggleMovieToList(listName: "watched_m", movieRuntime: movie.runtime)
+                                    }
                                 }) {
                                     HStack {
                                         Image(systemName: viewModel.isInList["watched_m"]! ? "eye.fill" : "eye")
@@ -728,7 +730,9 @@ struct MovieDetailsView: View {
                                 Divider()
                                 
                                 Button(action: {
-                                    viewModel.toggleMovieToList(listName: "watchlist")
+                                    Task {
+                                        try await viewModel.toggleMovieToList(listName: "watchlist", movieRuntime: movie.runtime)
+                                    }
                                 }) {
                                     HStack {
                                         Image(systemName: viewModel.isInList["watchlist"]! ? "bookmark.fill" : "bookmark")
@@ -748,7 +752,9 @@ struct MovieDetailsView: View {
                                 Divider()
                                 
                                 Button(action: {
-                                    viewModel.toggleMovieToList(listName: "favorite")
+                                    Task {
+                                        try await viewModel.toggleMovieToList(listName: "favorite", movieRuntime: movie.runtime)
+                                    }
                                 }) {
                                     HStack {
                                         Image(systemName: viewModel.isInList["favorite"]! ? "heart.fill" : "heart")

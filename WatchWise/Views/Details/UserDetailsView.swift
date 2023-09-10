@@ -17,212 +17,272 @@ struct UserDetailsView: View {
     
     @Environment(\.dismiss) var dismiss
     
-    init(uid: String) {
-        self.viewModel = UserDetailsViewModel(uid: uid)
+    init(uid: String, currentUserUid: String) {
+        self.viewModel = UserDetailsViewModel(uid: uid, currentUserUid: currentUserUid)
     }
     
     var body: some View {
         
-        VStack {
-            if let user = viewModel.user {
-                ZStack(alignment: .topLeading) {
-                    OffsetScrollView(offset: $offset, showIndicators: true, axis: .vertical) {
-                        BackgroundImageView(backdrop_path: user.backdropPath, offset: offset)
-                        
-                        KFImage(URL(string: user.profilePath))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                            .offset(y: -75)
-                            .shadow(color: Color.primary, radius: 5)
-                        
-                        Text(user.displayName)
-                            .bold()
-                            .font(.title2)
-                            .offset(y: -70)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        Text(user.username)
-                            .fontWeight(.semibold)
-                            .font(.title3)
-                            .offset(y: -65)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        Divider()
-                            .offset(y: -55)
-                        
-                        if user.uid == authManager.currentUserUid {
-                            HStack {
-                                Button(action: {  }) {
-                                    HStack {
-                                        Image(systemName: "pencil")
-                                        Text("Modifica profilo")
-                                            .bold()
-                                    }
-                                }
-                                .buttonStyle(.borderedProminent)
-                                Button(action: {  }) {
-                                    HStack {
-                                        Image(systemName: "gear")
-                                        Text("Impostazioni app")
-                                            .bold()
-                                    }
-                                }
-                                .buttonStyle(.borderedProminent)
-                            }
-                            .offset(y: -45)
-                        } else {
-                            Button(action: {  }) {
+        NavigationView {
+            VStack {
+                if let user = viewModel.user {
+                    ZStack(alignment: .topLeading) {
+                        OffsetScrollView(offset: $offset, showIndicators: true, axis: .vertical) {
+                            BackgroundImageView(backdrop_path: user.backdropPath, offset: offset)
+                            
+                            KFImage(URL(string: user.profilePath))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 150, height: 150)
+                                .clipShape(Circle())
+                                .offset(y: -75)
+                                .shadow(color: Color.primary, radius: 5)
+                            
+                            Text(user.displayName)
+                                .bold()
+                                .font(.title2)
+                                .offset(y: -70)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            
+                            Text(user.username)
+                                .fontWeight(.semibold)
+                                .font(.title3)
+                                .offset(y: -65)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            
+                            Divider()
+                                .offset(y: -55)
+                            
+                            if user.uid == authManager.currentUserUid {
                                 HStack {
-                                    Image(systemName: "plus")
-                                    Text("Segui".uppercased())
-                                        .bold()
+                                    Button(action: {  }) {
+                                        HStack {
+                                            Image(systemName: "pencil")
+                                            Text("Modifica profilo")
+                                                .bold()
+                                        }
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                    Button(action: {  }) {
+                                        HStack {
+                                            Image(systemName: "gear")
+                                            Text("Impostazioni app")
+                                                .bold()
+                                        }
+                                    }
+                                    .buttonStyle(.borderedProminent)
                                 }
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .offset(y: -45)
-                        }
-                        
-                        Divider()
-                            .offset(y: -35)
-                        
-                        Text("Informazioni")
-                            .fontWeight(.semibold)
-                            .font(.title3)
-                            .foregroundColor(.accentColor)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal)
-                            .offset(y: -30)
-                        
-                        ScrollView(.horizontal) {
-                            HStack {
-                                TimeCard(title: "Tempo film", times: [0, 0, 0])
-                                TimeCard(title: "Tempo TV", times: [0, 0, 0])
-                                NumbersCard(title: "Film visti", number: 0)
-                                NumbersCard(title: "Episodi visti", number: 0)
-                                NumbersCard(title: "Followers", number: 0)
-                                NumbersCard(title: "Seguiti", number: 0)
-                            }
-                            .padding(.horizontal)
-                        }
-                        .offset(y: -40)
-                        
-                        Divider()
-                            .offset(y: -35)
-                        
-                        Text("Liste")
-                            .fontWeight(.semibold)
-                            .font(.title3)
-                            .foregroundColor(.accentColor)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal)
-                            .offset(y: -30)
-                        
-                        ScrollView(.horizontal) {
-                            HStack {
-                                ListCard(title: "Preferiti", items: [])
-                                ListCard(title: "Watchlist", items: [])
-                                ListCard(title: "Film visti", items: [])
-                                ListCard(title: "Serie in visione", items: [])
-                                ListCard(title: "Completate", items: [])
-                                
-                                VStack(spacing: 4) {
-                                    Image(systemName: "plus")
-                                        .font(.title)
-                                        .bold()
-                                        .foregroundStyle(Color.accentColor)
-                                    
-                                    Text("Crea una nuova lista".uppercased())
-                                        .padding(.horizontal, 8)
-                                        .font(.callout)
-                                        .frame(maxWidth: .infinity, alignment: .center)
-                                        .multilineTextAlignment(.center)
+                                .offset(y: -45)
+                            } else {
+                                Button(action: {
+                                    if viewModel.isFollowing {
+                                        viewModel.unfollowUser()
+                                    } else {
+                                        viewModel.followUser()
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: viewModel.isFollowing ? "xmark" : "plus")
+                                        Text(viewModel.isFollowing ? "Non seguire più".uppercased() : "Segui".uppercased())
+                                            .bold()
+                                    }
                                 }
-                                .frame(width: 160, height: 105)
-                                .background(.ultraThinMaterial)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .strokeBorder(Utils.linearGradient)
-                                )
-                                .cornerRadius(12)
-                                .shadow(color: .primary.opacity(0.2) , radius: 3)
-                                .padding(.vertical, 8)
+                                .buttonStyle(.borderedProminent)
+                                .offset(y: -45)
                             }
-                            .padding(.horizontal)
-                        }
-                        .offset(y: -40)
-                        
-                        Divider()
-                            .offset(y: -35)
-                        
-                        Text("Valutazioni e recensioni")
-                            .fontWeight(.semibold)
-                            .font(.title3)
-                            .foregroundColor(.accentColor)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal)
-                            .offset(y: -30)
-                        
-                        HistogramView(ratings: .constant([]))
-                            .padding(.horizontal)
-                            .offset(y: -20)
-                        
-                        
-                        Button {
-                            showReviews.toggle()
-                        } label: {
-                            Text("Visualizza tutte le recensioni (19)")
-                                .frame(height: 28)
+                            
+                            Divider()
+                                .offset(y: -35)
+                            
+                            Text("Informazioni")
+                                .fontWeight(.semibold)
+                                .font(.title3)
+                                .foregroundColor(.accentColor)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.horizontal)
-                        }
-                        .sheet(isPresented: $showReviews) {
-                            List {
-                                VStack {
-                                    Text("Recensione 1")
-                                    Text("Recensione 2")
+                                .offset(y: -30)
+                            
+                            ScrollView(.horizontal) {
+                                HStack {
+                                    TimeCard(title: "Tempo film", months: viewModel.movieMonths, days: viewModel.movieDays, hours: viewModel.movieHours)
+                                    TimeCard(title: "Tempo TV", months: viewModel.tvMonths, days: viewModel.tvDays, hours: viewModel.tvHours)
+                                    NumbersCard(title: "Film visti", number: user.movieNumber)
+                                    NumbersCard(title: "Episodi visti", number: user.tvNumber)
+                                    NumbersCard(title: "Followers", number: viewModel.followersCount)
+                                    NumbersCard(title: "Seguiti", number: viewModel.followingCount)
                                 }
+                                .padding(.horizontal)
+                            }
+                            .offset(y: -40)
+                            
+                            Divider()
+                                .offset(y: -35)
+                            
+                            Text("Liste")
+                                .fontWeight(.semibold)
+                                .font(.title3)
+                                .foregroundColor(.accentColor)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal)
+                                .offset(y: -30)
+                            
+                            ScrollView(.horizontal) {
+                                HStack {
+                                    NavigationLink(destination: ListDetailsView(listId: "favorite", currentUserUid: authManager.currentUserUid)) {
+                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "favorite" }) ?? ("", "", 0, ""))
+                                    }
+                                    NavigationLink(destination: ListDetailsView(listId: "watchlist", currentUserUid: authManager.currentUserUid)) {
+                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "watchlist" }) ?? ("", "", 0, ""))
+                                    }
+                                    NavigationLink(destination: ListDetailsView(listId: "watched_m", currentUserUid: authManager.currentUserUid)) {
+                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "watched_m" }) ?? ("", "", 0, ""))
+                                    }
+                                    NavigationLink(destination: ListDetailsView(listId: "watching_t", currentUserUid: authManager.currentUserUid)) {
+                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "watching_t" }) ?? ("", "", 0, ""))
+                                    }
+                                    NavigationLink(destination: ListDetailsView(listId: "finished_t", currentUserUid: authManager.currentUserUid)) {
+                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "finished_t" }) ?? ("", "", 0, ""))
+                                    }
+                                    
+                                    VStack(spacing: 4) {
+                                        Image(systemName: "plus")
+                                            .font(.title)
+                                            .bold()
+                                            .foregroundStyle(Color.accentColor)
+                                        
+                                        Text("Crea una nuova lista".uppercased())
+                                            .padding(.horizontal, 8)
+                                            .font(.callout)
+                                            .frame(maxWidth: .infinity, alignment: .center)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                    .frame(width: 160, height: 105)
+                                    .background(.ultraThinMaterial)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .strokeBorder(Utils.linearGradient)
+                                    )
+                                    .cornerRadius(12)
+                                    .shadow(color: .primary.opacity(0.2) , radius: 3)
+                                    .padding(.vertical, 8)
+                                }
+                                .padding(.horizontal)
+                            }
+                            .offset(y: -40)
+                            
+                            Divider()
+                                .offset(y: -35)
+                            
+                            Text("Valutazioni e recensioni")
+                                .fontWeight(.semibold)
+                                .font(.title3)
+                                .foregroundColor(.accentColor)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal)
+                                .offset(y: -30)
+                            
+                            HistogramView(ratings: $viewModel.ratings)
+                                .padding(.horizontal)
+                                .offset(y: -20)
+                            
+                            if !viewModel.reviews.isEmpty {
+                                Button {
+                                    showReviews.toggle()
+                                } label: {
+                                    Text("Visualizza tutte le recensioni (\(viewModel.reviews.count))")
+                                        .frame(height: 28)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.horizontal)
+                                }
+                                .sheet(isPresented: $showReviews) {
+                                    NavigationView {
+                                        if !viewModel.reviews.isEmpty {
+                                            List(viewModel.reviews, id: \.productId) { review in
+                                                NavigationLink(destination: review.type == "movie" ? AnyView(MovieDetailsView(movieId: review.productId, currentUserUid: authManager.currentUserUid)) : AnyView(TVShowDetailsView(showId: review.productId, currentUserUid: authManager.currentUserUid))) {
+                                                    HStack(alignment: .top) {
+                                                        if let posterPath = review.posterPath {
+                                                            KFImage(URL(string: "https://image.tmdb.org/t/p/w154\(posterPath)"))
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 60, height: 60)
+                                                                .cornerRadius(8)
+                                                                .padding(.leading, -8)
+                                                        } else {
+                                                            Image(.error404)
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 60, height: 60)
+                                                                .cornerRadius(8)
+                                                                .padding(.leading, -8)
+                                                        }
+                                                        VStack {
+                                                            Text("Data recensione: \(Utils.formatDateToLocalString(date: review.timestamp.dateValue()))")
+                                                                .foregroundStyle(Color.secondary)
+                                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                                .lineLimit(2)
+                                                                .multilineTextAlignment(.leading)
+                                                                .font(.footnote)
+                                                            Text("\"\(review.text)\"")
+                                                                .italic()
+                                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                                .font(.subheadline)
+                                                                .multilineTextAlignment(.leading)
+                                                        }
+                                                        .padding(.trailing, 5)
+                                                    }
+                                                }
+                                            }
+                                            .navigationTitle("Recensioni di \(user.displayName)")
+                                        } else {
+                                            ProgressView("Caricamento in corso...")
+                                                .progressViewStyle(.circular)
+                                                .tint(.accentColor)
+                                                .controlSize(.large)
+                                        }
+                                    }
+                                }
+                                .offset(y: -5)
                             }
                         }
-                        .offset(y: -5)
-                    }
-                    .ignoresSafeArea(edges: .top)
-                    if user.uid != authManager.currentUserUid {
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "arrow.backward")
-                                .font(.title2)
-                                .foregroundColor(.accentColor)
-                                .padding(10)
-                                .background(.thinMaterial)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .strokeBorder(LinearGradient(colors: [.primary.opacity(0.1), .primary.opacity(0.4), .primary.opacity(0.1)], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                )
-                                .cornerRadius(12)
+                        .ignoresSafeArea(edges: .top)
+                        if user.uid != authManager.currentUserUid {
+                            Button(action: { dismiss() }) {
+                                Image(systemName: "arrow.backward")
+                                    .font(.title2)
+                                    .foregroundColor(.accentColor)
+                                    .padding(10)
+                                    .background(.thinMaterial)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .strokeBorder(LinearGradient(colors: [.primary.opacity(0.1), .primary.opacity(0.4), .primary.opacity(0.1)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    )
+                                    .cornerRadius(12)
+                            }
+                            .padding(.leading)
                         }
-                        .padding(.leading)
                     }
+                } else {
+                    ProgressView("Caricamento in corso...")
+                        .progressViewStyle(.circular)
+                        .tint(.accentColor)
+                        .controlSize(.large)
                 }
-            } else {
-                ProgressView("Caricamento in corso...")
-                    .progressViewStyle(.circular)
-                    .tint(.accentColor)
-                    .controlSize(.large)
             }
-        }
-        .onAppear {
-            Task {
-                await viewModel.fetchUserDetails()
+            .onAppear {
+                Task {
+                    await viewModel.fetchUserDetails()
+                }
             }
-        }
         .navigationBarBackButtonHidden(true)
+        }
     }
 }
 
 struct TimeCard: View {
     var title: String
-    var times: [Int]
+    var months: Int
+    var days: Int
+    var hours: Int
     
     var body: some View {
         VStack(spacing: 4) {
@@ -238,7 +298,7 @@ struct TimeCard: View {
             
             HStack {
                 VStack {
-                    Text(Utils.convertSeasonEpisodeNumber(times[0]))
+                    Text(Utils.convertSeasonEpisodeNumber(months))
                         .foregroundStyle(Color.accentColor)
                         .bold()
                         .font(.title2)
@@ -248,7 +308,7 @@ struct TimeCard: View {
                         .fontWeight(.light)
                 }
                 VStack {
-                    Text(Utils.convertSeasonEpisodeNumber(times[0]))
+                    Text(Utils.convertSeasonEpisodeNumber(days))
                         .foregroundStyle(Color.accentColor)
                         .bold()
                         .font(.title2)
@@ -258,7 +318,7 @@ struct TimeCard: View {
                         .fontWeight(.light)
                 }
                 VStack {
-                    Text(Utils.convertSeasonEpisodeNumber(times[0]))
+                    Text(Utils.convertSeasonEpisodeNumber(hours))
                         .foregroundStyle(Color.accentColor)
                         .bold()
                         .font(.title2)
@@ -270,6 +330,7 @@ struct TimeCard: View {
             }
             .padding(.horizontal)
             .padding(.bottom, 8)
+            .frame(height: 50)
             
             Spacer()
         }
@@ -323,12 +384,11 @@ struct NumbersCard: View {
 }
 
 struct ListCard: View {
-    var title: String
-    var items: [Any]
+    var rawList: (type: String, name: String, totalCount: Int, listId: String)
     
     var body: some View {
         VStack(spacing: 4) {
-            Text(title.uppercased())
+            Text(rawList.name.uppercased())
                 .fontWeight(.semibold)
                 .padding(.top, 8)
                 .padding(.horizontal, 8)
@@ -336,14 +396,23 @@ struct ListCard: View {
                 .frame(height: 32)
             
             Utils.linearGradient
-                .frame(maxWidth: .infinity, maxHeight: 1)
+                .frame(maxWidth: .infinity)
+                .frame(height: 1)
             
-            Text("WIP")
-                .foregroundStyle(Color.accentColor)
-                .bold()
-                .font(.title)
-                .padding(.horizontal)
-                .padding(.vertical, 8)
+            VStack(spacing: 0) {
+                Text("\(rawList.totalCount)")
+                    .foregroundStyle(Color.accentColor)
+                    .bold()
+                    .font(.title)
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                    .frame(height: 40)
+                
+                Text(rawList.type == "movie" ? "film" : (rawList.type == "tv" ? "serie tv" : "film e/o serie TV"))
+                    .font(.caption.smallCaps())
+                    .fontWeight(.thin)
+                    .foregroundStyle(Color.secondary)
+            }
             
             Spacer()
         }
@@ -363,7 +432,7 @@ struct UserDetailsView_Previews: PreviewProvider {
     static let authManager = AuthManager()
     
     static var previews: some View {
-        UserDetailsView(uid: "aGPDrIy3oHbMOgoGykZKulO5L8w2")
+        UserDetailsView(uid: "egcf4FX5jDY5dbUeF3qZs1d6mQA3", currentUserUid: "aGPDrIy3oHbMOgoGykZKulO5L8w2")
             .environmentObject(authManager)
     }
 }

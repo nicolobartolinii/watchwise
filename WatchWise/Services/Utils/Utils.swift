@@ -74,4 +74,16 @@ struct Utils {
             return "\(number)"
         }
     }
+    
+    static func convertMinutesToTimeComponents(minutes: Int) -> (months: Int, days: Int, hours: Int) {
+        let totalHours = minutes / 60
+        let days = totalHours / 24
+        let months = days / 30 // Considerando una media di 30 giorni per mese
+
+        let remainingHours = totalHours % 24
+        let remainingDays = days % 30
+
+        return (months: months, days: remainingDays, hours: remainingHours)
+    }
+
 }

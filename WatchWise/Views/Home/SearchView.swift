@@ -422,7 +422,7 @@ struct SearchView: View {
                                     List {
                                         if !(searchUsersResults?.isEmpty ?? false) {
                                             ForEach(searchUsersResults ?? [], id: \.uid) { user in
-                                                NavigationLink(destination: UserDetailsView(uid: user.uid)) {
+                                                NavigationLink(destination: UserDetailsView(uid: user.uid, currentUserUid: authManager.currentUserUid)) {
                                                     HStack {
                                                         KFImage(URL(string: user.profilePath))
                                                             .resizable()

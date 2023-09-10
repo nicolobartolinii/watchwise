@@ -27,14 +27,11 @@ struct WatchWiseApp: App {
             case .unauthenticated, .authenticating:
                 AuthenticationView()
                     .environmentObject(authManager)
-                    .accentColor(.cyan)
             case .authenticated:
                 HomeNavigationView()
                     .environmentObject(authManager)
-                    .accentColor(.cyan)
             case .openingApp:
                 SplashScreen()
-                    .accentColor(.cyan)
             }
         }
     }

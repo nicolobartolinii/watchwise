@@ -122,7 +122,6 @@ struct EmailRegistrationView: View {
                 .buttonStyle(.borderedProminent)
                 .navigationDestination(isPresented: $authManager.shouldNavigate, destination: {
                     CompleteRegistrationView()
-                        .accentColor(.cyan)
                         .environmentObject(authManager)
                 })
                 
@@ -215,5 +214,4 @@ extension String {
 
 #Preview {
     EmailRegistrationView()
-        .accentColor(.cyan)
 }

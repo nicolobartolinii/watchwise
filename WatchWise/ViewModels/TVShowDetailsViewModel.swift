@@ -47,32 +47,33 @@ class TVShowDetailsViewModel: ObservableObject {
             await fetchAllRatings()
             await fetchCurrentUserReview()
             await fetchReviewsCount()
+            await fetchWatchedEpisodes()
         }
     }
     
     func getTVShowDetails() async {
-            do {
-                var show = try await repository.getTVShowDetails(showId: showId)
-                
-                for (index, season) in show.seasons!.enumerated() {
-                    do {
-                        let detailedSeason = try await repository.getSeasonDetails(showId: showId, seasonNumber: Int32(season.seasonNumber))
-                        isSeasonDetailsPresented[season.seasonNumber] = false
-                        if season.seasonNumber != 0 {
-                            self.episodes.append(contentsOf: detailedSeason.episodes ?? [])
-                        }
-                        show.seasons?[index] = detailedSeason
-                    } catch {
-                        print("Error fetching details for season \(season.seasonNumber): \(error)")
+        do {
+            var show = try await repository.getTVShowDetails(showId: showId)
+            
+            for (index, season) in show.seasons!.enumerated() {
+                do {
+                    let detailedSeason = try await repository.getSeasonDetails(showId: showId, seasonNumber: Int32(season.seasonNumber))
+                    isSeasonDetailsPresented[season.seasonNumber] = false
+                    if season.seasonNumber != 0 {
+                        self.episodes.append(contentsOf: detailedSeason.episodes ?? [])
                     }
+                    show.seasons?[index] = detailedSeason
+                } catch {
+                    print("Error fetching details for season \(season.seasonNumber): \(error)")
                 }
-                
-                self.show = show
-                
-            } catch {
-                print("Error fetching show details: \(error)")
             }
+            
+            self.show = show
+            
+        } catch {
+            print("Error fetching show details: \(error)")
         }
+    }
     
     func getSimilarTVShows() {
         repository.getSimilarTVShows(by: showId) { discoveredTVShows in
@@ -211,11 +212,108 @@ class TVShowDetailsViewModel: ObservableObject {
         }
     }
     
-    func toggleWatchedEpisode(seasonNumber: Int, episodeNumber: Int) async {
+    func toggleWatchedEpisode(seasonNumber: Int, episodeNumber: Int, episodeRuntime: Int?) async {
+        if let isInList = isInList["watching_t"] {
+            if !isInList {
+                firestoreService.addProductToList(self.showId, listName: "watching_t", userId: self.currentUserUid, type: "tv") { error in
+                    if let error = error {
+                        print("Errore nell'aggiunta della serie \(self.showId) alla lista watching_t: \(error)")
+                        return
+                    }
+                    self.isInList["watching_t"] = true
+                    
+                    Task {
+                        await self.addShowToEpisodesCollection()
+                    }
+                }
+            }
+        }
         do {
-            try await firestoreService.addEpisodeToWatchedList(userId: currentUserUid, showId: showId, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
+            if isEpisodeWatched[seasonNumber]?[episodeNumber] ?? false {
+                try await firestoreService.removeEpisodeFromWatchedList(userId: currentUserUid, showId: showId, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
+                try await firestoreService.incrementUserField(userId: currentUserUid, type: "tvMinutes", number: -(episodeRuntime ?? 30))
+                try await firestoreService.incrementUserField(userId: currentUserUid, type: "tvNumber", number: -1)
+                isEpisodeWatched[seasonNumber]?[episodeNumber] = false
+            } else {
+                try await firestoreService.addEpisodeToWatchedList(userId: currentUserUid, showId: showId, seasonNumber: seasonNumber, episodeNumber: episodeNumber)
+                try await firestoreService.incrementUserField(userId: currentUserUid, type: "tvMinutes", number: episodeRuntime ?? 30)
+                try await firestoreService.incrementUserField(userId: currentUserUid, type: "tvNumber", number: 1)
+                if isEpisodeWatched[seasonNumber] == nil {
+                    isEpisodeWatched[seasonNumber] = [:]
+                }
+                isEpisodeWatched[seasonNumber]?[episodeNumber] = true
+            }
         } catch {
             print("Errore durante l'aggiunta dell'episodio alla lista dei visti: \(error)")
+        }
+    }
+    
+    func toggleWatchedSeason(seasonNumber: Int) async {
+        if let isInList = isInList["watching_t"] {
+            if !isInList {
+                firestoreService.addProductToList(self.showId, listName: "watching_t", userId: self.currentUserUid, type: "tv") { error in
+                    if let error = error {
+                        print("Errore nell'aggiunta della serie \(self.showId) alla lista watching_t: \(error)")
+                        return
+                    }
+                    self.isInList["watching_t"] = true
+                    
+                    Task {
+                        await self.addShowToEpisodesCollection()
+                    }
+                }
+            }
+        }
+        do {
+            var episodesToAdd: [Int] = []
+            var minutesToAdd: Int = 0
+            var minutesToRemove: Int = 0
+            var numberToRemove: Int = 0
+            let realSeasonEpisodesCount = show?.seasons?.first(where: { $0.seasonNumber == seasonNumber })?.episodes?.count ?? 0
+            let watchedEpisodes = isEpisodeWatched[seasonNumber]
+            
+            if !(watchedEpisodes?.filter({ $0.value == true }).count == realSeasonEpisodesCount) {
+                isEpisodeWatched[seasonNumber] = [:]
+                for i in 1...realSeasonEpisodesCount {
+                    if !(watchedEpisodes?[i] ?? false)  {
+                        episodesToAdd.append(i)
+                        minutesToAdd += show?.seasons?.first(where: {$0.seasonNumber == seasonNumber })?.episodes?.first(where: { $0.episodeNumber == i})?.runtime ?? 30
+                    }
+                    isEpisodeWatched[seasonNumber]?[i] = true
+                }
+                try await firestoreService.updateSeasonInWatchedList(userId: currentUserUid, showId: showId, seasonNumber: seasonNumber, episodesToAdd: episodesToAdd)
+                try await firestoreService.incrementUserField(userId: currentUserUid, type: "tvMinutes", number: minutesToAdd)
+                try await firestoreService.incrementUserField(userId: currentUserUid, type: "tvNumber", number: episodesToAdd.count)
+            } else {
+                for (key, _) in isEpisodeWatched[seasonNumber] ?? [:] {
+                    isEpisodeWatched[seasonNumber]?[key] = false
+                    minutesToRemove -= show?.seasons?.first(where: {$0.seasonNumber == seasonNumber })?.episodes?.first(where: { $0.episodeNumber == key})?.runtime ?? 30
+                    numberToRemove -= 1
+                }
+                try await firestoreService.removeSeasonFromWatchedList(userId: currentUserUid, showId: showId, seasonNumber: seasonNumber)
+                try await firestoreService.incrementUserField(userId: currentUserUid, type: "tvMinutes", number: minutesToRemove)
+                try await firestoreService.incrementUserField(userId: currentUserUid, type: "tvNumber", number: numberToRemove)
+            }
+        } catch {
+            print("Errore durante la selezione/deselezione dell'intera stagione: \(error)")
+        }
+    }
+    
+    private func fetchWatchedEpisodes() async {
+        do {
+            let watchedEpisodesData = try await firestoreService.getWatchedEpisodes(userId: currentUserUid, showId: showId)
+            
+            for (season, episodes) in watchedEpisodesData {
+                let seasonNumber = Int(season)
+                for episode in episodes {
+                    if isEpisodeWatched[seasonNumber] == nil {
+                        isEpisodeWatched[seasonNumber] = [:]
+                    }
+                    isEpisodeWatched[seasonNumber]![episode] = true
+                }
+            }
+        } catch {
+            print("Error populating watched episodes: \(error)")
         }
     }
 }

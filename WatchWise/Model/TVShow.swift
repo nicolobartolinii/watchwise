@@ -15,7 +15,7 @@ struct TVShow: Codable {
     let firstAirDate: String?
     let genres: [Genre]
     let homepage: String?
-    let id: Int
+    let id: Int64
     let inProduction: Bool?
     let languages: [String]?
     let lastAirDate: String?

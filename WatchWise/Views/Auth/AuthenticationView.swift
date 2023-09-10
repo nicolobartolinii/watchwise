@@ -18,11 +18,9 @@ struct AuthenticationView: View {
       case .login:
         LoginView()
           .environmentObject(authManager)
-          .accentColor(.cyan)
       case .signUp:
         EmailRegistrationView()
           .environmentObject(authManager)
-          .accentColor(.cyan)
       }
     }
   }

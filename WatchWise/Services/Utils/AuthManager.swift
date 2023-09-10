@@ -196,7 +196,6 @@ extension AuthManager {
         
         let listsRef = userRef.collection("lists")
         let episodesRef = userRef.collection("episodes")
-        let followRef = userRef.collection("follow")
         let recommendationsRef = userRef.collection("recommendations")
         
         do {
@@ -226,14 +225,6 @@ extension AuthManager {
                 "name": NSLocalizedString("Serie TV completate", comment: "Serie TV completate"),
                 "type": "tv",
                 "tvShows": []
-            ])
-            try await followRef.document("following").setData([
-                "users": [],
-                "count": 0
-            ])
-            try await followRef.document("followers").setData([
-                "users": [],
-                "count": 0
             ])
         } catch {
             print(error)

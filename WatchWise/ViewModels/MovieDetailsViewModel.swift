@@ -59,7 +59,7 @@ class MovieDetailsViewModel: ObservableObject {
         }
     }
     
-    func toggleMovieToList(listName: String) {
+    func toggleMovieToList(listName: String, movieRuntime: Int?) async throws {
         if let isInList = isInList[listName] {
             if isInList {
                 firestoreService.removeProductFromList(self.movieId, listName: listName, userId: self.currentUserUid, type: "movies") { error in
@@ -69,6 +69,10 @@ class MovieDetailsViewModel: ObservableObject {
                     }
                     self.isInList[listName] = false
                 }
+                if listName == "watched_m" {
+                    try await firestoreService.incrementUserField(userId: currentUserUid, type: "movieMinutes", number: -(movieRuntime ?? 120))
+                    try await firestoreService.incrementUserField(userId: currentUserUid, type: "movieNumber", number: -1)
+                }
             } else {
                 firestoreService.addProductToList(self.movieId, listName: listName, userId: self.currentUserUid, type: "movies") { error in
                     if let error = error {
@@ -76,6 +80,10 @@ class MovieDetailsViewModel: ObservableObject {
                         return
                     }
                     self.isInList[listName] = true
+                }
+                if listName == "watched_m" {
+                    try await firestoreService.incrementUserField(userId: currentUserUid, type: "movieMinutes", number: movieRuntime ?? 120)
+                    try await firestoreService.incrementUserField(userId: currentUserUid, type: "movieNumber", number: 1)
                 }
             }
         }

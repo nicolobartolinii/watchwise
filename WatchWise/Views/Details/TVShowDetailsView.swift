@@ -10,8 +10,6 @@ import Alamofire
 import Kingfisher
 import ExpandableText
 import AxisRatingBar
-import ACarousel
-import CarouselStack
 
 enum TVShowTabSelection {
     case info
@@ -122,7 +120,7 @@ struct TVShowDetailsView: View {
                                         }
                                     } ) {
                                         VStack {
-                                            Text("Episodi")
+                                            Text("Stagioni")
                                                 .fontWeight(selectedTVShowTab == .episodes ? .semibold : .regular)
                                                 .font(.title3.smallCaps())
                                                 .foregroundStyle(Color.primary)
@@ -682,82 +680,9 @@ struct TVShowDetailsView: View {
                                     
                                     Divider()
                                     
-                                    Text("Inizia il monitoraggio")
-                                        .fontWeight(.semibold)
-                                        .font(.title3)
-                                        .foregroundColor(.accentColor)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.horizontal)
-                                    
-                                    CarouselStack(viewModel.episodes) { episode in
-                                        HStack(alignment: .center) {
-                                            if let imagePath = episode.imagePath {
-                                                KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(imagePath)"))
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: 80, height: 80)
-                                                    .cornerRadius(10)
-                                                    .padding(5)
-                                            } else {
-                                                Image("error_404")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                                    .frame(width: 80, height: 80)
-                                                    .cornerRadius(10)
-                                                    .padding(5)
-                                            }
-                                            VStack {
-                                                HStack(spacing: 0) {
-                                                    if let seasonNumber = episode.seasonNumber {
-                                                        Text("S\(Utils.convertSeasonEpisodeNumber(seasonNumber)) | ")
-                                                            .fontWeight(.semibold)
-                                                    }
-                                                    Text("E\(Utils.convertSeasonEpisodeNumber(episode.episodeNumber))")
-                                                        .fontWeight(.semibold)
-                                                }
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                Text(episode.name ?? "Episodio \(episode.episodeNumber)")
-                                                    .font(.callout)
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                            }
-                                            .padding(.leading, -5)
-                                            .padding(.trailing, 5)
-                                            Spacer()
-                                            Button(action: {}) {
-                                                ZStack {
-                                                    Circle()
-                                                        .fill(Color(uiColor: .systemGray4))
-                                                        .frame(width: 40, height: 40)
-                                                    
-                                                    Image(systemName: "checkmark")
-                                                        .foregroundStyle(Color.gray)
-                                                        .fontWeight(.medium)
-                                                        .font(.title3)
-                                                }
-                                            }.padding(.trailing, 10)
-                                        }
-                                        .frame(height: 90)
-                                        .background(.ultraThickMaterial)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .strokeBorder(Utils.linearGradient)
-                                        )
-                                        .cornerRadius(12)
-                                        .shadow(color: Color.primary.opacity(0.4) , radius: 3)
-                                    }.frame(height: 100)
-                                    
-                                    Divider()
-                                    
-                                    Text("Tutti gli episodi")
-                                        .fontWeight(.semibold)
-                                        .font(.title3)
-                                        .foregroundColor(.accentColor)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.horizontal)
-                                    
                                     if let seasons = show.seasons {
                                         ForEach(seasons, id: \.self) { season in
-                                            if season.seasonNumber != 0 {
+                                            if season.seasonNumber != 0 && season.episodes?.count != 0 {
                                                 SeasonView(season: season, viewModel: viewModel, linearGradient: Utils.linearGradient)
                                             }
                                         }
@@ -1165,21 +1090,29 @@ struct SeasonView: View {
                 
                 Spacer()
                 
-                Text("0/\(season.episodes?.count ?? 0)")
+                let seasonWatchedEpisodes = viewModel.isEpisodeWatched[season.seasonNumber]?.filter { $0.value == true }.count ?? 0
+                let seasonTotalEpisodes = season.episodes?.count ?? 0
+                Text("\(seasonWatchedEpisodes)/\(seasonTotalEpisodes)")
                     .foregroundStyle(Color.primary)
                 
-                Button(action: {}) {
+                Button(action: {
+                    Task {
+                        await viewModel.toggleWatchedSeason(seasonNumber: season.seasonNumber)
+                    }
+                }) {
                     ZStack {
                         Circle()
-                            .fill(Color(uiColor: .systemGray4))
+                            .fill(viewModel.isEpisodeWatched[season.seasonNumber]?.filter({ $0.value == true }).count == seasonTotalEpisodes ? Color.accentColor : Color(uiColor: .systemGray4))
                             .frame(width: 40, height: 40)
                         
                         Image(systemName: "checkmark")
-                            .foregroundStyle(Color.gray)
+                            .foregroundStyle(viewModel.isEpisodeWatched[season.seasonNumber]?.filter({ $0.value == true }).count == seasonTotalEpisodes ? Color.primary : Color.gray)
                             .fontWeight(.medium)
                             .font(.title3)
                     }
-                }.padding(.trailing, 10)
+                }
+                .padding(.trailing, 10)
+                .disabled(seasonTotalEpisodes == 0)
             }
             .frame(height: 90)
             .background(.ultraThickMaterial)
@@ -1288,12 +1221,12 @@ struct SeasonDetailsView: View {
                     
                     ForEach(season.episodes ?? [], id: \.self) { episode in
                         EpisodeView(episode: episode, viewModel: viewModel)
+                            .padding(.horizontal)
                     }
                 }
             }
             .navigationTitle(season.name ?? "Stagione \(season.seasonNumber)")
         }
-        .accentColor(.cyan)
     }
 }
 
@@ -1337,20 +1270,21 @@ struct EpisodeView: View {
             Spacer()
             Button(action: {
                 Task {
-                    await viewModel.toggleWatchedEpisode(seasonNumber: episode.seasonNumber ?? 0, episodeNumber: episode.episodeNumber)
+                    await viewModel.toggleWatchedEpisode(seasonNumber: episode.seasonNumber ?? 0, episodeNumber: episode.episodeNumber, episodeRuntime: episode.runtime)
                 }
             }) {
                 ZStack {
                     Circle()
-                        .fill(Color(uiColor: .systemGray4))
+                        .fill(viewModel.isEpisodeWatched[episode.seasonNumber ?? 0]?[episode.episodeNumber] ?? false ? Color.accentColor : Color(uiColor: .systemGray4))
                         .frame(width: 40, height: 40)
                     
                     Image(systemName: "checkmark")
-                        .foregroundStyle(Color.gray)
+                        .foregroundStyle(viewModel.isEpisodeWatched[episode.seasonNumber ?? 0]?[episode.episodeNumber] ?? false ? Color.primary : Color.gray)
                         .fontWeight(.medium)
                         .font(.title3)
                 }
-            }.padding(.trailing, 10)
+            }
+            .padding(.trailing, 10)
         }
         .frame(height: 90)
         .background(.ultraThickMaterial)
@@ -1359,6 +1293,5 @@ struct EpisodeView: View {
                 .strokeBorder(Utils.linearGradient)
         )
         .cornerRadius(12)
-        .padding(.horizontal)
     }
 }
