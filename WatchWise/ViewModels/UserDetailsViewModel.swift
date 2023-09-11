@@ -47,12 +47,12 @@ class UserDetailsViewModel: ObservableObject {
     
     func fetchUserDetails() async {
         do {
-            await loadUserInfos()
             if let user = try await repository.getUser(by: self.uid) {
                 self.user = user
             } else {
                 self.user = nil
             }
+            await loadUserInfos()
         } catch {
             print("Errore nell'ottenimento dei dettagli dell'utente: \(error)")
             self.user = nil
@@ -97,11 +97,20 @@ class UserDetailsViewModel: ObservableObject {
         do {
             self.ratings = try await firestoreService.getUserRatings(userId: self.uid)
             self.reviews = try await firestoreService.getUserReviews(userId: self.uid)
-            self.rawLists = try await firestoreService.getUserRawLists(userId: self.uid)
+            await self.getUserRawLists()
             self.followersCount = try await firestoreService.getUserFollowCount(for: self.uid, type: "followers")
             self.followingCount = try await firestoreService.getUserFollowCount(for: self.uid, type: "following")
         } catch {
             print("Error loading user details: \(error)")
+        }
+    }
+    
+    func getUserRawLists() async {
+        do {
+            self.rawLists = []
+            self.rawLists = try await firestoreService.getUserRawLists(userId: self.uid)
+        } catch {
+            print("Errore durante l'ottenimento delle liste: \(error)")
         }
     }
     

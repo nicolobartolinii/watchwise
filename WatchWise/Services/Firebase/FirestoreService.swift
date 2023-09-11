@@ -506,4 +506,15 @@ class FirestoreService {
         return snapshot.documents.count
     }
     
+    func createNewList(for userId: String, listId: String, listName: String, listType: String) async throws {
+        let listsRef = db.collection("users").document(userId).collection("lists")
+        let newListRef = listsRef.document(listId)
+        
+        let listData: [String: Any] = [
+            "name": listName,
+            "type": listType,
+        ]
+        
+        try await newListRef.setData(listData)
+    }
 }

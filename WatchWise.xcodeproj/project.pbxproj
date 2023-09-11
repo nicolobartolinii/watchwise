@@ -14,7 +14,10 @@
 		117E3E6B2AACBC5900EC3A99 /* AltReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E3E6A2AACBC5900EC3A99 /* AltReview.swift */; };
 		117E3E6D2AACE15200EC3A99 /* ListDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E3E6C2AACE15200EC3A99 /* ListDetailsView.swift */; };
 		117E3E6F2AACE16400EC3A99 /* ListDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E3E6E2AACE16400EC3A99 /* ListDetailsViewModel.swift */; };
+		119276232AADE85500EE1B18 /* CreateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119276222AADE85500EE1B18 /* CreateListViewModel.swift */; };
+		119276252AADEA2000EE1B18 /* CreateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119276242AADEA2000EE1B18 /* CreateListView.swift */; };
 		11DCD1DD2AA9ED0A00ECAD4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11DCD1DC2AA9ED0A00ECAD4B /* GoogleService-Info.plist */; };
+		11FF5B6E2AAE1E94002E1F07 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 11FF5B6D2AAE1E94002E1F07 /* AlertToast */; };
 		35FB878C4910785280653742 /* Pods_WatchWise_WatchWiseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2CD3A0E4816C811EA020C5 /* Pods_WatchWise_WatchWiseUITests.framework */; };
 		997BEC852738F815AD416AB6 /* Pods_WatchWiseTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCD4E15E36954A81010F71A /* Pods_WatchWiseTests.framework */; };
 		B90052A12A97B0D2005FC143 /* HistogramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90052A02A97B0D2005FC143 /* HistogramView.swift */; };
@@ -136,6 +139,8 @@
 		117E3E6A2AACBC5900EC3A99 /* AltReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AltReview.swift; sourceTree = "<group>"; };
 		117E3E6C2AACE15200EC3A99 /* ListDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailsView.swift; sourceTree = "<group>"; };
 		117E3E6E2AACE16400EC3A99 /* ListDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailsViewModel.swift; sourceTree = "<group>"; };
+		119276222AADE85500EE1B18 /* CreateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateListViewModel.swift; sourceTree = "<group>"; };
+		119276242AADEA2000EE1B18 /* CreateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateListView.swift; sourceTree = "<group>"; };
 		1198DFA3BFF0229B15EDD988 /* Pods-WatchWise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.release.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.release.xcconfig"; sourceTree = "<group>"; };
 		11DCD1DC2AA9ED0A00ECAD4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4C6F31A77B1FD0BA2BE26426 /* Pods-WatchWise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.debug.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.debug.xcconfig"; sourceTree = "<group>"; };
@@ -208,6 +213,7 @@
 				B9F2B1722A8B8B9B00B18E44 /* FirebaseDatabaseSwift in Frameworks */,
 				B9F2B16E2A8B8B9B00B18E44 /* FirebaseCrashlytics in Frameworks */,
 				B9F2B1822A8B8B9B00B18E44 /* FirebaseInstallations in Frameworks */,
+				11FF5B6E2AAE1E94002E1F07 /* AlertToast in Frameworks */,
 				B97B1C152A9E30D700A0D767 /* CarouselStack in Frameworks */,
 				B9F2B16A2A8B8B9B00B18E44 /* FirebaseAnalytics in Frameworks */,
 				B97984422A97AA1C00A9EC42 /* AxisSegmentedView in Frameworks */,
@@ -267,6 +273,14 @@
 				8093A0428160055D22BAB237 /* Pods-WatchWiseTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		119276212AADE6DC00EE1B18 /* Customization */ = {
+			isa = PBXGroup;
+			children = (
+				119276242AADEA2000EE1B18 /* CreateListView.swift */,
+			);
+			path = Customization;
 			sourceTree = "<group>";
 		};
 		4031569D087B667F0280A2E7 /* Frameworks */ = {
@@ -340,6 +354,7 @@
 				1174B74E2AA9F53D004F8783 /* TVShowDetailsViewModel.swift */,
 				116A417C2AAB5243009E31ED /* EpisodesViewModel.swift */,
 				117E3E6E2AACE16400EC3A99 /* ListDetailsViewModel.swift */,
+				119276222AADE85500EE1B18 /* CreateListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -376,6 +391,7 @@
 		B98DE98C2A8BCFB70076F379 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				119276212AADE6DC00EE1B18 /* Customization */,
 				B9AAAE232A9220F900226A35 /* Components */,
 				B92212712A910E3000AFFB9C /* Details */,
 				B91FFEF32A8D3BD9005C15EF /* Home */,
@@ -532,6 +548,7 @@
 				B97B1C162A9E30D700A0D767 /* ShuffleDeck */,
 				B97B1C182A9E30D700A0D767 /* ShuffleIt */,
 				B97B1C1A2A9E30D700A0D767 /* ShuffleStack */,
+				11FF5B6D2AAE1E94002E1F07 /* AlertToast */,
 			);
 			productName = WatchWise;
 			productReference = B9F2B1342A8B867A00B18E44 /* WatchWise.app */;
@@ -620,6 +637,7 @@
 				B97984402A97AA1C00A9EC42 /* XCRemoteSwiftPackageReference "AxisSegmentedView" */,
 				B97B1C102A9E2CA900A0D767 /* XCRemoteSwiftPackageReference "ACarousel" */,
 				B97B1C132A9E30D700A0D767 /* XCRemoteSwiftPackageReference "ShuffleIt" */,
+				11FF5B6C2AAE1E94002E1F07 /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
 			productRefGroup = B9F2B1352A8B867A00B18E44 /* Products */;
 			projectDirPath = "";
@@ -791,6 +809,7 @@
 			files = (
 				116A417D2AAB5243009E31ED /* EpisodesViewModel.swift in Sources */,
 				B922963C2AA0BBB300826537 /* UserDetailsView.swift in Sources */,
+				119276232AADE85500EE1B18 /* CreateListViewModel.swift in Sources */,
 				B92212672A90E04A00AFFB9C /* APIRouter.swift in Sources */,
 				B98D011E2AA3825B009F611F /* PersonDetailsView.swift in Sources */,
 				B92296472AA0C03200826537 /* UserDetailsViewModel.swift in Sources */,
@@ -838,6 +857,7 @@
 				B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */,
 				B94713A62A9CF88800B3FDB1 /* TVShowDetailsView.swift in Sources */,
 				B98D01182AA3785B009F611F /* PeopleRepository.swift in Sources */,
+				119276252AADEA2000EE1B18 /* CreateListView.swift in Sources */,
 				B922125E2A90B59D00AFFB9C /* EpisodesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1183,6 +1203,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		11FF5B6C2AAE1E94002E1F07 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		B91FFEF62A8D3D3C005C15EF /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -1266,6 +1294,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		11FF5B6D2AAE1E94002E1F07 /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 11FF5B6C2AAE1E94002E1F07 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
+		};
 		B91FFEF72A8D3D3C005C15EF /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B91FFEF62A8D3D3C005C15EF /* XCRemoteSwiftPackageReference "Kingfisher" */;

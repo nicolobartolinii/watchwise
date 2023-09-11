@@ -79,6 +79,11 @@ struct TVShowDetailsView: View {
                             
                             HStack(spacing: 24) {
                                 Button(action: {
+                                    if !isListsSharePresented {
+                                        Task {
+                                            await viewModel.loadUserRawLists()
+                                        }
+                                    }
                                     withAnimation(.easeInOut(duration: 0.2)) {
                                         isListsSharePresented.toggle()
                                     }
@@ -765,29 +770,82 @@ struct TVShowDetailsView: View {
                                 
                                 Divider()
                                 
-                                HStack {
-                                    Image(systemName: "list.bullet")
-                                        .frame(width: 28)
-                                    Text("Altre liste")
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .frame(width: 28)
+                                Button(action: {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        isOtherListsPresented = true
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: "list.bullet")
+                                            .frame(width: 28)
+                                            .foregroundStyle(Color.primary)
+                                        Text("Altre liste")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .foregroundStyle(Color.primary)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .frame(width: 28)
+                                            .foregroundStyle(Color.primary)
+                                    }
+                                    .padding()
                                 }
-                                .padding()
                                 
                                 Divider()
                                 
                                 HStack {
                                     Image(systemName: "square.and.arrow.up")
                                         .frame(width: 28)
+                                        .foregroundStyle(Color.primary)
                                     Text("Condividi")
                                         .frame(maxWidth: .infinity, alignment: .leading)
+                                        .foregroundStyle(Color.primary)
                                     Image(systemName: "chevron.right")
                                         .frame(width: 28)
+                                        .foregroundStyle(Color.primary)
                                 }
                                 .padding()
                                 
+                            } else {
+                                Button(action: {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        isOtherListsPresented = false
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: "chevron.left")
+                                            .foregroundStyle(Color.primary)
+                                            .frame(width: 28)
+                                        Text("Indietro")
+                                            .foregroundStyle(Color.primary)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        Spacer()
+                                    }
+                                    .padding()
+                                }
+                                
+                                Utils.linearGradient
+                                    .frame(maxWidth: .infinity, maxHeight: 1)
+                                
+                                if viewModel.rawLists.count == 0 {
+                                    Text("Puoi creare una lista personalizzata nel tuo profilo")
+                                        .foregroundStyle(Color.primary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding()
+                                } else {
+                                    ForEach(Array(viewModel.filterRawLists().indices), id: \.self) { index in
+                                        let rawList = viewModel.filterRawLists()[index]
+                                        Button(action: {
+                                            viewModel.toggleTVShowToList(listName: rawList.listId)
+                                        }) {
+                                            AddToListView(leadingIconIncluded: "checklist.checked", leadingIconNotIncluded: "checklist.unchecked", rawList: rawList, isInList: $viewModel.isInList)
+                                                .padding()
+                                        }
+                                        
+                                        if index < viewModel.filterRawLists().count - 1 {
+                                            Divider()
+                                        }
+                                    }
+                                }
                             }
                             
                             Utils.linearGradient
@@ -798,7 +856,7 @@ struct TVShowDetailsView: View {
                                     isListsSharePresented = false
                                 }
                             }) {
-                                Text("Annulla")
+                                Text("Chiudi")
                                     .foregroundStyle(Color.primary)
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .padding()

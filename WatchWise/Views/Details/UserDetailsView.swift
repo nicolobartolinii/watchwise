@@ -13,6 +13,7 @@ struct UserDetailsView: View {
     @ObservedObject var viewModel: UserDetailsViewModel
     
     @State var offset: CGFloat = 0
+    @State var showNewListSheet = false
     @State var showReviews = false
     
     @Environment(\.dismiss) var dismiss
@@ -126,49 +127,72 @@ struct UserDetailsView: View {
                                 .padding(.horizontal)
                                 .offset(y: -30)
                             
-                            ScrollView(.horizontal) {
-                                HStack {
-                                    NavigationLink(destination: ListDetailsView(listId: "favorite", currentUserUid: authManager.currentUserUid)) {
-                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "favorite" }) ?? ("", "", 0, ""))
-                                    }
-                                    NavigationLink(destination: ListDetailsView(listId: "watchlist", currentUserUid: authManager.currentUserUid)) {
-                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "watchlist" }) ?? ("", "", 0, ""))
-                                    }
-                                    NavigationLink(destination: ListDetailsView(listId: "watched_m", currentUserUid: authManager.currentUserUid)) {
-                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "watched_m" }) ?? ("", "", 0, ""))
-                                    }
-                                    NavigationLink(destination: ListDetailsView(listId: "watching_t", currentUserUid: authManager.currentUserUid)) {
-                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "watching_t" }) ?? ("", "", 0, ""))
-                                    }
-                                    NavigationLink(destination: ListDetailsView(listId: "finished_t", currentUserUid: authManager.currentUserUid)) {
-                                        ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "finished_t" }) ?? ("", "", 0, ""))
-                                    }
-                                    
-                                    VStack(spacing: 4) {
-                                        Image(systemName: "plus")
-                                            .font(.title)
-                                            .bold()
-                                            .foregroundStyle(Color.accentColor)
+                            if viewModel.rawLists.count != 0 {
+                                ScrollView(.horizontal) {
+                                    HStack {
+                                        NavigationLink(destination: ListDetailsView(listId: "favorite", currentUserUid: authManager.currentUserUid)) {
+                                            ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "favorite" }) ?? ("", "", 0, ""))
+                                        }
+                                        NavigationLink(destination: ListDetailsView(listId: "watchlist", currentUserUid: authManager.currentUserUid)) {
+                                            ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "watchlist" }) ?? ("", "", 0, ""))
+                                        }
+                                        NavigationLink(destination: ListDetailsView(listId: "watched_m", currentUserUid: authManager.currentUserUid)) {
+                                            ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "watched_m" }) ?? ("", "", 0, ""))
+                                        }
+                                        NavigationLink(destination: ListDetailsView(listId: "watching_t", currentUserUid: authManager.currentUserUid)) {
+                                            ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "watching_t" }) ?? ("", "", 0, ""))
+                                        }
+                                        NavigationLink(destination: ListDetailsView(listId: "finished_t", currentUserUid: authManager.currentUserUid)) {
+                                            ListCard(rawList: viewModel.rawLists.first(where: { $0.listId == "finished_t" }) ?? ("", "", 0, ""))
+                                        }
+                                        ForEach(viewModel.rawLists.filter( { $0.listId != "favorite" && $0.listId != "watchlist" && $0.listId != "watched_m" && $0.listId != "watching_t" && $0.listId != "finished_t" }), id: \.listId) { rawList in
+                                            NavigationLink(destination: ListDetailsView(listId: rawList.listId, currentUserUid: authManager.currentUserUid)) {
+                                                ListCard(rawList: rawList)
+                                            }
+                                        }
                                         
-                                        Text("Crea una nuova lista".uppercased())
-                                            .padding(.horizontal, 8)
-                                            .font(.callout)
-                                            .frame(maxWidth: .infinity, alignment: .center)
-                                            .multilineTextAlignment(.center)
+                                        if user.uid == authManager.currentUserUid {
+                                            Button(action: { self.showNewListSheet = true }) {
+                                                VStack(spacing: 4) {
+                                                    Image(systemName: "plus")
+                                                        .font(.title)
+                                                        .bold()
+                                                        .foregroundStyle(Color.accentColor)
+                                                    
+                                                    Text("Crea una nuova lista".uppercased())
+                                                        .padding(.horizontal, 8)
+                                                        .font(.callout)
+                                                        .frame(maxWidth: .infinity, alignment: .center)
+                                                        .multilineTextAlignment(.center)
+                                                        .foregroundStyle(Color.primary)
+                                                }
+                                                .frame(width: 160, height: 105)
+                                                .background(.ultraThinMaterial)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 12)
+                                                        .strokeBorder(Utils.linearGradient)
+                                                )
+                                                .cornerRadius(12)
+                                                .shadow(color: .primary.opacity(0.2) , radius: 3)
+                                                .padding(.vertical, 8)
+                                                .sheet(isPresented: $showNewListSheet, onDismiss: { Task {
+                                                    await viewModel.getUserRawLists()
+                                                }}) {
+                                                    CreateListView(currentUserUid: authManager.currentUserUid)
+                                                }
+                                            }
+                                        }
                                     }
-                                    .frame(width: 160, height: 105)
-                                    .background(.ultraThinMaterial)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .strokeBorder(Utils.linearGradient)
-                                    )
-                                    .cornerRadius(12)
-                                    .shadow(color: .primary.opacity(0.2) , radius: 3)
-                                    .padding(.vertical, 8)
+                                    .padding(.horizontal)
                                 }
-                                .padding(.horizontal)
+                                .offset(y: -40)
+                            } else {
+                                ProgressView("Caricamento in corso...")
+                                    .progressViewStyle(.circular)
+                                    .tint(.accentColor)
+                                    .controlSize(.regular)
+                                    .offset(y: -40)
                             }
-                            .offset(y: -40)
                             
                             Divider()
                                 .offset(y: -35)
@@ -394,6 +418,7 @@ struct ListCard: View {
                 .padding(.horizontal, 8)
                 .font(.headline)
                 .frame(height: 32)
+                .foregroundStyle(Color.primary)
             
             Utils.linearGradient
                 .frame(maxWidth: .infinity)

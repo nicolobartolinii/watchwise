@@ -21,7 +21,7 @@ struct ClearableTextField: View {
     var axis: Axis = .horizontal
     
     var body: some View {
-        HStack {
+        HStack(alignment: .center) {
             if startIcon != "" {
                 Image(systemName: startIcon)
                     .frame(width: 24, height: 24)
@@ -31,6 +31,7 @@ struct ClearableTextField: View {
                 .keyboardType(keyboardType)
                 .textInputAutocapitalization(textInputAutocapitalization)
                 .autocorrectionDisabled(autocorrectionDisabled)
+                .multilineTextAlignment(.leading)
                 .onChange(of: text) { newValue in
                     if lowercaseText {
                         text = newValue.lowercased()

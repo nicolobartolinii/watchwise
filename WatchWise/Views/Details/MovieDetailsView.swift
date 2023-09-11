@@ -82,6 +82,11 @@ struct MovieDetailsView: View {
                             
                             HStack(spacing: 24) {
                                 Button(action: {
+                                    if !isListsSharePresented {
+                                        Task {
+                                            await viewModel.loadUserRawLists()
+                                        }
+                                    }
                                     withAnimation(.easeInOut(duration: 0.2)) {
                                         isListsSharePresented.toggle()
                                     }
@@ -246,29 +251,7 @@ struct MovieDetailsView: View {
                                     if !viewModel.allReviews.isEmpty {
                                         List {
                                             ForEach(viewModel.allReviews, id: \.user.uid) { review in
-                                                HStack(alignment: .top) {
-                                                    KFImage(URL(string: review.user.profilePath))
-                                                        .resizable()
-                                                        .clipShape(Circle())
-                                                        .scaledToFill()
-                                                        .frame(width: 50, height: 50)
-                                                        .cornerRadius(8)
-                                                        .padding(.leading, -8)
-                                                    VStack {
-                                                        Text("**\(review.user.username)** | Data recensione: \(Utils.formatDateToLocalString(date: review.timestamp.dateValue()))")
-                                                            .foregroundStyle(Color.secondary)
-                                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                                            .lineLimit(2)
-                                                            .multilineTextAlignment(.leading)
-                                                            .font(.footnote)
-                                                        Text("\"\(review.text)\"")
-                                                            .italic()
-                                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                                            .font(.subheadline)
-                                                            .multilineTextAlignment(.leading)
-                                                    }
-                                                    .padding(.trailing, 5)
-                                                }
+                                                ReviewView(review: review)
                                             }
                                         }
                                     } else {
@@ -339,315 +322,9 @@ struct MovieDetailsView: View {
                                     .padding(.horizontal)
                                 }
                             case .details:
-                                if let originalTitle = movie.original_title, originalTitle != "" {
-                                    Text(NSLocalizedString("Titolo originale e lingua originale", comment: "Titolo originale e lingua originale").uppercased())
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.leading)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 0)
-                                    VStack(spacing: 0) {
-                                        Text(originalTitle)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding()
-                                        if let originalLanguageCode = movie.original_language {
-                                            if let originalLanguage = Locale.current.localizedString(forLanguageCode: originalLanguageCode) {
-                                                Divider()
-                                                    .padding(.horizontal)
-                                                Text(originalLanguage)
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                                    .padding()
-                                            }
-                                        }
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
-                                
-                                if let releaseDate = movie.release_date, !releaseDate.isEmpty {
-                                    Text(NSLocalizedString("Prima data di rilascio", comment: "Prima data di rilascio").uppercased())
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.leading)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 0)
-                                    VStack(spacing: 0) {
-                                        Text(Utils.formatDateToLocalString(dateString: releaseDate)!)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding()
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
-                                
-                                if let homepage = movie.homepage, !homepage.isEmpty {
-                                    Text("Homepage".uppercased())
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.leading)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 0)
-                                    
-                                    VStack(spacing: 0) {
-                                        Button(action: {
-                                            if let url = URL(string: homepage) {
-                                                UIApplication.shared.open(url)
-                                            } else {
-                                                UIApplication.shared.open(URL(string: "https://themoviedb.org/movie/\(movie.id)")!)
-                                            }
-                                        }) {
-                                            Text(NSLocalizedString("Vai alla homepage", comment: "Vai alla homepage"))
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .padding()
-                                        }
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
-                                
-                                
-                                
-                                if let collection = movie.belongs_to_collection {
-                                    Text(NSLocalizedString("Collezione", comment: "Collezione").uppercased())
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.leading)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 0)
-                                    HStack(spacing: 0) {
-                                        if let collectionPosterPath = collection.poster_path {
-                                            KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(collectionPosterPath)"))
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 40, height: 40)
-                                                .cornerRadius(10)
-                                                .padding(.vertical, 4)
-                                                .padding(.leading)
-                                        }
-                                        Text(collection.name)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding()
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
-                                
-                                if let budget = movie.budget, let revenue = movie.revenue, budget > 0 || revenue > 0 {
-                                    Text(NSLocalizedString(budget > 0 && revenue > 0 ? "Budget e Incassi" : (budget < 0 ? "Incassi" : "Budget"), comment: "Budget e Incassi").uppercased())
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.leading)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 0)
-                                    
-                                    VStack(spacing: 0) {
-                                        if budget > 0 {
-                                            if let formattedBudget = Utils.formatToDollars(budget) {
-                                                Text(revenue > 0 ? "Budget: \(formattedBudget)" : formattedBudget)
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                                    .padding()
-                                            }
-                                        }
-                                        
-                                        if revenue > 0 {
-                                            if let formattedRevenue = Utils.formatToDollars(revenue) {
-                                                if budget > 0 {
-                                                    Divider()
-                                                        .padding(.horizontal)
-                                                }
-                                                Text(budget > 0 ? "Incassi: \(formattedRevenue)" : formattedRevenue)
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                                    .padding()
-                                            }
-                                        }
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
-                                
-                                if let status = movie.status, !status.isEmpty {
-                                    Text(NSLocalizedString("Stato", comment: "Stato").uppercased())
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.leading)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 0)
-                                    VStack(spacing: 0) {
-                                        Text(NSLocalizedString(status, comment: status))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding()
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
-                                
-                                if let spokenLanguages = movie.spokenLanguages, !spokenLanguages.isEmpty, !spokenLanguages.contains(where: { $0.iso_639_1 == "xx" }) {
-                                    Text(NSLocalizedString("Lingue parlate", comment: "Lingue parlate").uppercased())
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.leading)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 0)
-                                    VStack(spacing: 0) {
-                                        ForEach(spokenLanguages.indices, id: \.self) { index in
-                                            if index > 0 {
-                                                Divider()
-                                                    .padding(.horizontal)
-                                            }
-                                            Text(Locale.current.localizedString(forLanguageCode: spokenLanguages[index].iso_639_1)!)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .padding()
-                                            
-                                        }
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
-                                
-                                if let productionCompanies = movie.productionCompanies, !productionCompanies.isEmpty {
-                                    Text(NSLocalizedString("Case produttrici", comment: "Case produttrici").uppercased())
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.leading)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 0)
-                                    VStack(spacing: 0) {
-                                        ForEach(productionCompanies.indices, id: \.self) { index in
-                                            if index > 0 {
-                                                Divider()
-                                                    .padding(.horizontal)
-                                            }
-                                            HStack(spacing: 0) {
-                                                if let logoPath = productionCompanies[index].logo_path {
-                                                    KFImage(URL(string: "https://image.tmdb.org/t/p/w92\(logoPath)"))
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(width: 40, height: 40)
-                                                        .cornerRadius(10)
-                                                        .padding(.vertical, 4)
-                                                        .padding(.leading)
-                                                }
-                                                Text(productionCompanies[index].name)
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                                    .padding()
-                                            }
-                                        }
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
-                                
-                                if let productionCountries = movie.productionCountries, !productionCountries.isEmpty {
-                                    Text(NSLocalizedString("Paesi di produzione", comment: "Paesi di produzione").uppercased())
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.leading)
-                                        .padding(.top, 8)
-                                        .padding(.bottom, 0)
-                                    VStack(spacing: 0) {
-                                        ForEach(productionCountries.indices, id: \.self) { index in
-                                            if index > 0 {
-                                                Divider()
-                                                    .padding(.horizontal)
-                                            }
-                                            
-                                            Text(Locale.current.localizedString(forRegionCode: productionCountries[index].iso_3166_1)!)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .padding()
-                                        }
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
+                                MovieInfoDetailsView(movie: movie)
                             case .videos:
-                                if let videos = movie.videos?.results, !videos.isEmpty {
-                                    let officialVideos = videos.filter { $0.official }
-                                    
-                                    if !officialVideos.isEmpty && !videos.isEmpty {
-                                        let sortedVideos = officialVideos.sorted {
-                                            if $0.type == "Trailer" { return true }
-                                            if $1.type == "Trailer" { return false }
-                                            if $0.type == "Teaser" && $1.type != "Trailer" { return true }
-                                            return false
-                                        }
-                                        
-                                        Text(NSLocalizedString("Video disponibili", comment: "Video disponibili").uppercased())
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.leading)
-                                            .padding(.top, 8)
-                                            .padding(.bottom, 0)
-                                        
-                                        VStack(spacing: 0) {
-                                            ForEach(sortedVideos.indices, id: \.self) { index in
-                                                if index > 0 {
-                                                    Divider()
-                                                        .padding(.horizontal)
-                                                }
-                                                
-                                                let video = sortedVideos[index]
-                                                let language = Locale.current.localizedString(forLanguageCode: video.iso_639_1) ?? ""
-                                                let country = Locale.current.localizedString(forRegionCode: video.iso_3166_1) ?? ""
-                                                
-                                                Button(action: {
-                                                    openVideo(video)
-                                                }) {
-                                                    VStack(alignment: .leading) {
-                                                        Text(video.name)
-                                                            .bold()
-                                                            .lineLimit(1)
-                                                        Text("\(language) (\(country))")
-                                                            .font(.subheadline)
-                                                            .foregroundColor(.secondary)
-                                                    }
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                                    .padding()
-                                                }
-                                            }
-                                        }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
-                                    } else {
-                                        VStack(spacing: 0) {
-                                            Text(NSLocalizedString("Nessun video disponibile", comment: "Nessun video disponibile"))
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                .padding()
-                                        }
-                                        .background(Color(UIColor.tertiarySystemFill)
-                                            .cornerRadius(12))
-                                        .padding(.horizontal)
-                                    }
-                                } else {
-                                    VStack(spacing: 0) {
-                                        Text(NSLocalizedString("Nessun video disponibile", comment: "Nessun video disponibile"))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding()
-                                    }
-                                    .background(Color(UIColor.tertiarySystemFill)
-                                        .cornerRadius(12))
-                                    .padding(.horizontal)
-                                }
-                                
+                                MovieVideosDetailsView(movie: movie)
                             }
                             
                             if let similarMovies = viewModel.similarMovies, !similarMovies.isEmpty {
@@ -705,122 +382,7 @@ struct MovieDetailsView: View {
                     )
                     .blur(radius: isListsSharePresented ? 10 : 0)
                     if isListsSharePresented {
-                        VStack(spacing: 0) {
-                            if !isOtherListsPresented {
-                                Button(action: {
-                                    Task {
-                                        try await viewModel.toggleMovieToList(listName: "watched_m", movieRuntime: movie.runtime)
-                                    }
-                                }) {
-                                    HStack {
-                                        Image(systemName: viewModel.isInList["watched_m"]! ? "eye.fill" : "eye")
-                                            .foregroundStyle(Color.primary)
-                                            .frame(width: 28)
-                                        Text("Film visti")
-                                            .foregroundStyle(Color.primary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                        Spacer()
-                                        Image(systemName: viewModel.isInList["watched_m"]! ? "checkmark.circle.fill" : "checkmark.circle")
-                                            .foregroundStyle(viewModel.isInList["watched_m"]! ? Color.mint : Color.primary)
-                                            .frame(width: 28)
-                                    }
-                                    .padding()
-                                }
-                                
-                                Divider()
-                                
-                                Button(action: {
-                                    Task {
-                                        try await viewModel.toggleMovieToList(listName: "watchlist", movieRuntime: movie.runtime)
-                                    }
-                                }) {
-                                    HStack {
-                                        Image(systemName: viewModel.isInList["watchlist"]! ? "bookmark.fill" : "bookmark")
-                                            .foregroundStyle(Color.primary)
-                                            .frame(width: 28)
-                                        Text("Watchlist")
-                                            .foregroundStyle(Color.primary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                        Spacer()
-                                        Image(systemName: viewModel.isInList["watchlist"]! ? "checkmark.circle.fill" : "checkmark.circle")
-                                            .foregroundStyle(viewModel.isInList["watchlist"]! ? Color.mint : Color.primary)
-                                            .frame(width: 28)
-                                    }
-                                    .padding()
-                                }
-                                
-                                Divider()
-                                
-                                Button(action: {
-                                    Task {
-                                        try await viewModel.toggleMovieToList(listName: "favorite", movieRuntime: movie.runtime)
-                                    }
-                                }) {
-                                    HStack {
-                                        Image(systemName: viewModel.isInList["favorite"]! ? "heart.fill" : "heart")
-                                            .foregroundStyle(Color.primary)
-                                            .frame(width: 28)
-                                        Text("Preferiti")
-                                            .foregroundStyle(Color.primary)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                        Spacer()
-                                        Image(systemName: viewModel.isInList["favorite"]! ? "checkmark.circle.fill" : "checkmark.circle")
-                                            .foregroundStyle(viewModel.isInList["favorite"]! ? Color.mint : Color.primary)
-                                            .frame(width: 28)
-                                    }
-                                    .padding()
-                                }
-                                
-                                Divider()
-                                
-                                HStack {
-                                    Image(systemName: "list.bullet")
-                                        .frame(width: 28)
-                                    Text("Altre liste")
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .frame(width: 28)
-                                }
-                                .padding()
-                                
-                                Divider()
-                                
-                                HStack {
-                                    Image(systemName: "square.and.arrow.up")
-                                        .frame(width: 28)
-                                    Text("Condividi")
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Image(systemName: "chevron.right")
-                                        .frame(width: 28)
-                                }
-                                .padding()
-                                
-                            }
-                            
-                            Utils.linearGradient
-                                .frame(maxWidth: .infinity, maxHeight: 1)
-                            
-                            Button(action: {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    isListsSharePresented = false
-                                }
-                            }) {
-                                Text("Annulla")
-                                    .foregroundStyle(Color.primary)
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .padding()
-                            }
-                        }
-                        .background(.ultraThinMaterial)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .strokeBorder(Utils.linearGradient)
-                        )
-                        .cornerRadius(12)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                        .padding()
-                        .transition(.move(edge: .bottom))
+                        ListsShareView(isListsSharePresented: $isListsSharePresented, isOtherListsPresented: $isOtherListsPresented, movie: movie, viewModel: viewModel)
                     }
                 } else {
                     ProgressView("Caricamento in corso...")
@@ -837,22 +399,6 @@ struct MovieDetailsView: View {
         
         .navigationBarBackButtonHidden(true)
         .padding(.bottom, 1)
-    }
-    
-    func openVideo(_ video: Video) {
-        let urlString: String
-        switch video.site {
-        case "YouTube":
-            urlString = "https://www.youtube.com/watch?v=\(video.key)"
-        case "Vimeo":
-            urlString = "https://vimeo.com/\(video.key)"
-        default:
-            return
-        }
-        
-        if let url = URL(string: urlString) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
     }
     
     func providerView(provider: Provider, type: String) -> some View {
@@ -1160,6 +706,550 @@ struct HeaderView: View {
         }
         .padding(.leading)
         .padding(.trailing, 8)
+    }
+}
+
+struct MovieInfoDetailsView: View {
+    var movie: Movie
+    
+    var body: some View {
+        if let originalTitle = movie.original_title, originalTitle != "" {
+            Text(NSLocalizedString("Titolo originale e lingua originale", comment: "Titolo originale e lingua originale").uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                .padding(.top, 8)
+                .padding(.bottom, 0)
+            VStack(spacing: 0) {
+                Text(originalTitle)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                if let originalLanguageCode = movie.original_language {
+                    if let originalLanguage = Locale.current.localizedString(forLanguageCode: originalLanguageCode) {
+                        Divider()
+                            .padding(.horizontal)
+                        Text(originalLanguage)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                    }
+                }
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+        
+        if let releaseDate = movie.release_date, !releaseDate.isEmpty {
+            Text(NSLocalizedString("Prima data di rilascio", comment: "Prima data di rilascio").uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                .padding(.top, 8)
+                .padding(.bottom, 0)
+            VStack(spacing: 0) {
+                Text(Utils.formatDateToLocalString(dateString: releaseDate)!)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+        
+        if let homepage = movie.homepage, !homepage.isEmpty {
+            Text("Homepage".uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                .padding(.top, 8)
+                .padding(.bottom, 0)
+            
+            VStack(spacing: 0) {
+                Button(action: {
+                    if let url = URL(string: homepage) {
+                        UIApplication.shared.open(url)
+                    } else {
+                        UIApplication.shared.open(URL(string: "https://themoviedb.org/movie/\(movie.id)")!)
+                    }
+                }) {
+                    Text(NSLocalizedString("Vai alla homepage", comment: "Vai alla homepage"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                }
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+        
+        
+        
+        if let collection = movie.belongs_to_collection {
+            Text(NSLocalizedString("Collezione", comment: "Collezione").uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                .padding(.top, 8)
+                .padding(.bottom, 0)
+            HStack(spacing: 0) {
+                if let collectionPosterPath = collection.poster_path {
+                    KFImage(URL(string: "https://image.tmdb.org/t/p/w185\(collectionPosterPath)"))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .cornerRadius(10)
+                        .padding(.vertical, 4)
+                        .padding(.leading)
+                }
+                Text(collection.name)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+        
+        if let budget = movie.budget, let revenue = movie.revenue, budget > 0 || revenue > 0 {
+            Text(NSLocalizedString(budget > 0 && revenue > 0 ? "Budget e Incassi" : (budget < 0 ? "Incassi" : "Budget"), comment: "Budget e Incassi").uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                .padding(.top, 8)
+                .padding(.bottom, 0)
+            
+            VStack(spacing: 0) {
+                if budget > 0 {
+                    if let formattedBudget = Utils.formatToDollars(budget) {
+                        Text(revenue > 0 ? "Budget: \(formattedBudget)" : formattedBudget)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                    }
+                }
+                
+                if revenue > 0 {
+                    if let formattedRevenue = Utils.formatToDollars(revenue) {
+                        if budget > 0 {
+                            Divider()
+                                .padding(.horizontal)
+                        }
+                        Text(budget > 0 ? "Incassi: \(formattedRevenue)" : formattedRevenue)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                    }
+                }
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+        
+        if let status = movie.status, !status.isEmpty {
+            Text(NSLocalizedString("Stato", comment: "Stato").uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                .padding(.top, 8)
+                .padding(.bottom, 0)
+            VStack(spacing: 0) {
+                Text(NSLocalizedString(status, comment: status))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+        
+        if let spokenLanguages = movie.spokenLanguages, !spokenLanguages.isEmpty, !spokenLanguages.contains(where: { $0.iso_639_1 == "xx" }) {
+            Text(NSLocalizedString("Lingue parlate", comment: "Lingue parlate").uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                .padding(.top, 8)
+                .padding(.bottom, 0)
+            VStack(spacing: 0) {
+                ForEach(spokenLanguages.indices, id: \.self) { index in
+                    if index > 0 {
+                        Divider()
+                            .padding(.horizontal)
+                    }
+                    Text(Locale.current.localizedString(forLanguageCode: spokenLanguages[index].iso_639_1)!)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                    
+                }
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+        
+        if let productionCompanies = movie.productionCompanies, !productionCompanies.isEmpty {
+            Text(NSLocalizedString("Case produttrici", comment: "Case produttrici").uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                .padding(.top, 8)
+                .padding(.bottom, 0)
+            VStack(spacing: 0) {
+                ForEach(productionCompanies.indices, id: \.self) { index in
+                    if index > 0 {
+                        Divider()
+                            .padding(.horizontal)
+                    }
+                    HStack(spacing: 0) {
+                        if let logoPath = productionCompanies[index].logo_path {
+                            KFImage(URL(string: "https://image.tmdb.org/t/p/w92\(logoPath)"))
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40)
+                                .cornerRadius(10)
+                                .padding(.vertical, 4)
+                                .padding(.leading)
+                        }
+                        Text(productionCompanies[index].name)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                    }
+                }
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+        
+        if let productionCountries = movie.productionCountries, !productionCountries.isEmpty {
+            Text(NSLocalizedString("Paesi di produzione", comment: "Paesi di produzione").uppercased())
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading)
+                .padding(.top, 8)
+                .padding(.bottom, 0)
+            VStack(spacing: 0) {
+                ForEach(productionCountries.indices, id: \.self) { index in
+                    if index > 0 {
+                        Divider()
+                            .padding(.horizontal)
+                    }
+                    
+                    Text(Locale.current.localizedString(forRegionCode: productionCountries[index].iso_3166_1)!)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                }
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+    }
+}
+
+struct AddToListView: View {
+    var leadingIconIncluded: String
+    var leadingIconNotIncluded: String
+    var rawList: (type: String, name: String, totalCount: Int, listId: String)
+    @Binding var isInList: [String: Bool]
+    
+    var body: some View {
+        HStack {
+            Image(systemName: isInList[rawList.listId] ?? false ? leadingIconIncluded : leadingIconNotIncluded)
+                .foregroundStyle(Color.primary)
+                .frame(width: 28)
+            Text(rawList.name)
+                .foregroundStyle(Color.primary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Spacer()
+            Image(systemName: isInList[rawList.listId] ?? false ? "checkmark.circle.fill" : "checkmark.circle")
+                .foregroundStyle(isInList[rawList.listId] ?? false ? Color.mint : Color.primary)
+                .frame(width: 28)
+        }
+    }
+}
+
+struct MovieVideosDetailsView: View {
+    var movie: Movie
+    
+    var body: some View {
+        if let videos = movie.videos?.results, !videos.isEmpty {
+            let officialVideos = videos.filter { $0.official }
+            
+            if !officialVideos.isEmpty && !videos.isEmpty {
+                let sortedVideos = officialVideos.sorted {
+                    if $0.type == "Trailer" { return true }
+                    if $1.type == "Trailer" { return false }
+                    if $0.type == "Teaser" && $1.type != "Trailer" { return true }
+                    return false
+                }
+                
+                Text(NSLocalizedString("Video disponibili", comment: "Video disponibili").uppercased())
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading)
+                    .padding(.top, 8)
+                    .padding(.bottom, 0)
+                
+                VStack(spacing: 0) {
+                    ForEach(sortedVideos.indices, id: \.self) { index in
+                        if index > 0 {
+                            Divider()
+                                .padding(.horizontal)
+                        }
+                        
+                        let video = sortedVideos[index]
+                        let language = Locale.current.localizedString(forLanguageCode: video.iso_639_1) ?? ""
+                        let country = Locale.current.localizedString(forRegionCode: video.iso_3166_1) ?? ""
+                        
+                        Button(action: {
+                            openVideo(video)
+                        }) {
+                            VStack(alignment: .leading) {
+                                Text(video.name)
+                                    .bold()
+                                    .lineLimit(1)
+                                Text("\(language) (\(country))")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                        }
+                    }
+                }
+                .background(Color(UIColor.tertiarySystemFill)
+                    .cornerRadius(12))
+                .padding(.horizontal)
+            } else {
+                VStack(spacing: 0) {
+                    Text(NSLocalizedString("Nessun video disponibile", comment: "Nessun video disponibile"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                }
+                .background(Color(UIColor.tertiarySystemFill)
+                    .cornerRadius(12))
+                .padding(.horizontal)
+            }
+        } else {
+            VStack(spacing: 0) {
+                Text(NSLocalizedString("Nessun video disponibile", comment: "Nessun video disponibile"))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }
+            .background(Color(UIColor.tertiarySystemFill)
+                .cornerRadius(12))
+            .padding(.horizontal)
+        }
+    }
+    
+    func openVideo(_ video: Video) {
+        let urlString: String
+        switch video.site {
+        case "YouTube":
+            urlString = "https://www.youtube.com/watch?v=\(video.key)"
+        case "Vimeo":
+            urlString = "https://vimeo.com/\(video.key)"
+        default:
+            return
+        }
+        
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+}
+
+struct ReviewView: View {
+    var review: Review
+    
+    var body: some View {
+        HStack(alignment: .top) {
+            KFImage(URL(string: review.user.profilePath))
+                .resizable()
+                .clipShape(Circle())
+                .scaledToFill()
+                .frame(width: 50, height: 50)
+                .cornerRadius(8)
+                .padding(.leading, -8)
+            VStack {
+                Text("**\(review.user.username)** | Data recensione: \(Utils.formatDateToLocalString(date: review.timestamp.dateValue()))")
+                    .foregroundStyle(Color.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                    .font(.footnote)
+                Text("\"\(review.text)\"")
+                    .italic()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.subheadline)
+                    .multilineTextAlignment(.leading)
+            }
+            .padding(.trailing, 5)
+        }
+    }
+}
+
+struct ListsShareView: View {
+    @Binding var isListsSharePresented: Bool
+    @Binding var isOtherListsPresented: Bool
+    var movie: Movie
+    @ObservedObject var viewModel: MovieDetailsViewModel
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            if !isOtherListsPresented {
+                Button(action: {
+                    Task {
+                        try await viewModel.toggleMovieToList(listName: "watched_m", movieRuntime: movie.runtime)
+                    }
+                }) {
+                    AddToListView(leadingIconIncluded: "eye.fill", leadingIconNotIncluded: "eye", rawList: viewModel.rawLists.first(where: { $0.listId == "watched_m" }) ?? (type: "", name: "", totalCount: 0, listId: ""), isInList: $viewModel.isInList)
+                        .padding()
+                }
+                
+                Divider()
+                
+                Button(action: {
+                    Task {
+                        try await viewModel.toggleMovieToList(listName: "watchlist", movieRuntime: movie.runtime)
+                    }
+                }) {
+                    AddToListView(leadingIconIncluded: "bookmark.fill", leadingIconNotIncluded: "bookmark", rawList: viewModel.rawLists.first(where: { $0.listId == "watchlist" }) ?? (type: "", name: "", totalCount: 0, listId: ""), isInList: $viewModel.isInList)
+                        .padding()
+                }
+                
+                Divider()
+                
+                Button(action: {
+                    Task {
+                        try await viewModel.toggleMovieToList(listName: "favorite", movieRuntime: movie.runtime)
+                    }
+                }) {
+                    AddToListView(leadingIconIncluded: "heart.fill", leadingIconNotIncluded: "heart", rawList: viewModel.rawLists.first(where: { $0.listId == "favorite" }) ?? (type: "", name: "", totalCount: 0, listId: ""), isInList: $viewModel.isInList)
+                        .padding()
+                }
+                
+                Divider()
+                
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isOtherListsPresented = true
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "list.bullet")
+                            .frame(width: 28)
+                            .foregroundStyle(Color.primary)
+                        Text("Altre liste")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(Color.primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .frame(width: 28)
+                            .foregroundStyle(Color.primary)
+                    }
+                    .padding()
+                }
+                
+                Divider()
+                
+                HStack {
+                    Image(systemName: "square.and.arrow.up")
+                        .frame(width: 28)
+                    Text("Condividi")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Image(systemName: "chevron.right")
+                        .frame(width: 28)
+                }
+                .padding()
+                
+            } else {
+                OtherListsView(viewModel: viewModel, isOtherListsPresented: $isOtherListsPresented, movie: movie)
+            }
+            
+            Utils.linearGradient
+                .frame(maxWidth: .infinity, maxHeight: 1)
+            
+            Button(action: {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isListsSharePresented = false
+                }
+            }) {
+                Text("Chiudi")
+                    .foregroundStyle(Color.primary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+            }
+        }
+        .background(.ultraThinMaterial)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(Utils.linearGradient)
+        )
+        .cornerRadius(12)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .padding()
+        .transition(.move(edge: .bottom))
+    }
+}
+
+struct OtherListsView: View {
+    @ObservedObject var viewModel: MovieDetailsViewModel
+    @Binding var isOtherListsPresented: Bool
+    var movie: Movie
+    
+    var body: some View {
+        Button(action: {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isOtherListsPresented = false
+            }
+        }) {
+            HStack {
+                Image(systemName: "chevron.left")
+                    .foregroundStyle(Color.primary)
+                    .frame(width: 28)
+                Text("Indietro")
+                    .foregroundStyle(Color.primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Spacer()
+            }
+            .padding()
+        }
+        
+        Utils.linearGradient
+            .frame(maxWidth: .infinity, maxHeight: 1)
+        
+        if viewModel.rawLists.count == 0 {
+            Text("Puoi creare una lista personalizzata nel tuo profilo")
+                .foregroundStyle(Color.primary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+        } else {
+            ForEach(Array(viewModel.filterRawLists().indices), id: \.self) { index in
+                let rawList = viewModel.filterRawLists()[index]
+                Button(action: {
+                    Task {
+                        try await viewModel.toggleMovieToList(listName: rawList.listId, movieRuntime: movie.runtime)
+                    }
+                }) {
+                    AddToListView(leadingIconIncluded: "checklist.checked", leadingIconNotIncluded: "checklist.unchecked", rawList: rawList, isInList: $viewModel.isInList)
+                        .padding()
+                }
+                
+                if index < viewModel.filterRawLists().count - 1 {
+                    Divider()
+                }
+            }
+        }
     }
 }
 

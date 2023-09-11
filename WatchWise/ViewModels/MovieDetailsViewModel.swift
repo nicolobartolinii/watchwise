@@ -25,6 +25,7 @@ class MovieDetailsViewModel: ObservableObject {
     @Published var oldReviewText: String = ""
     @Published var reviewsCount: Int = 0
     @Published var allReviews: [Review] = []
+    @Published var rawLists: [(type: String, name: String, totalCount: Int, listId: String)] = []
     
     private var movieId: Int64
     private var currentUserUid: String
@@ -168,5 +169,23 @@ class MovieDetailsViewModel: ObservableObject {
         } catch {
             print("Errore durante l'aggiornamento della recensione: \(error)")
         }
+    }
+    
+    func loadUserRawLists() async {
+        do {
+            self.rawLists = try await firestoreService.getUserRawLists(userId: currentUserUid)
+            for rawList in filterRawLists() {
+                isInList[rawList.listId] = false
+            }
+            checkIfMovieInLists()
+        } catch {
+            print("Errore durante l'ottenimento delle liste: \(error)")
+        }
+    }
+    
+    func filterRawLists() -> [(type: String, name: String, totalCount: Int, listId: String)] {
+        return Array(rawLists.filter { rawList in
+            return rawList.listId != "favorite" && rawList.listId != "watchlist" && rawList.listId != "watched_m" && rawList.listId != "watching_t" && rawList.listId != "finished_t" && rawList.type != "tv"
+        })
     }
 }
