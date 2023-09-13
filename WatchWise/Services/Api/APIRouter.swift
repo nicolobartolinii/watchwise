@@ -23,6 +23,8 @@ enum APIRouter: URLRequestConvertible {
     case getPersonDetails(personId: Int32)
     case getSimilarMovies(movieId: Int64)
     case getSimilarTVShows(showId: Int64)
+    case getMovieImages(movieId: Int64, language: String)
+    case getTVShowImages(showId: Int64, language: String)
     
     static let baseURL = URL(string: "https://api.themoviedb.org/3")
     
@@ -56,6 +58,10 @@ enum APIRouter: URLRequestConvertible {
             return "/movie/\(movieId)/similar"
         case .getSimilarTVShows(let showId):
             return "/tv/\(showId)/similar"
+        case .getMovieImages(let movieId, _):
+            return "/movie/\(movieId)/images"
+        case .getTVShowImages(let showId, _):
+            return "/movie/\(showId)/images"
         }
     }
     
@@ -140,6 +146,12 @@ enum APIRouter: URLRequestConvertible {
                     "language": "it-IT",
                     "region": "IT",
                     "page": 1]
+        case .getMovieImages(_, let language):
+            return ["api_key": APIConstants.apiKey,
+                    "include_image_language": language]
+        case .getTVShowImages(_, let language):
+            return ["api_key": APIConstants.apiKey,
+                    "include_image_language": language]
         }
     }
     

@@ -56,7 +56,7 @@ struct UserDetailsView: View {
                             
                             if user.uid == authManager.currentUserUid {
                                 HStack {
-                                    Button(action: {  }) {
+                                    NavigationLink(destination: EditProfileView(user: user)) {
                                         HStack {
                                             Image(systemName: "pencil")
                                             Text("Modifica profilo")

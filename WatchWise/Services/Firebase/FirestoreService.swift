@@ -517,4 +517,51 @@ class FirestoreService {
         
         try await newListRef.setData(listData)
     }
+    
+    func getTopRatedMoviesAndTVShows() async throws -> [String: [Int64]] {
+        let db = Firestore.firestore()
+        var results: [String: [Int64]] = ["movies": [], "tv": []]
+        
+        // Ottieni l'indice delle valutazioni
+        let document = try await db.collection("metadata").document("ratingsIndex").getDocument()
+        guard let data = document.data() else {
+            throw NSError(domain: "FirestoreServiceError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Document data is nil"])
+        }
+        
+        if let movies = data["movies"] as? [String], let tvShows = data["tv"] as? [String] {
+            var movieScores: [(Int64, Double)] = []
+            var tvScores: [(Int64, Double)] = []
+            
+            // Calcola i punteggi ponderati per i film
+            for movieId in movies {
+                let doc = try await db.collection("ratings").document("movies").collection("\(movieId)").document("info").getDocument()
+                if let info = doc.data(), let count = info["count"] as? Int, let total = info["total"] as? Double {
+                    let averageRating = total / Double(count)
+                    let bonus = min(Double(count), 50.0) * 0.01
+                    let score = averageRating + bonus
+                    movieScores.append((Int64(movieId)!, score))
+                }
+            }
+
+            
+            // Calcola i punteggi ponderati per le serie TV
+            for tvShowId in tvShows {
+                let doc = try await db.collection("ratings").document("tv").collection("\(tvShowId)").document("info").getDocument()
+                if let info = doc.data(), let count = info["count"] as? Int, let total = info["total"] as? Double {
+                    let averageRating = total / Double(count)
+                    let bonus = min(Double(count), 50.0) * 0.01
+                    let score = averageRating + bonus
+                    tvScores.append((Int64(tvShowId)!, score))
+                }
+            }
+            
+            // Ordina i risultati in base ai punteggi ponderati e restituisci i primi 10
+            results["movies"] = movieScores.sorted(by: { $0.1 > $1.1 }).prefix(10).map { $0.0 }
+            results["tv"] = tvScores.sorted(by: { $0.1 > $1.1 }).prefix(10).map { $0.0 }
+        }
+        
+        return results
+    }
+
+
 }

@@ -82,4 +82,12 @@ class APIService {
     static func getSimilarTVShows(showId: Int64, completion: @escaping (AFResult<DiscoverTVShowsResponse>) -> Void) {
         performRequest(route: APIRouter.getSimilarTVShows(showId: showId), completion: completion)
     }
+    
+    static func getMovieImages(movieId: Int64, language: String, completion: @escaping (AFResult<ImagesResponse>) -> Void) {
+        performRequest(route: APIRouter.getMovieImages(movieId: movieId, language: language), completion: completion)
+    }
+    
+    static func getTVShowImages(showId: Int64, language: String, completion: @escaping (AFResult<ImagesResponse>) -> Void) {
+        performRequest(route: APIRouter.getTVShowImages(showId: showId, language: language), completion: completion)
+    }
 }

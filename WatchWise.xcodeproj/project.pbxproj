@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		115178B02AAF1E1700144E7F /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115178AF2AAF1E1700144E7F /* EditProfileView.swift */; };
+		115178B22AAF1E2400144E7F /* ChangeBackdropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115178B12AAF1E2400144E7F /* ChangeBackdropView.swift */; };
+		115178B42AAF1E3200144E7F /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115178B32AAF1E3200144E7F /* EditProfileViewModel.swift */; };
+		115178B62AAF1E3C00144E7F /* ChangeBackdropViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115178B52AAF1E3C00144E7F /* ChangeBackdropViewModel.swift */; };
+		115178B82AAF6D0000144E7F /* ImagesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115178B72AAF6D0000144E7F /* ImagesResponse.swift */; };
 		116A417D2AAB5243009E31ED /* EpisodesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116A417C2AAB5243009E31ED /* EpisodesViewModel.swift */; };
 		116A417F2AAB5374009E31ED /* NextEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116A417E2AAB5374009E31ED /* NextEpisode.swift */; };
 		1174B74F2AA9F53D004F8783 /* TVShowDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1174B74E2AA9F53D004F8783 /* TVShowDetailsViewModel.swift */; };
@@ -132,6 +137,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		115178AF2AAF1E1700144E7F /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		115178B12AAF1E2400144E7F /* ChangeBackdropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeBackdropView.swift; sourceTree = "<group>"; };
+		115178B32AAF1E3200144E7F /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
+		115178B52AAF1E3C00144E7F /* ChangeBackdropViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeBackdropViewModel.swift; sourceTree = "<group>"; };
+		115178B72AAF6D0000144E7F /* ImagesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesResponse.swift; sourceTree = "<group>"; };
 		116A417C2AAB5243009E31ED /* EpisodesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesViewModel.swift; sourceTree = "<group>"; };
 		116A417E2AAB5374009E31ED /* NextEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextEpisode.swift; sourceTree = "<group>"; };
 		1174B74E2AA9F53D004F8783 /* TVShowDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -279,6 +289,8 @@
 			isa = PBXGroup;
 			children = (
 				119276242AADEA2000EE1B18 /* CreateListView.swift */,
+				115178AF2AAF1E1700144E7F /* EditProfileView.swift */,
+				115178B12AAF1E2400144E7F /* ChangeBackdropView.swift */,
 			);
 			path = Customization;
 			sourceTree = "<group>";
@@ -329,6 +341,7 @@
 				B95C4A6D2AA8A67D0046475A /* Review.swift */,
 				116A417E2AAB5374009E31ED /* NextEpisode.swift */,
 				117E3E6A2AACBC5900EC3A99 /* AltReview.swift */,
+				115178B72AAF6D0000144E7F /* ImagesResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -355,6 +368,8 @@
 				116A417C2AAB5243009E31ED /* EpisodesViewModel.swift */,
 				117E3E6E2AACE16400EC3A99 /* ListDetailsViewModel.swift */,
 				119276222AADE85500EE1B18 /* CreateListViewModel.swift */,
+				115178B32AAF1E3200144E7F /* EditProfileViewModel.swift */,
+				115178B52AAF1E3C00144E7F /* ChangeBackdropViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -807,6 +822,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				115178B62AAF1E3C00144E7F /* ChangeBackdropViewModel.swift in Sources */,
 				116A417D2AAB5243009E31ED /* EpisodesViewModel.swift in Sources */,
 				B922963C2AA0BBB300826537 /* UserDetailsView.swift in Sources */,
 				119276232AADE85500EE1B18 /* CreateListViewModel.swift in Sources */,
@@ -829,6 +845,7 @@
 				B98D011A2AA37C67009F611F /* Person.swift in Sources */,
 				B92212692A90E15400AFFB9C /* APIService.swift in Sources */,
 				116A417F2AAB5374009E31ED /* NextEpisode.swift in Sources */,
+				115178B42AAF1E3200144E7F /* EditProfileViewModel.swift in Sources */,
 				117E3E6F2AACE16400EC3A99 /* ListDetailsViewModel.swift in Sources */,
 				B936CA772A929F77001F4908 /* SplashScreen.swift in Sources */,
 				B9AAAE272A92214E00226A35 /* ClearableTextField.swift in Sources */,
@@ -839,12 +856,14 @@
 				B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */,
 				B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */,
 				B9F2B1382A8B867A00B18E44 /* WatchWiseApp.swift in Sources */,
+				115178B22AAF1E2400144E7F /* ChangeBackdropView.swift in Sources */,
 				1174B7512AA9F60F004F8783 /* TVShowsRepository.swift in Sources */,
 				B92296422AA0BFFD00826537 /* FirestoreService.swift in Sources */,
 				B92212732A910E4700AFFB9C /* MovieDetailsView.swift in Sources */,
 				B94713A42A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift in Sources */,
 				B973F5112A936D8B00AB7DC8 /* AuthenticatedView.swift in Sources */,
 				B922963E2AA0BCFC00826537 /* User.swift in Sources */,
+				115178B82AAF6D0000144E7F /* ImagesResponse.swift in Sources */,
 				117E3E6D2AACE15200EC3A99 /* ListDetailsView.swift in Sources */,
 				B98D011C2AA380BC009F611F /* PersonDetailsViewModel.swift in Sources */,
 				B92212652A90E01300AFFB9C /* APIConstants.swift in Sources */,
@@ -853,6 +872,7 @@
 				B922125C2A90B59000AFFB9C /* SearchView.swift in Sources */,
 				B978F9382A9A2BF20076A03A /* NavigationBar.swift in Sources */,
 				B95C4A6E2AA8A67D0046475A /* Review.swift in Sources */,
+				115178B02AAF1E1700144E7F /* EditProfileView.swift in Sources */,
 				B922126E2A90E68A00AFFB9C /* APIManager.swift in Sources */,
 				B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */,
 				B94713A62A9CF88800B3FDB1 /* TVShowDetailsView.swift in Sources */,

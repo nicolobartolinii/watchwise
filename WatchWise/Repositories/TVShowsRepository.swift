@@ -46,4 +46,49 @@ class TVShowsRepository {
             }
         }
     }
+    
+    func getTVShowImages(for showId: Int64, completion: @escaping ([Backdrop]) -> Void) {
+        var backdrops: [Backdrop] = []
+        let dispatchGroup = DispatchGroup()
+        
+        // Chiamata per la lingua "it"
+        dispatchGroup.enter()
+        APIManager.getTVShowImages(showId: showId, language: "it") { (result: AFResult<ImagesResponse>) in
+            switch result {
+            case .success(let imagesResponse):
+                backdrops.append(contentsOf: imagesResponse.backdrops)
+            case .failure(let error):
+                print("Error getting IT show images: \(error)")
+            }
+            dispatchGroup.leave()
+        }
+        
+        // Chiamata per la lingua "en"
+        dispatchGroup.enter()
+        APIManager.getTVShowImages(showId: showId, language: "en") { (result: AFResult<ImagesResponse>) in
+            switch result {
+            case .success(let imagesResponse):
+                backdrops.append(contentsOf: imagesResponse.backdrops)
+            case .failure(let error):
+                print("Error getting EN show images: \(error)")
+            }
+            dispatchGroup.leave()
+        }
+        
+        // Chiamata senza specifica lingua
+        dispatchGroup.enter()
+        APIManager.getTVShowImages(showId: showId, language: "null") { (result: AFResult<ImagesResponse>) in
+            switch result {
+            case .success(let imagesResponse):
+                backdrops.append(contentsOf: imagesResponse.backdrops)
+            case .failure(let error):
+                print("Error getting NULL show images: \(error)")
+            }
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            completion(backdrops)
+        }
+    }
 }
