@@ -90,3 +90,5 @@ fastlane/test_output
 iOSInjectionProject/
 
 Services/Api/APIConstants.swift
+
+GoogleService-Info.plist
