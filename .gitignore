@@ -92,3 +92,4 @@ iOSInjectionProject/
 Services/Api/APIConstants.swift
 
 GoogleService-Info.plist
+WatchWise/GoogleService-Info.plist
