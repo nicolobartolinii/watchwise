@@ -542,7 +542,7 @@ class FirestoreService {
                     movieScores.append((Int64(movieId)!, score))
                 }
             }
-
+            
             
             // Calcola i punteggi ponderati per le serie TV
             for tvShowId in tvShows {
@@ -562,6 +562,60 @@ class FirestoreService {
         
         return results
     }
-
-
+    
+    // Invia un nuovo messaggio in una specifica chat
+    func sendMessage(to userId: String, productId: Int64, currentUserUid: String) throws {
+        let newMessage = Message(id: UUID().uuidString, productId: productId, senderId: currentUserUid, timestamp: Timestamp(date: Date()))
+        do {
+            db.collection("users").document(currentUserUid).collection("chats").document(userId).setData(["lastUpdated": Timestamp(date: Date())], merge: true)
+            try db.collection("users").document(currentUserUid).collection("chats").document(userId).collection("messages").addDocument(from: newMessage)
+            db.collection("users").document(userId).collection("chats").document(currentUserUid).setData(["lastUpdated": Timestamp(date: Date())], merge: true)
+            try db.collection("users").document(userId).collection("chats").document(currentUserUid).collection("messages").addDocument(from: newMessage)
+        } catch {
+            throw error
+        }
+    }
+    
+    func fetchUserChats(for currentUserUid: String) async throws -> [Chat] {
+        var chats: [Chat] = []
+        do {
+            let snapshot = try await db.collection("users").document(currentUserUid).collection("chats").getDocuments()
+            for chat in snapshot.documents {
+                if let user = try await getUserDetails(by: chat.documentID) {
+                    chats.append(Chat(user: user))
+                }
+            }
+        } catch {
+            throw error
+        }
+        return chats
+    }
+    
+    func getFollowingUsers(for userId: String) async throws -> [User] {
+        let followingRef = db.collection("users").document(userId).collection("following")
+        let followingDocs = try await followingRef.getDocuments()
+        var users: [User] = []
+        
+        for followingDoc in followingDocs.documents {
+            if let user = try await getUserDetails(by: followingDoc.documentID) {
+                users.append(user)
+            }
+        }
+        
+        return users
+    }
+    
+    func fetchUserChatMessages(for currentUserUid: String, by userId: String) async throws -> [Message] {
+        var messages: [Message] = []
+        do {
+            let snapshot = try await db.collection("users").document(currentUserUid).collection("chats").document(userId).collection("messages").getDocuments()
+            for message in snapshot.documents {
+                let message = Message(id: message.documentID, productId: message["productId"] as? Int64 ?? -1, senderId: message["senderId"] as? String ?? "", timestamp: message["timestamp"] as? Timestamp ?? Timestamp(date: Date()))
+                messages.append(message)
+            }
+        } catch {
+            throw error
+        }
+        return messages
+    }
 }

@@ -181,7 +181,6 @@ struct HomeView: View {
             switch result {
             case .success(let movies):
                 self.nowPlayingMovies = movies.results
-                print("Now playing movies count: \(movies.results.count)")
             case .failure(let error):
                 print("Error getting now playing movies: \(error)")
             }

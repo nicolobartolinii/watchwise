@@ -47,6 +47,7 @@ class AuthManager: ObservableObject {
     @Published var user: FirebaseAuth.User?
     
     private var loggingWithGoogle: Bool = false
+    var googleEmail = ""
     
     @Published var currentUserUid: String = ""
     
@@ -268,6 +269,7 @@ extension AuthManager {
             
             let result = try await Auth.auth().signIn(with: credential)
             let firebaseUser = result.user
+            self.googleEmail = firebaseUser.email ?? "Error"
             print("User \(firebaseUser.uid) signed in with email \(firebaseUser.email ?? "unknown")")
             loggingWithGoogle = false
             return true

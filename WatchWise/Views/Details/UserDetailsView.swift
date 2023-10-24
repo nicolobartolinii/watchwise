@@ -64,7 +64,9 @@ struct UserDetailsView: View {
                                         }
                                     }
                                     .buttonStyle(.borderedProminent)
-                                    Button(action: {  }) {
+                                    Button(action: { 
+                                        authManager.signOut()
+                                    }) {
                                         HStack {
                                             Image(systemName: "gear")
                                             Text("Impostazioni app")

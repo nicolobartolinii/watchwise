@@ -121,7 +121,8 @@ struct LoginView: View {
                     HStack {
                         Image(systemName: "apple.logo")
                             .resizable()
-                            .frame(width: 24, height: 24)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 24)
                         Text(NSLocalizedString("Entra con Apple", comment: "Bottone Apple"))
                             .font(.title3)
                             .bold()
@@ -135,7 +136,7 @@ struct LoginView: View {
                         if await authManager.signInWithGoogle() == true {
                             let db = Firestore.firestore()
                             let usersRef = db.collection("users")
-                            let querySnapshot = try await usersRef.whereField("email", isEqualTo: authManager.email).getDocuments()
+                            let querySnapshot = try await usersRef.whereField("email", isEqualTo: authManager.googleEmail).getDocuments()
                             if querySnapshot.documents.isEmpty {
                                 authManager.shouldNavigate = true
                                 authManager.switchFlow()
@@ -148,7 +149,8 @@ struct LoginView: View {
                     HStack {
                         Image("ic_google")
                             .resizable()
-                            .frame(width: 24, height: 24)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 24)
                         Text(NSLocalizedString("Entra con Google", comment: "Bottone Google"))
                             .font(.title3)
                             .bold()

@@ -21,6 +21,12 @@
 		117E3E6F2AACE16400EC3A99 /* ListDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E3E6E2AACE16400EC3A99 /* ListDetailsViewModel.swift */; };
 		119276232AADE85500EE1B18 /* CreateListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119276222AADE85500EE1B18 /* CreateListViewModel.swift */; };
 		119276252AADEA2000EE1B18 /* CreateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119276242AADEA2000EE1B18 /* CreateListView.swift */; };
+		11D040802AB201E000499896 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0407F2AB201E000499896 /* ChatViewModel.swift */; };
+		11D040842AB202FB00499896 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D040832AB202FB00499896 /* Chat.swift */; };
+		11D040862AB2031800499896 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D040852AB2031800499896 /* Message.swift */; };
+		11D040882AB2066800499896 /* ChatsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D040872AB2066800499896 /* ChatsListViewModel.swift */; };
+		11D0408A2AB206D500499896 /* ChatsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D040892AB206D500499896 /* ChatsListView.swift */; };
+		11D0408C2AB2071800499896 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0408B2AB2071800499896 /* ChatView.swift */; };
 		11DCD1DD2AA9ED0A00ECAD4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11DCD1DC2AA9ED0A00ECAD4B /* GoogleService-Info.plist */; };
 		11FF5B6E2AAE1E94002E1F07 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 11FF5B6D2AAE1E94002E1F07 /* AlertToast */; };
 		35FB878C4910785280653742 /* Pods_WatchWise_WatchWiseUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2CD3A0E4816C811EA020C5 /* Pods_WatchWise_WatchWiseUITests.framework */; };
@@ -152,6 +158,12 @@
 		119276222AADE85500EE1B18 /* CreateListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateListViewModel.swift; sourceTree = "<group>"; };
 		119276242AADEA2000EE1B18 /* CreateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateListView.swift; sourceTree = "<group>"; };
 		1198DFA3BFF0229B15EDD988 /* Pods-WatchWise.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.release.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.release.xcconfig"; sourceTree = "<group>"; };
+		11D0407F2AB201E000499896 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		11D040832AB202FB00499896 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		11D040852AB2031800499896 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		11D040872AB2066800499896 /* ChatsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListViewModel.swift; sourceTree = "<group>"; };
+		11D040892AB206D500499896 /* ChatsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListView.swift; sourceTree = "<group>"; };
+		11D0408B2AB2071800499896 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		11DCD1DC2AA9ED0A00ECAD4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4C6F31A77B1FD0BA2BE26426 /* Pods-WatchWise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WatchWise.debug.xcconfig"; path = "Target Support Files/Pods-WatchWise/Pods-WatchWise.debug.xcconfig"; sourceTree = "<group>"; };
 		57795A70F06874F1753D612E /* Pods_WatchWise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WatchWise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -313,6 +325,8 @@
 				B92212592A90B57E00AFFB9C /* FeedView.swift */,
 				B922125B2A90B59000AFFB9C /* SearchView.swift */,
 				B922125D2A90B59D00AFFB9C /* EpisodesView.swift */,
+				11D040892AB206D500499896 /* ChatsListView.swift */,
+				11D0408B2AB2071800499896 /* ChatView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -342,6 +356,8 @@
 				116A417E2AAB5374009E31ED /* NextEpisode.swift */,
 				117E3E6A2AACBC5900EC3A99 /* AltReview.swift */,
 				115178B72AAF6D0000144E7F /* ImagesResponse.swift */,
+				11D040832AB202FB00499896 /* Chat.swift */,
+				11D040852AB2031800499896 /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -370,6 +386,8 @@
 				119276222AADE85500EE1B18 /* CreateListViewModel.swift */,
 				115178B32AAF1E3200144E7F /* EditProfileViewModel.swift */,
 				115178B52AAF1E3C00144E7F /* ChangeBackdropViewModel.swift */,
+				11D0407F2AB201E000499896 /* ChatViewModel.swift */,
+				11D040872AB2066800499896 /* ChatsListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -825,6 +843,8 @@
 				115178B62AAF1E3C00144E7F /* ChangeBackdropViewModel.swift in Sources */,
 				116A417D2AAB5243009E31ED /* EpisodesViewModel.swift in Sources */,
 				B922963C2AA0BBB300826537 /* UserDetailsView.swift in Sources */,
+				11D040882AB2066800499896 /* ChatsListViewModel.swift in Sources */,
+				11D0408C2AB2071800499896 /* ChatView.swift in Sources */,
 				119276232AADE85500EE1B18 /* CreateListViewModel.swift in Sources */,
 				B92212672A90E04A00AFFB9C /* APIRouter.swift in Sources */,
 				B98D011E2AA3825B009F611F /* PersonDetailsView.swift in Sources */,
@@ -843,6 +863,7 @@
 				B98DE9902A8BCFFD0076F379 /* LoginView.swift in Sources */,
 				B936CA722A927A62001F4908 /* CompleteRegistrationView.swift in Sources */,
 				B98D011A2AA37C67009F611F /* Person.swift in Sources */,
+				11D0408A2AB206D500499896 /* ChatsListView.swift in Sources */,
 				B92212692A90E15400AFFB9C /* APIService.swift in Sources */,
 				116A417F2AAB5374009E31ED /* NextEpisode.swift in Sources */,
 				115178B42AAF1E3200144E7F /* EditProfileViewModel.swift in Sources */,
@@ -852,6 +873,7 @@
 				1174B74F2AA9F53D004F8783 /* TVShowDetailsViewModel.swift in Sources */,
 				B936CA752A929D44001F4908 /* AuthManager.swift in Sources */,
 				B90052A12A97B0D2005FC143 /* HistogramView.swift in Sources */,
+				11D040842AB202FB00499896 /* Chat.swift in Sources */,
 				B90F58412AA72F450079C00C /* MoviesRepository.swift in Sources */,
 				B9AAAE252A92211200226A35 /* ToggleableSecureField.swift in Sources */,
 				B91FFEF52A8D3BEA005C15EF /* HomeView.swift in Sources */,
@@ -860,6 +882,7 @@
 				1174B7512AA9F60F004F8783 /* TVShowsRepository.swift in Sources */,
 				B92296422AA0BFFD00826537 /* FirestoreService.swift in Sources */,
 				B92212732A910E4700AFFB9C /* MovieDetailsView.swift in Sources */,
+				11D040802AB201E000499896 /* ChatViewModel.swift in Sources */,
 				B94713A42A9CA70200B3FDB1 /* DiscoverPeopleResponse.swift in Sources */,
 				B973F5112A936D8B00AB7DC8 /* AuthenticatedView.swift in Sources */,
 				B922963E2AA0BCFC00826537 /* User.swift in Sources */,
@@ -877,6 +900,7 @@
 				B92212582A90B56C00AFFB9C /* HomeNavigationView.swift in Sources */,
 				B94713A62A9CF88800B3FDB1 /* TVShowDetailsView.swift in Sources */,
 				B98D01182AA3785B009F611F /* PeopleRepository.swift in Sources */,
+				11D040862AB2031800499896 /* Message.swift in Sources */,
 				119276252AADEA2000EE1B18 /* CreateListView.swift in Sources */,
 				B922125E2A90B59D00AFFB9C /* EpisodesView.swift in Sources */,
 			);

@@ -26,6 +26,7 @@ class MovieDetailsViewModel: ObservableObject {
     @Published var reviewsCount: Int = 0
     @Published var allReviews: [Review] = []
     @Published var rawLists: [(type: String, name: String, totalCount: Int, listId: String)] = []
+    @Published var followingUsers: [User] = []
     
     private var movieId: Int64
     private var currentUserUid: String
@@ -187,5 +188,21 @@ class MovieDetailsViewModel: ObservableObject {
         return Array(rawLists.filter { rawList in
             return rawList.listId != "favorite" && rawList.listId != "watchlist" && rawList.listId != "watched_m" && rawList.listId != "watching_t" && rawList.listId != "finished_t" && rawList.type != "tv"
         })
+    }
+    
+    func loadUserFollowingUsers() async {
+        do {
+            self.followingUsers = try await firestoreService.getFollowingUsers(for: currentUserUid)
+        } catch {
+            print("Errore durante l'ottenimento degli utentiseguiti: \(error)")
+        }
+    }
+    
+    func sendMessage(to userId: String) {
+        do {
+            try firestoreService.sendMessage(to: userId, productId: movieId, currentUserUid: currentUserUid)
+        } catch {
+            print("Errore durante l'invio del messaggio: \(error)")
+        }
     }
 }

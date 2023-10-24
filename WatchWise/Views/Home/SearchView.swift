@@ -546,7 +546,7 @@ struct SearchView: View {
         }
     }
     
-    private func performMoviesSearch(for query: String, page: Int32) async {
+    func performMoviesSearch(for query: String, page: Int32) async {
         do {
             isLoading = true
             try await Task.sleep(nanoseconds: 1_000_000_000)

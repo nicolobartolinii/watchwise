@@ -40,6 +40,7 @@ struct MovieDetailsView: View {
     @State private var observation: NSKeyValueObservation?
     @State private var isListsSharePresented = false
     @State private var isOtherListsPresented = false
+    @State private var isShareSheetPresented = false
     @State private var isEditingReview: Bool = false
     
     @FocusState private var focusedReview: FocusField?
@@ -85,6 +86,7 @@ struct MovieDetailsView: View {
                                     if !isListsSharePresented {
                                         Task {
                                             await viewModel.loadUserRawLists()
+                                            await viewModel.loadUserFollowingUsers()
                                         }
                                     }
                                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -382,7 +384,7 @@ struct MovieDetailsView: View {
                     )
                     .blur(radius: isListsSharePresented ? 10 : 0)
                     if isListsSharePresented {
-                        ListsShareView(isListsSharePresented: $isListsSharePresented, isOtherListsPresented: $isOtherListsPresented, movie: movie, viewModel: viewModel)
+                        ListsShareView(isListsSharePresented: $isListsSharePresented, isOtherListsPresented: $isOtherListsPresented, isShareSheetPresented: $isShareSheetPresented, movie: movie, viewModel: viewModel)
                     }
                 } else {
                     ProgressView("Caricamento in corso...")
@@ -1101,12 +1103,13 @@ struct ReviewView: View {
 struct ListsShareView: View {
     @Binding var isListsSharePresented: Bool
     @Binding var isOtherListsPresented: Bool
+    @Binding var isShareSheetPresented: Bool
     var movie: Movie
     @ObservedObject var viewModel: MovieDetailsViewModel
     
     var body: some View {
         VStack(spacing: 0) {
-            if !isOtherListsPresented {
+            if !isOtherListsPresented && !isShareSheetPresented {
                 Button(action: {
                     Task {
                         try await viewModel.toggleMovieToList(listName: "watched_m", movieRuntime: movie.runtime)
@@ -1162,18 +1165,87 @@ struct ListsShareView: View {
                 
                 Divider()
                 
-                HStack {
-                    Image(systemName: "square.and.arrow.up")
-                        .frame(width: 28)
-                    Text("Condividi")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Image(systemName: "chevron.right")
-                        .frame(width: 28)
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isShareSheetPresented = true
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "square.and.arrow.up")
+                            .frame(width: 28)
+                            .foregroundStyle(Color.primary)
+                        Text("Condividi")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(Color.primary)
+                        Image(systemName: "chevron.right")
+                            .frame(width: 28)
+                            .foregroundStyle(Color.primary)
+                    }
+                    .padding()
                 }
-                .padding()
                 
-            } else {
+            } else if isOtherListsPresented && !isShareSheetPresented {
                 OtherListsView(viewModel: viewModel, isOtherListsPresented: $isOtherListsPresented, movie: movie)
+            } else if isShareSheetPresented && !isOtherListsPresented {
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isShareSheetPresented = false
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                            .foregroundStyle(Color.primary)
+                            .frame(width: 28)
+                        Text("Indietro")
+                            .foregroundStyle(Color.primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Spacer()
+                    }
+                    .padding()
+                }
+                
+                Utils.linearGradient
+                    .frame(maxWidth: .infinity, maxHeight: 1)
+                
+                if viewModel.followingUsers.count == 0 {
+                    Text("Non segui ancora nessun utente")
+                        .foregroundStyle(Color.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                } else {
+                    ForEach(Array(viewModel.followingUsers.indices), id: \.self) { index in
+                        let user = viewModel.followingUsers[index]
+                        Button(action: {
+                            viewModel.sendMessage(to: user.uid)
+                        }) {
+                            HStack {
+                                KFImage(URL(string: user.profilePath))
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width: 40, height: 40)
+                                    .scaledToFit()
+                                    .foregroundStyle(Color.primary)
+                                VStack {
+                                    Text(user.displayName)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .foregroundStyle(Color.primary)
+                                    Text(user.username)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .foregroundStyle(Color.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: "paperplane")
+                                    .frame(width: 28)
+                                    .foregroundStyle(Color.primary)
+                            }
+                            .padding()
+                        }
+                        
+                        if index < viewModel.followingUsers.count - 1 {
+                            Divider()
+                        }
+                    }
+                }
             }
             
             Utils.linearGradient
